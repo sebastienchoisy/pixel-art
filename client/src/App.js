@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React from "react";
+import Board from "./components/board/board";
 
 function App() {
   const [data, setData] = React.useState(null);
@@ -12,10 +13,13 @@ function App() {
   }, []);
   return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>{!data ? "Loading..." : data}</p>
-        </header>
+        {/*<header className="App-header">*/}
+        {/*  <img src={logo} className="App-logo" alt="logo" />*/}
+        {/*  <p>{!data ? "Loading..." : data}</p>*/}
+        {/*</header>*/}
+          <div className="board-container">
+              <Board colsNb="50" linesNb="50" ></Board>
+          </div>
       </div>
   );
 }
