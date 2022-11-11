@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React from "react";
-import Board from "./components/board/board";
+import Board from "./components/board/Board";
 
 function App() {
   const [data, setData] = React.useState(null);

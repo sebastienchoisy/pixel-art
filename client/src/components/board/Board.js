@@ -1,32 +1,32 @@
-import React, {useEffect, useRef} from 'react';
-import './board.css';
-import {Pixel} from './pixel';
+import React, {useEffect, useRef, useState} from 'react';
+import './Board.css';
+import { Pixel  } from './pixel';
 
 const Board = props => {
     const refCanvas = useRef(null);
     const pixelSize = 12;
     const pixelBorderColor = "#D3D3D3";
+    const [pixels, setPixels] = useState([]);
     useEffect(() => {
         const generateEmptyPixels = () => {
-            let pixels = [];
             for (let i = 0; i < props.linesNb; i++) {
                 for (let j = 0; j < props.colsNb; j++) {
                     let newPixel = new Pixel(i, j);
                     pixels.push(newPixel);
                 }
             }
-            return pixels;
+            setPixels(pixels)
         }
-        const pixels = generateEmptyPixels();
+        generateEmptyPixels();
 
         const canvas = refCanvas.current;
         const context = canvas.getContext('2d');
 
         const drawPixel = pixel => {
-            context.strokeStyle = pixelBorderColor;
             context.fillStyle = pixel.color;
+            context.strokeStyle = pixelBorderColor;
             context.strokeRect(pixel.line * pixelSize, pixel.column * pixelSize, pixelSize, pixelSize);
-            context.fillRect(pixel.line * pixelSize, pixel.column * pixelSize, pixelSize, pixelSize);
+            context.fillRect((pixel.line * pixelSize)+1, (pixel.column * pixelSize)+1, pixelSize-2, pixelSize-2);
             pixel.occurrence++;
         }
         //Our first draw
@@ -59,7 +59,7 @@ const Board = props => {
         }
 
         canvas.addEventListener("click", handleClick, false);
-    }, [])
+    }, [props.colsNb,props.linesNb,pixels])
 
     return <div className="board">
         <canvas id="myCanvas" ref={refCanvas} width={props.colsNb * pixelSize}
