@@ -8,66 +8,62 @@ const Board = props => {
     const pixelSize = 12;
     const pixelBorderColor = "#D3D3D3";
     const [pixels, setPixels] = useState([]);
-    const [color, setColor] = useState("#cc0000");
+    const [color, setColor] = useState("#000000");
 
     const generateEmptyPixels = () => {
         let pixelTab = [];
-        console.log('hehe')
         for (let i = 0; i < props.linesNb; i++) {
             for (let j = 0; j < props.colsNb; j++) {
                 let newPixel = new Pixel(i, j);
                 pixelTab.push(newPixel);
             }
         }
-        console.log('salut c"est fini')
-        setPixels(pixelTab)
+        return pixelTab;
+        //setPixels(pixelTab)
     }
 
-    const drawPixel = pixel => {
+    const drawPixel = useCallback(pixel => {
         refCanvas.current.getContext('2d').fillStyle = pixel.color;
         refCanvas.current.getContext('2d').strokeStyle = pixelBorderColor;
         refCanvas.current.getContext('2d').strokeRect(pixel.line * pixelSize, pixel.column * pixelSize, pixelSize, pixelSize);
         refCanvas.current.getContext('2d').fillRect((pixel.line * pixelSize)+1, (pixel.column * pixelSize)+1, pixelSize-2, pixelSize-2);
         pixel.occurrence++;
-    }
-
-    const getPixel = (x, y) => {
-        console.log('titi')
-        return pixels.find((pixel) => pixel.line === x && pixel.column === y);
-    };
+    }, [])
     
      const handleClick = useCallback((evt) => { 
+        const getPixel = (x, y) => {
+            return pixels.find((pixel) => pixel.line === x && pixel.column === y);
+        };
+
          let mousePos = getMousePos(evt);
          let x = Math.floor(mousePos.x / pixelSize)
          let y = Math.floor(mousePos.y / pixelSize)
          let clickedPixel = getPixel(x, y);
-         // TODO prendre la couleur du color picker
-         console.log('couleur : ')
-         console.log(color)
          clickedPixel.color = color;
-         console.log('pixel : ')
-         console.log(clickedPixel)
          drawPixel(clickedPixel);
-     }, [color, drawPixel, getPixel]);
+     }, [color, drawPixel, pixels]);
 
 
     useEffect(() => {
-        console.log('tata')
         const canvas = refCanvas.current;
         canvas.addEventListener("click", handleClick, false);
-        generateEmptyPixels();
-
         return () => canvas.removeEventListener("click", handleClick);
-    }, [generateEmptyPixels, handleClick])
+    }, [handleClick])
 
     useEffect(() => {
-        console.log('toto')
+        setPixels(generateEmptyPixels());
+    },[]);
+
+    useEffect(() => {
         //Our first draw
         pixels.forEach((pixel) => {
-            console.log(refCanvas)
             drawPixel(pixel, refCanvas.current?.getContext('2d'))
         });
-    }, [drawPixel, pixels])
+    })
+
+    /*
+react_devtools_backend.js:4026 Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.
+    */
 
     const getMousePos = (evt) => {
         let rect = refCanvas.current.getBoundingClientRect(),
@@ -80,11 +76,8 @@ const Board = props => {
     }
 
     const callbackColor = colorPickerData => {
-        console.log('Color from child : ' + colorPickerData.target.value)
         setColor(colorPickerData.target.value);
     }
-
-    console.log('_'+color);
 
     return <div className="board">
         <ColorPicker parentCallback={callbackColor}/>
@@ -93,6 +86,5 @@ const Board = props => {
     </div>
 
 }
-
 
 export default Board;
