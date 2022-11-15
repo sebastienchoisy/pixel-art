@@ -1,3 +1,5 @@
+import connexionMongo  from "./connexionMongo"
+
 const getPixelBoard = () => new Promise((resolve, reject) => {
 	//recuperation des utimongo
 });
@@ -13,7 +15,6 @@ const updatePixelBoard = () => new Promise((resolve, reject) => {
 const deletePixelBoard = () => new Promise((resolve, reject) => {
 	//mongo
 });
-
 
 module.exports.getPixelBoard = getPixelBoard;
 module.exports.createPixelBoard = createPixelBoard;
