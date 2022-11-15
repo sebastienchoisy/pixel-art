@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React from "react";
 import Board from "./components/board/Board";
@@ -18,7 +17,7 @@ function App() {
         {/*  <p>{!data ? "Loading..." : data}</p>*/}
         {/*</header>*/}
           <div className="board-container">
-              <Board colsNb="50" linesNb="50" ></Board>
+            <Board colsNb="50" linesNb="50" ></Board>
           </div>
       </div>
   );
