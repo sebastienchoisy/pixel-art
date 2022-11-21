@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import './Board.css';
 import PropTypes from 'prop-types';
-import Pixel from './Pixel';
+import Pixel from '../../models/Pixel';
 import ColorPicker from './ColorPicker';
 
 export default function Board(props) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   NavLink as RRNavLink, Link,
@@ -11,14 +11,22 @@ import {
   Nav,
   NavItem,
   NavLink,
-  NavbarText,
+  NavbarText, Button,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
 import mushroom from '../../assets/mushroom.png';
 
-export default function Header() {
+export default function Header(props) {
   const [isOpen, setIsOpen] = useState(false);
-
+  let { username } = props;
   const toggle = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    // TODO improve
+    // eslint-disable-next-line react/destructuring-assignment
+    username = props.username;
+    // eslint-disable-next-line react/destructuring-assignment
+  }, [props.username]);
 
   return (
     <header>
@@ -36,16 +44,41 @@ export default function Header() {
             <NavItem>
               <NavLink tag={RRNavLink} to="/boards">Boards</NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/profil">Profil</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink tag={RRNavLink} to="/login">Connexion</NavLink>
-            </NavItem>
+            {username
+                && (
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/profil">Profil</NavLink>
+                </NavItem>
+                )}
+            {!username
+                && (
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/login">Connexion</NavLink>
+                </NavItem>
+                )}
+            {!username
+                && (
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/signin">S&apos;inscrire</NavLink>
+                </NavItem>
+                )}
           </Nav>
-          <NavbarText>Draw with us</NavbarText>
+          {username
+            && (
+            <NavbarText className="me-2">{username}</NavbarText>)}
+          {username
+            && (
+            <Button outline color="secondary">Deconnexion</Button>)}
         </Collapse>
       </Navbar>
     </header>
   );
 }
+
+Header.propTypes = {
+  username: PropTypes.string,
+};
+
+Header.defaultProps = {
+  username: null,
+};
