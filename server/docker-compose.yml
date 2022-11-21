@@ -1,12 +1,39 @@
+#services:
+#  mongodb_container:
+#    image: mongo:4.0
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=root
+#      - MONGO_INITDB_ROOT_PASSWORD=root
+      #MONGO_INITDB_ROOT_USERNAME: root
+      #MONGO_INITDB_ROOT_PASSWORD: root
+#    ports:
+#      - 27017:27017
+#    volumes:
+#      - mongodb_data_container:/data/db
+#  volumes:
+#  mongodb_data_container:
+
+version: '3'
+
 services:
-mongodb_container:
-  image: mongo:latest
-  environment:
-  MONGO_INITDB_ROOT_USERNAME: root
-  MONGO_INITDB_ROOT_PASSWORD: rootpassword
-  ports:
-  - 27017:27017
-  volumes:
-  - mongodb_data_container:/data/db
-volumes:
-mongodb_data_container:
+  node:
+    image: node:10.16.3
+    volumes:
+      - "./api:/var/www"  
+    ports:
+      - "8081:3000"
+    links:
+      - mongo
+    command: bash -c "cd /var/www && ./node_modules/.bin/pm2 start startup.json --name API --no-daemon"
+    environment:
+      - URL_MONGO=mongodb+srv://root:root@cluster0.0aawvzt.mongodb.net/test
+
+  mongo:
+    image: mongo:4.0
+    volumes:
+      - "./mongo/data:/data/db"
+    ports: 
+      - "27017:27017"
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root

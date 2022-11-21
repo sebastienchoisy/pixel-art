@@ -1,12 +1,16 @@
 const express = require("express");
+const cookieParser = require('cookie-parser');
+const cors         = require('cors');
 
-const PORT = process.env.PORT || 3001;
+
 
 const app = express();
-
-const cors = require('cors');
+const PORT = process.env.PORT || 3001;
 
 const userAPI = require('./routes/user');
+const mongodb     = require('./db/mongo');
+
+mongodb.initClientDbConnection();
 
 app.use(cors());
 
@@ -19,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use(express.json());
 
+app.use(cookieParser());
 app.use('/user', userAPI);
 
 app.use((err, req, res, next) => {
@@ -35,3 +40,4 @@ const server = app.listen(PORT, () => {
 	// eslint-disable-next-line no-console
 	console.log(`Application started. Visit http://localhost:${port}`);
 });
+module.exports = app;
