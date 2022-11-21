@@ -4,7 +4,7 @@ import React, {
 import './Board.css';
 import PropTypes from 'prop-types';
 import Pixel from '../../models/Pixel';
-import ColorPicker from './ColorPicker';
+import ColorPicker from './ColorPicker/ColorPicker';
 
 export default function Board(props) {
   const refCanvas = useRef(null);
@@ -70,19 +70,23 @@ export default function Board(props) {
     });
   });
 
-  const callbackColor = (colorPickerData) => {
-    setColor(colorPickerData.target.value);
+  const callbackColor = (colorValue) => {
+    setColor(colorValue);
   };
 
   return (
-    <div className="board">
-      <ColorPicker parentCallback={callbackColor} />
-      <canvas
-        id="myCanvas"
-        ref={refCanvas}
-        width={colsNb * pixelSize}
-        height={linesNb * pixelSize}
-      />
+    <div className="board d-flex justify-content-around">
+      <div>
+        <canvas
+          id="myCanvas"
+          ref={refCanvas}
+          width={colsNb * pixelSize}
+          height={linesNb * pixelSize}
+        />
+      </div>
+      <div>
+        <ColorPicker parentCallback={callbackColor} />
+      </div>
     </div>
   );
 }
