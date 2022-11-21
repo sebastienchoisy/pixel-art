@@ -1,5 +1,4 @@
 const User = require('../models/user');
-
 exports.getById = async (req, res) => {
     const id = req.params.id;
     try {
@@ -35,7 +34,9 @@ exports.updateUser = async (req, res) => {
     const temp = {};
     ({ 
         username    : temp.username,
-        password : temp.password
+        password : temp.password,
+        pixelboardContributed:temp.pixelboardContributed,
+        theme:temp.theme
     } = req.query);
 
     try {
@@ -46,6 +47,21 @@ exports.updateUser = async (req, res) => {
                     user[key] = temp[key];
                 }
             });
+            await user.save();
+            return res.status(201).json(user);
+        }
+
+        return res.status(404).json('user_not_found');
+    } catch (error) {
+        return res.status(501).json(error);
+    }
+}
+exports.updateUserNbPixel = async (lastUpdateUser) => {
+    try {
+        let user = await User.findOne({ username: lastUpdateUser });
+        
+        if (user) {       
+            user.nbPixelModified +=1;
             await user.save();
             return res.status(201).json(user);
         }

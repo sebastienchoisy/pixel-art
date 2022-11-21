@@ -11,6 +11,22 @@ const User = new Schema({
     password: {
         type: String,
         trim: true,
+        required: [true, 'Password est obligatoire']
+    },
+    nbPixelModified:{
+        type: Number,
+        trim: true, 
+        default : 0
+    }, 
+    pixelboardContributed:{
+        type: Array,
+        trim: true, 
+        default:[]
+    },
+    theme:{
+        type:String, 
+        trim: true,
+        default: "light"
     }
 }, {
     timestamps: true // ajoute 2 champs au document createdAt et updatedAt
