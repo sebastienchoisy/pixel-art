@@ -80,3 +80,13 @@ exports.deletePixelBoard  = async (req, res) => {
     }
 
 }
+
+exports.countPixelBoard = async (req,res) => {
+    try {
+        let countPixelBoard = await PixelBoard.count();
+        return res.status(200).json(countPixelBoard);
+    } catch (error) {
+        console.error(error)
+        return res.status(501).json(error);
+    }
+}

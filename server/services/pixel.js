@@ -31,10 +31,7 @@ exports.createPixel = async (req,res) => {
         color: temp.color,
         lastUpdateUser: temp.lastUpdateUser
     } = req.query);
-
-    // update user there
     Object.keys(temp).forEach((key) => (temp[key] == null) && delete temp[key]);
-
     try {
         let pixel = await Pixel.create(temp);
         user.updateUserNbPixel(temp.lastUpdateUser,temp.pixelboardAssociated);  

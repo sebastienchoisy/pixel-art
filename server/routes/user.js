@@ -4,10 +4,15 @@ const userService = require('../services/user');
 
 const router = express.Router();
 
-router.get('/:id', wrapAsync(async (req, res) => {
+router.get('/get/:id', wrapAsync(async (req, res) => {
 	const user = await userService.getById(req,res);
 	return user;
 }))
+
+router.get('/statCount', wrapAsync(async (req,res) => {
+	const PixelBoard = await userService.countUser(req,res);
+	return PixelBoard;
+}));
 
 router.patch('/update', wrapAsync(async (req, res) => {
 	const user = await userService.updateUser(req,res);

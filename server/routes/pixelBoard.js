@@ -4,10 +4,16 @@ const PixelBoardService = require('../services/pixelBoard');
 
 const router = express.Router();
 
-router.get('/:id', wrapAsync(async (req, res) => {
+router.get('/get/:id', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
 	return PixelBoards;
 }))
+
+router.get('/statCount', wrapAsync(async (req,res) => {
+	const PixelBoard = await PixelBoardService.countPixelBoard(req,res);
+	return PixelBoard;
+}));
+
 
 router.patch('/update/:id', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.updatePixelBoard(req,res);

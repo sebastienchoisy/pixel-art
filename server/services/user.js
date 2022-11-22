@@ -75,3 +75,13 @@ exports.updateUserNbPixel = async (lastUpdateUser,newPixelboardAssociated) => {
         console.error(error)
     }
 }
+
+exports.countUser = async (req,res) => {
+    try {
+        let countUser = await User.count();
+        return res.status(200).json(countUser);
+    } catch (error) {
+        console.error(error)
+        return res.status(501).json(error);
+    }
+}
