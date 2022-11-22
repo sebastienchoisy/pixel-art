@@ -9,7 +9,7 @@ import ScreenBoard from './screens/Screen-board';
 import ScreenProfil from './screens/Screen-profil';
 import ScreenLogin from './screens/Screen-login';
 import Header from './components/header/Header';
-import ScreenSignin from './screens/Screen-signin';
+import ScreenSignup from './screens/Screen-signup';
 import { getUserInfoWithCookie } from './services/APIService';
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
         <Route path="/boards" element={<ScreenBoard />} />
         <Route path="/profil" element={user ? <ScreenProfil /> : <Navigate replace to="/" />} />
         <Route path="/login" element={<ScreenLogin />} />
-        <Route path="/signin" element={!user ? <ScreenSignin /> : <Navigate replace to="/" />} />
+        <Route path="/signup" element={!user ? <ScreenSignup /> : <Navigate replace to="/" />} />
       </Routes>
     </div>
   );
