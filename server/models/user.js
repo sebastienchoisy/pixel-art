@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
-const bcrypt   = require('bcryptjs');
+
+const passportLocalMongoose = require("passport-local-mongoose")
+
+const Session = new Schema({
+    refreshToken: {
+      type: String,
+      default: "",
+    },
+  })
 
 const User = new Schema({
     username: {
@@ -8,11 +16,11 @@ const User = new Schema({
         trim    : true,
         required: [true, 'User name est obligatoire']
     },
-    password: {
+    /*password: {
         type: String,
         trim: true,
         required: [true, 'Password est obligatoire']
-    },
+    },*/
     nbPixelModified:{
         type: Number,
         trim: true, 
@@ -30,17 +38,34 @@ const User = new Schema({
         type:String, 
         trim: true,
         default: "light"
-    }
+    },
+    authStrategy: {
+        type: String,
+        default: "local",
+    },
+    refreshToken: {
+        type: [Session],
+    },
+
 }, {
     timestamps: true // ajoute 2 champs au document createdAt et updatedAt
 });
 
 // hook executé avant la sauvegarde d'un document. Hash le mot de passe quand il est modifié
-User.pre('save', function(next) {
+/*User.pre('save', function(next) {
     if (!this.isModified('password')) {
         return next();
     }
     next();
-});
+});*/
 
+User.set("toJSON", {
+    transform: function (doc, ret, options) {
+      delete ret.refreshToken
+      return ret
+    },
+  })
+  
+User.plugin(passportLocalMongoose)
+  
 module.exports = mongoose.model('User', User);

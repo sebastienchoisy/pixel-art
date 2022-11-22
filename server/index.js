@@ -1,8 +1,12 @@
 const express = require("express");
 const cookieParser = require('cookie-parser');
 const cors         = require('cors');
+const passport = require("passport")
+const session = require("express-session")
 
-
+require("./strategies/JwtStrategy")
+require("./strategies/LocalStrategy")
+require("./authenticate")
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,8 +19,26 @@ const mongodb     = require('./db/mongo');
 
 mongodb.initClientDbConnection();
 
-app.use(cors());
+const corsOptions = {
+	origin: function (origin, callback) {
+	  if (!origin || whitelist.indexOf(origin) !== -1) {
+		callback(null, true)
+	  } else {
+		callback(new Error("Not allowed by CORS"))
+	  }
+	},
+  
+	credentials: true,
+  }
 
+app.use(cors(corsOptions))
+app.use(cookieParser("jhdshhds884hfhhs-ew6dhjd"))
+app.use(session({  
+	secret: 'coder-session', 
+	resave: false, 
+	saveUninitialized: false  }));
+app.use(passport.initialize())
+app.use(passport.session())
 app.get('/', (req, res) => {
 	res.status(404).send('notFound');
 });
