@@ -1,5 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function ScreenProfil() {
-  return <span> Screen Profile </span>;
+  const theme = useContext(ThemeContext);
+  return (
+    <div style={theme}>
+      <span> Screen Profile </span>
+    </div>
+  );
 }

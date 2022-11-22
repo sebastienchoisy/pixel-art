@@ -75,8 +75,8 @@ export default function Board(props) {
   };
 
   return (
-    <div className="board d-flex justify-content-around">
-      <div>
+    <div className="board d-flex justify-content-center">
+      <div className="mx-2">
         <canvas
           id="myCanvas"
           ref={refCanvas}
@@ -84,7 +84,7 @@ export default function Board(props) {
           height={linesNb * pixelSize}
         />
       </div>
-      <div>
+      <div className="mx-2">
         <ColorPicker parentCallback={callbackColor} />
       </div>
     </div>

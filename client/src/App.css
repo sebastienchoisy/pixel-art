@@ -1,3 +1,11 @@
+html, body, #root, .App {
+  height: 100%
+}
+.App > div {
+  min-height: 100%;
+  height: fit-content;
+}
+
 .App {
   text-align: center;
 }

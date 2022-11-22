@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   NavLink as RRNavLink, Link,
@@ -11,14 +11,21 @@ import {
   Nav,
   NavItem,
   NavLink,
-  NavbarText, Button,
+  NavbarText,
+  Button,
+  Form,
+  FormGroup,
+  Input,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import mushroom from '../../assets/mushroom.png';
+import { ThemeContext } from '../../context/ThemeContext';
 
 export default function Header(props) {
   const [isOpen, setIsOpen] = useState(false);
   let { username } = props;
+  const { changeTheme } = props;
+  const theme = useContext(ThemeContext);
   const toggle = () => setIsOpen(!isOpen);
 
   useEffect(() => {
@@ -29,7 +36,7 @@ export default function Header(props) {
   }, [props.username]);
 
   return (
-    <header>
+    <header style={theme}>
       <Navbar className="navbar-expand-md navbar-light bg-light">
         <NavbarBrand tag={Link} to="/">
           <img className="logo" src={mushroom} alt="mushroom" />
@@ -68,7 +75,12 @@ export default function Header(props) {
             <NavbarText className="me-2">{username}</NavbarText>)}
           {username
             && (
-            <Button outline color="secondary">Deconnexion</Button>)}
+            <Button className="me-2" outline color="secondary">Deconnexion</Button>)}
+          <Form>
+            <FormGroup switch>
+              <Input type="switch" role="switch" onClick={changeTheme} />
+            </FormGroup>
+          </Form>
         </Collapse>
       </Navbar>
     </header>
@@ -77,6 +89,7 @@ export default function Header(props) {
 
 Header.propTypes = {
   username: PropTypes.string,
+  changeTheme: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {

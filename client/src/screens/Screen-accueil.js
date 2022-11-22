@@ -1,5 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function ScreenAccueil() {
-  return <span> Screen Accueil </span>;
+  const theme = useContext(ThemeContext);
+  return (
+    <div style={theme}>
+      <span>
+        Screen Accueil
+      </span>
+    </div>
+  );
 }
