@@ -9,6 +9,7 @@ exports.getById = async (req, res) => {
         }
         return res.status(404).json('user_not_found');
     } catch (error) {
+        console.error(error)
         return res.status(501).json(error);
     }
 }
@@ -26,6 +27,7 @@ exports.createUser = async (req,res) => {
         let user = await User.create(temp);
         return res.status(201).json(user);
     } catch (error) {
+        console.error(error)
         return res.status(501).json(error);
     }
 }
@@ -53,21 +55,23 @@ exports.updateUser = async (req, res) => {
 
         return res.status(404).json('user_not_found');
     } catch (error) {
+        console.error(error)
         return res.status(501).json(error);
     }
 }
-exports.updateUserNbPixel = async (lastUpdateUser) => {
+
+exports.updateUserNbPixel = async (lastUpdateUser,newPixelboardAssociated) => {
     try {
         let user = await User.findOne({ username: lastUpdateUser });
-        
-        if (user) {       
+        if (user) { 
+            if(!user.pixelboardContributed.includes(newPixelboardAssociated)) {
+                user.pixelboardContributed.push(newPixelboardAssociated)
+            }
+
             user.nbPixelModified +=1;
             await user.save();
-            return res.status(201).json(user);
         }
-
-        return res.status(404).json('user_not_found');
     } catch (error) {
-        return res.status(501).json(error);
+        console.error(error)
     }
 }

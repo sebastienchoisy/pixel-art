@@ -8,7 +8,7 @@ exports.getPixel= async (req, res) => {
         pixelboardAssociated: temp.pixelboardAssociated,
     } = req.query);
 
-    try {
+    try {   
        let pixel = await Pixel.findOne({ posX: temp.posX, posY:temp.posY, pixelboardAssociated: temp.pixelboardAssociated });
 
         if (pixel) {
@@ -16,9 +16,11 @@ exports.getPixel= async (req, res) => {
         }
         return res.status(404).json('Pixel_not_found');
     } catch (error) {
+        console.error(error)
         return res.status(501).json(error);
     }
 }
+
 exports.createPixel = async (req,res) => {
     const temp = {};
 
@@ -26,15 +28,19 @@ exports.createPixel = async (req,res) => {
         posX: temp.posX,
         posY: temp.posY,
         pixelboardAssociated: temp.pixelboardAssociated,
-        color: temp.color
+        color: temp.color,
+        lastUpdateUser: temp.lastUpdateUser
     } = req.query);
 
+    // update user there
     Object.keys(temp).forEach((key) => (temp[key] == null) && delete temp[key]);
 
     try {
         let pixel = await Pixel.create(temp);
+        user.updateUserNbPixel(temp.lastUpdateUser,temp.pixelboardAssociated);  
         return res.status(201).json(pixel);
     } catch (error) {
+        console.error(error)
         return res.status(501).json(error);
     }
 }
@@ -54,10 +60,10 @@ exports.updatePixel = async (req, res) => {
        
         if (pixel) {     
             pixel.occurence +=1;
-            user.updateUserNbPixel(lastUpdateUser);  
+            user.updateUserNbPixel(temp.lastUpdateUser,temp.pixelboardAssociated);  
             Object.keys(temp).forEach((key) => {
                 if (!!temp[key]) {
-                    Pixel[key] = temp[key];
+                    pixel[key] = temp[key];
                 }
             });
             await pixel.save();
@@ -66,6 +72,7 @@ exports.updatePixel = async (req, res) => {
 
         return res.status(404).json('Pixel_not_found');
     } catch (error) {
+        console.error(error)
         return res.status(501).json(error);
     }
 }

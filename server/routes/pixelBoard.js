@@ -1,6 +1,6 @@
 const express = require('express');
 const { wrapAsync } = require('../lib/utils');
-const userService = require('../services/pixelBoard');
+const PixelBoardService = require('../services/pixelBoard');
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get('/:id', wrapAsync(async (req, res) => {
 	return PixelBoards;
 }))
 
-router.patch('/update', wrapAsync(async (req, res) => {
+router.patch('/update/:id', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.updatePixelBoard(req,res);
 	return PixelBoards;
 }));
@@ -19,9 +19,9 @@ router.post('/add', wrapAsync(async (req, res) => {
 	return PixelBoards;
 }));
 
-router.delete('/delete', wrapAsync(async (req, res) => {
+router.delete('/delete/:id', wrapAsync(async (req, res) => {
 	const PixelBoard = await PixelBoardService.deletePixelBoard(req,res);
-	return PixelBoard;// TODO : A MODIFIER
+	return PixelBoard;
 }));
 
 module.exports = router;

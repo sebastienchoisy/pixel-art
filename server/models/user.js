@@ -21,7 +21,10 @@ const User = new Schema({
     pixelboardContributed:{
         type: Array,
         trim: true, 
-        default:[]
+        default:[],
+        items: {
+            type: "string"
+          }
     },
     theme:{
         type:String, 
