@@ -81,6 +81,37 @@ router.post("/signup", (req, res, next) => {
 	)
   })
 
+  router.get("/logout", verifyUser, (req, res, next) => {
+	const { signedCookies = {} } = req
+	const { refreshToken } = signedCookies
+	User.findById(req.user._id).then(
+	  user => {
+		const tokenIndex = user.refreshToken.findIndex(
+		  item => item.refreshToken === refreshToken
+		)
+  
+		if (tokenIndex !== -1) {
+		  user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove()
+		}
+  
+		user.save((err, user) => {
+		  if (err) {
+			res.statusCode = 500
+			res.send(err)
+		  } else {
+			res.clearCookie("refreshToken", COOKIE_OPTIONS)
+			res.send({ success: true })
+		  }
+		})
+	  },
+	  err => next(err)
+	)
+  })
+
+  router.get("/me", verifyUser, (req, res, next) => {
+	res.send(req.user)
+  })
+
  /*router.post("/refreshToken", async (req, res, next) => {
 	const { signedCookies = {} } = req
 	const { refreshToken } = signedCookies  
@@ -129,12 +160,10 @@ router.post("/signup", (req, res, next) => {
 	  res.statusCode = 401
 	  res.send("Unauthorized")
 	}
-  })*/
+  })
 
   
-  router.get("/me", verifyUser, (req, res, next) => {
-	res.send(req.user)
-  })
+  */
 
 /*router.post('/add', wrapAsync(async (req, res) => {
 	const user = await userService.createUser(req,res);
