@@ -1,0 +1,526 @@
+{
+	"info": {
+		"_postman_id": "73d5de11-d5dd-4d78-a9c4-16cd0c028044",
+		"name": "ReactApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23599275"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/user/get/637c8597120ffa6301f4afaf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"get",
+								"637c8597120ffa6301f4afaf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Count User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/user/statCount",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"statCount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"Nicolas\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/user/refreshToken/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"refreshToken",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"Nicolas\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/user/login/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Singup User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/user/signup/?username=Nicolas&password=1234",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"signup",
+								""
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Nicolas"
+								},
+								{
+									"key": "password",
+									"value": "1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/user/logout/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"logout",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/user/update?username=test3&password=test5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"update"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "test3"
+								},
+								{
+									"key": "password",
+									"value": "test5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pixel",
+			"item": [
+				{
+					"name": "Get Pixel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixel/getPixel/?posX=1&posY=1&pixelboardAssociated=637c7c0db7ca088afa6349f7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixel",
+								"getPixel",
+								""
+							],
+							"query": [
+								{
+									"key": "posX",
+									"value": "1"
+								},
+								{
+									"key": "posY",
+									"value": "1"
+								},
+								{
+									"key": "pixelboardAssociated",
+									"value": "637c7c0db7ca088afa6349f7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Pixel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixel/add?posX=1&posY=10&pixelboardAssociated=637c7c0db7ca088afa6349f7&color=red&lastUpdateUser=test3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixel",
+								"add"
+							],
+							"query": [
+								{
+									"key": "posX",
+									"value": "1"
+								},
+								{
+									"key": "posY",
+									"value": "10"
+								},
+								{
+									"key": "pixelboardAssociated",
+									"value": "637c7c0db7ca088afa6349f7"
+								},
+								{
+									"key": "color",
+									"value": "red"
+								},
+								{
+									"key": "lastUpdateUser",
+									"value": "test3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pixel",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixel/update/?posX=1&posY=1&pixelboardAssociated=637c7c0db7ca088afa6349f7&color=blue&lastUpdateUser=test4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixel",
+								"update",
+								""
+							],
+							"query": [
+								{
+									"key": "posX",
+									"value": "1"
+								},
+								{
+									"key": "posY",
+									"value": "1"
+								},
+								{
+									"key": "pixelboardAssociated",
+									"value": "637c7c0db7ca088afa6349f7"
+								},
+								{
+									"key": "color",
+									"value": "blue"
+								},
+								{
+									"key": "lastUpdateUser",
+									"value": "test4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PixelBoard",
+			"item": [
+				{
+					"name": "Count PixeBoard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/statCount",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								"statCount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get PixelBoard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/get/637c7c0db7ca088afa6349f7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								"get",
+								"637c7c0db7ca088afa6349f7"
+							],
+							"query": [
+								{
+									"key": "637c7c0db7ca088afa6349f7",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "637c7e6a7949eb005c58e3fd",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create PixelBoard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/add?pixelBoardname=pixelBoardTest2&nbLines=50&nbColumns=50&intervalPixel=30&author=test3&multipleDrawPixel=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								"add"
+							],
+							"query": [
+								{
+									"key": "pixelBoardname",
+									"value": "pixelBoardTest2"
+								},
+								{
+									"key": "nbLines",
+									"value": "50"
+								},
+								{
+									"key": "nbColumns",
+									"value": "50"
+								},
+								{
+									"key": "dateOfClosure",
+									"value": "23/11/2022",
+									"disabled": true
+								},
+								{
+									"key": "intervalPixel",
+									"value": "30"
+								},
+								{
+									"key": "author",
+									"value": "test3"
+								},
+								{
+									"key": "multipleDrawPixel",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update PixelBoard",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/update/637c7c0db7ca088afa6349f7?nbLines=40&nbColumns=40",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								"update",
+								"637c7c0db7ca088afa6349f7"
+							],
+							"query": [
+								{
+									"key": "nbLines",
+									"value": "40"
+								},
+								{
+									"key": "nbColumns",
+									"value": "40"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PixelBoard",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/delete/637c7e6a7949eb005c58e3fd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								"delete",
+								"637c7e6a7949eb005c58e3fd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzgxZGQ0MWUwMDc1YTA2ZjA0Y2RiOWUiLCJpYXQiOjE2Njk0NTUxNzgsImV4cCI6MTY2OTQ1NjA3OH0.akV252p-USbKftA3wkoiUiLRkgZ711qsIHWehPtFn94",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

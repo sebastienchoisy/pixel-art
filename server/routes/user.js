@@ -5,7 +5,6 @@ const User = require("../models/user")
 const passport = require("passport")
 const jwt = require("jsonwebtoken")
 
-
 const { getToken, COOKIE_OPTIONS, getRefreshToken,verifyUser } = require("../authenticate")
 
 const router = express.Router();
@@ -62,6 +61,8 @@ router.post("/signup", (req, res, next) => {
   })
 
   router.post("/login", passport.authenticate("local"), (req, res, next) => {
+		console.log("login")
+
 	const token = getToken({ _id: req.user._id })
 	const refreshToken = getRefreshToken({ _id: req.user._id })
 	User.findById(req.user._id).then(
@@ -108,11 +109,7 @@ router.post("/signup", (req, res, next) => {
 	)
   })
 
-  router.get("/me", verifyUser, (req, res, next) => {
-	res.send(req.user)
-  })
-
- /*router.post("/refreshToken", async (req, res, next) => {
+ router.post("/refreshToken", async (req, res, next) => {
 	const { signedCookies = {} } = req
 	const { refreshToken } = signedCookies  
 	if (refreshToken) {
@@ -162,13 +159,15 @@ router.post("/signup", (req, res, next) => {
 	}
   })
 
-  
-  */
+  passport.serializeUser((user, done) => {
+	console.log("serializeUser")
+	done(null, user._id);
+});
 
-/*router.post('/add', wrapAsync(async (req, res) => {
-	const user = await userService.createUser(req,res);
-	return user;
-}));*/
+passport.deserializeUser((username, done) => {
+	console.log("deserializeUser")
+	const value = User.findOne({ username: username }, (err, user) => done(err, user));
+});
 
 module.exports = router;
 
