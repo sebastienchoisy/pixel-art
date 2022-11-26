@@ -12,28 +12,30 @@
 // }
 
 // FAKE API
-export function login(email, pwd) {
-  if (email === 'toto@gmail.com' && pwd === 'tata') {
+export function login(formData) {
+  if (formData.email === 'toto@gmail.com' && formData.password === 'tata') {
     return { success: true, username: 'toto' };
   }
   return { success: false };
 }
 
-export function signin(email, pwd) {
-  if (email === 'toto@gmail.com' && pwd === 'tata') {
-    return { success: true, username: 'toto' };
-  }
-  return { success: false };
+export function signup(formData) {
+  console.log(`${formData.username} ${formData.email} ${formData.password}`);
+  return { success: true, username: 'toto' };
 }
 
 export function logout() {
   return { success: true, message: 'logout' };
 }
 
+export function checkUsernameAvailability(username) {
+  return { success: true, message: `${username} available` };
+}
+
 export function getUserInfoWithCookie() {
   return {
     // on change la valeur de success pour changer l'état de connexion, true on est connecté
-    success: true,
+    success: false,
     user: {
       username: 'toto',
       inscriptionDate: '20/11/2022',
