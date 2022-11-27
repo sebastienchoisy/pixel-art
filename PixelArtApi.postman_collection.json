@@ -51,43 +51,13 @@
 					"response": []
 				},
 				{
-					"name": "RefreshToken User",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"Nicolas\",\r\n    \"password\":\"1234\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3001/user/refreshToken/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"user",
-								"refreshToken",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "login User",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"Nicolas\",\r\n    \"password\":\"1234\"\r\n}",
+							"raw": "{\r\n    \"username\":\"Nicolas123\",\r\n    \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -116,7 +86,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/user/signup/?username=Nicolas&password=1234",
+							"raw": "http://localhost:3001/user/signup/?username=Nicolas123&password=1234",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -130,7 +100,7 @@
 							"query": [
 								{
 									"key": "username",
-									"value": "Nicolas"
+									"value": "Nicolas123"
 								},
 								{
 									"key": "password",
@@ -175,12 +145,45 @@
 					"response": []
 				},
 				{
+					"name": "test",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/user/test/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"user",
+								"test",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update User",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/user/update?username=test3&password=test5",
+							"raw": "http://localhost:3001/user/update?username=Nicolas&password=test5",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -193,7 +196,7 @@
 							"query": [
 								{
 									"key": "username",
-									"value": "test3"
+									"value": "Nicolas"
 								},
 								{
 									"key": "password",
@@ -370,18 +373,6 @@
 								"pixelBoard",
 								"get",
 								"637c7c0db7ca088afa6349f7"
-							],
-							"query": [
-								{
-									"key": "637c7c0db7ca088afa6349f7",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "637c7e6a7949eb005c58e3fd",
-									"value": null,
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -393,7 +384,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/pixelBoard/add?pixelBoardname=pixelBoardTest2&nbLines=50&nbColumns=50&intervalPixel=30&author=test3&multipleDrawPixel=true",
+							"raw": "http://localhost:3001/pixelBoard/add?pixelBoardname=pixelBoardTest3&nbLines=50&nbColumns=50&dateOfClosure=23/11/2022&intervalPixel=30&author=test3&multipleDrawPixel=true",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -406,7 +397,7 @@
 							"query": [
 								{
 									"key": "pixelBoardname",
-									"value": "pixelBoardTest2"
+									"value": "pixelBoardTest3"
 								},
 								{
 									"key": "nbLines",
@@ -418,8 +409,7 @@
 								},
 								{
 									"key": "dateOfClosure",
-									"value": "23/11/2022",
-									"disabled": true
+									"value": "23/11/2022"
 								},
 								{
 									"key": "intervalPixel",
@@ -498,7 +488,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzgxZGQ0MWUwMDc1YTA2ZjA0Y2RiOWUiLCJpYXQiOjE2Njk0NTUxNzgsImV4cCI6MTY2OTQ1NjA3OH0.akV252p-USbKftA3wkoiUiLRkgZ711qsIHWehPtFn94",
+				"value": "",
 				"type": "string"
 			}
 		]

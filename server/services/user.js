@@ -45,9 +45,7 @@ exports.updateUser = async (req, res) => {
         let user = await User.findOne({ username: temp.username });
         if (user) {       
             Object.keys(temp).forEach((key) => {
-                if (!!temp[key]) {
-                    user[key] = temp[key];
-                }
+                user[key] = temp[key];
             });
             await user.save();
             return res.status(201).json(user);

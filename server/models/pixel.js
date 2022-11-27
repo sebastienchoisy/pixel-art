@@ -12,11 +12,6 @@ const Pixel = new Schema({
         trim: true,
         required: [true, 'Position Y est obligatoire']
     },
-    pixelboardAssociated:{
-        type: String,//id 
-        trim: true,
-        required:[true, 'PixelBoard associe est obligatoire']
-    }, 
     color:{
         type:String, 
         trim:true,

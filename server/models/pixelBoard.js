@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
-const bcrypt   = require('bcryptjs');
+
+const Pixel = require('./pixel');
 
 const PixelBoard = new Schema({
     pixelBoardname: {
@@ -39,9 +40,11 @@ const PixelBoard = new Schema({
         type: Boolean,
         trim:true, 
         default: true
+    }, 
+    pixels: {
+        type: [Pixel.schema],
+        default: []
     }
-
-
 }, {
     timestamps: true 
 });
