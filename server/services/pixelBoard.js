@@ -1,5 +1,6 @@
 const PixelBoard = require('../models/pixelBoard');
 const Pixel = require('../models/pixel');
+const HistoriquePixel = require('../models/historiquePixels')
 const PixelUpdate = require('../services/pixel');
 const { isObjectIdOrHexString } = require('mongoose');
 
@@ -52,9 +53,7 @@ exports.createPixelBoard = async (req,res) => {
 }
 
 exports.updatePixelBoard = async (req, res) => {
-
     const pixelBoard = await PixelBoard.findById(req.params.id);
-  
     if(req.body.nbColumns < pixelBoard.nbColumns){// Update if less number of columns than initiated 
         for (let col = pixelBoard.nbColumns; col > 0; col--) { 
             if(req.body.nbColumns < col){ // remove all pixels column and line
@@ -62,14 +61,12 @@ exports.updatePixelBoard = async (req, res) => {
                     let pixelToRemove = pixelBoard.pixels.filter(v => v.posX = line && v.posY === col).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
                     pixelBoard.pixels.splice(pixelToRemove,1)
                 }
-               
             }
             else{ //remove only pixels of n columns 
                 for (let line = pixelBoard.nbLines; line >req.body.nbLines; line--) {
                     let pixelToRemove = pixelBoard.pixels.filter(v => v.posX = line && v.posY === col).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
                     pixelBoard.pixels.splice(pixelToRemove,1)
                 }
-
             }
         }
         Object.keys(req.body).forEach((field) => {
@@ -135,20 +132,24 @@ exports.updatePixelOfPixelBoard =  async (req, res) => {
     let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0] //retrieve index of the pixel to update
     let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex] // retrieve the object pixel to update
     PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req) //update pixel 
-    let hasErr = false;
-    try {
-        await pixelBoard.save();
-    } catch (e) {
-        console.log(e);
-        hasErr = true;
-    }
-    if(hasErr) {
-        return res.status(501).json(error);
-    } else {
-        return res.status(201).json(pixelBoard);
-    }
-}
 
+    const today = new Date()
+    const days = today.getDate()
+    const months = today.getMonth() + 1 
+    const years = today.getFullYear() 
+    const hours = today.getHours()
+    const minutes = today.getMinutes() 
+    const secondes = today.getSeconds()
+
+    const formatedDate = days + "/" + months +"/" + years + " " + hours + ":" + minutes + ":" + secondes
+    const temp = { 
+        pixelBordId    : req.params.id,
+		userName : req.body.lastUpdateUser,
+		dateUpdate : formatedDate,
+    };
+    const historiquePixel = await HistoriquePixel.create(temp) //add historique 
+    return res.status(201).json(historiquePixel);
+}
 
 exports.deletePixelBoard  = async (req, res) => {
     let hasErr = false;
