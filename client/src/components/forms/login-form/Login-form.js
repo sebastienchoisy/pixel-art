@@ -29,11 +29,11 @@ export default function LoginForm(props) {
       data={formData}
       onSubmit={handleSubmit}
       onChange={handleChange}
-      className="form m-auto mt-5 login-form"
       schema={loginSchema}
       errorMessages={{
         required: () => formData.defaultMessage,
       }}
+      className="form m-auto mt-5 login-form"
     >
       <div className="text-start">
         <FormGroup>

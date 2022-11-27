@@ -50,3 +50,11 @@ export async function getUserInfo() {
     },
   };
 }
+
+export function createBoard(formBoard) {
+  return { success: true, message: formBoard };
+}
+
+export function checkBoardTitleAvailable(formBoard) {
+  return { success: true, message: formBoard };
+}
