@@ -11,6 +11,17 @@
 //   return axios.get('/user/info');
 // }
 
+import axios from 'axios';
+
+export function getBoard(id) {
+  console.log(id);
+  return axios.get('pixelBoard/get/6383815576e3d2aab1c49cfe');
+}
+
+export function getBoards() {
+  return axios.get('pixelBoard/all');
+}
+
 // FAKE API
 export function login(formData) {
   if (formData.email === 'toto@gmail.com' && formData.password === 'tata') {

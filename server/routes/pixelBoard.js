@@ -1,6 +1,7 @@
 const express = require('express');
 const { wrapAsync } = require('../lib/utils');
 const PixelBoardService = require('../services/pixelBoard');
+const PixelBoard = require("../models/pixelBoard");
 
 const router = express.Router();
 
@@ -31,6 +32,10 @@ router.post('/add', wrapAsync(async (req, res) => {
 router.delete('/delete/:id', wrapAsync(async (req, res) => {
 	const PixelBoard = await PixelBoardService.deletePixelBoard(req,res);
 	return PixelBoard;
+}));
+
+router.get('/all', wrapAsync(async (req, res) => {
+	await PixelBoardService.getAllBoards(res);
 }));
 
 module.exports = router;

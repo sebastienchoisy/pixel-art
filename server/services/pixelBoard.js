@@ -174,3 +174,13 @@ exports.countPixelBoard = async (req,res) => {
         return res.status(501).json(error);
     }
 }
+
+exports.getAllBoards = async (res) => {
+    try {
+        let boards = await PixelBoard.find();
+        res.status(200).json(boards);
+    } catch (error) {
+        console.error(error)
+        return res.status(501).json(error);
+    }
+}
