@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "73d5de11-d5dd-4d78-a9c4-16cd0c028044",
+		"_postman_id": "a532fc64-f852-40f9-b3e0-87b4ebbff1bf",
 		"name": "ReactApi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "23599275"
+		"_exporter_id": "24442849"
 	},
 	"item": [
 		{
@@ -145,16 +145,13 @@
 					"response": []
 				},
 				{
-					"name": "test",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Update User",
 					"request": {
-						"method": "GET",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n    \"username\":\"Nicolas\",\r\n    \"password\":\"test5\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -162,28 +159,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/user/test/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"user",
-								"test",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update User",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3001/user/update?username=Nicolas&password=test5",
+							"raw": "http://localhost:3001/user/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -196,136 +172,13 @@
 							"query": [
 								{
 									"key": "username",
-									"value": "Nicolas"
+									"value": "Nicolas",
+									"disabled": true
 								},
 								{
 									"key": "password",
-									"value": "test5"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Pixel",
-			"item": [
-				{
-					"name": "Get Pixel",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3001/pixel/getPixel/?posX=1&posY=1&pixelboardAssociated=637c7c0db7ca088afa6349f7",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"pixel",
-								"getPixel",
-								""
-							],
-							"query": [
-								{
-									"key": "posX",
-									"value": "1"
-								},
-								{
-									"key": "posY",
-									"value": "1"
-								},
-								{
-									"key": "pixelboardAssociated",
-									"value": "637c7c0db7ca088afa6349f7"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Pixel",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3001/pixel/add?posX=1&posY=10&pixelboardAssociated=637c7c0db7ca088afa6349f7&color=red&lastUpdateUser=test3",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"pixel",
-								"add"
-							],
-							"query": [
-								{
-									"key": "posX",
-									"value": "1"
-								},
-								{
-									"key": "posY",
-									"value": "10"
-								},
-								{
-									"key": "pixelboardAssociated",
-									"value": "637c7c0db7ca088afa6349f7"
-								},
-								{
-									"key": "color",
-									"value": "red"
-								},
-								{
-									"key": "lastUpdateUser",
-									"value": "test3"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Pixel",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3001/pixel/update/?posX=1&posY=1&pixelboardAssociated=637c7c0db7ca088afa6349f7&color=blue&lastUpdateUser=test4",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"pixel",
-								"update",
-								""
-							],
-							"query": [
-								{
-									"key": "posX",
-									"value": "1"
-								},
-								{
-									"key": "posY",
-									"value": "1"
-								},
-								{
-									"key": "pixelboardAssociated",
-									"value": "637c7c0db7ca088afa6349f7"
-								},
-								{
-									"key": "color",
-									"value": "blue"
-								},
-								{
-									"key": "lastUpdateUser",
-									"value": "test4"
+									"value": "test5",
+									"disabled": true
 								}
 							]
 						}
@@ -338,7 +191,7 @@
 			"name": "PixelBoard",
 			"item": [
 				{
-					"name": "Count PixeBoard",
+					"name": "Count PixelBoard",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -475,6 +328,36 @@
 								"pixelBoard",
 								"delete",
 								"637c7e6a7949eb005c58e3fd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pixel of Pixelboard",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"_id\": \"6383399984257aa1ded5138c\",\r\n    \"color\":\"red\",\r\n    \"lastUpdateUser\": \"Nicolas\",\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/updatePixel/6383399984257aa1ded5138a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								"updatePixel",
+								"6383399984257aa1ded5138a"
 							]
 						}
 					},

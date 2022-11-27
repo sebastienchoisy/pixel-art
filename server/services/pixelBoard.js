@@ -148,8 +148,8 @@ exports.updatePixelOfPixelBoard =  async (req, res) => {
     } else {
         return res.status(201).json(pixelBoard);
     }
-
 }
+
 
 exports.deletePixelBoard  = async (req, res) => {
     let hasErr = false;
