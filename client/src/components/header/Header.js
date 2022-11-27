@@ -59,7 +59,7 @@ export default function Header(props) {
             {!username
                 && (
                 <NavItem>
-                  <NavLink tag={RRNavLink} to="/signin">S&apos;inscrire</NavLink>
+                  <NavLink tag={RRNavLink} to="/signup">S&apos;inscrire</NavLink>
                 </NavItem>
                 )}
           </Nav>

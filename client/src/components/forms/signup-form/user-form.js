@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, FieldError, Form } from 'react-jsonschema-form-validation';
 import {
   Button, FormFeedback, FormGroup, Input, Label,
@@ -12,11 +12,12 @@ import {
   minPasswordCustomMessage,
   minUsernameCustomMessage,
   patternUsernameCustomMessage,
-} from './form-validation/signup-custom-messages';
+} from './form-validation/user-custom-messages';
 import { checkUsernameAvailability } from '../../../services/APIService';
-import schema from './form-validation/signup-form-schema';
+import schema from './form-validation/user-form-schema';
+import userPropTypes from '../../../propTypes/userPropTypes';
 
-export default function SignupForm(props) {
+export default function UserForm({ submitCallBack, userData }) {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -32,7 +33,6 @@ export default function SignupForm(props) {
   });
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(undefined);
   const [arePwdDifferents, setArePwdDifferents] = useState(false);
-  const { submitCallBack } = props;
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.password2) {
@@ -41,6 +41,15 @@ export default function SignupForm(props) {
       submitCallBack(formData);
     }
   };
+  useEffect(() => {
+    if (userData) {
+      setFormData({
+        ...formData,
+        username: userData.username,
+        email: userData.email,
+      });
+    }
+  }, [userData]);
   const handleChange = (newData) => setFormData(newData);
 
   const checkUsername = async () => {
@@ -57,7 +66,7 @@ export default function SignupForm(props) {
       data={formData}
       onSubmit={handleSubmit}
       onChange={handleChange}
-      schema={schema}
+      schema={userData ? { ...schema, required: ['username', 'email'] } : schema}
       errorMessages={{
         required: () => formData.defaultMessage,
       }}
@@ -171,6 +180,11 @@ export default function SignupForm(props) {
   );
 }
 
-SignupForm.propTypes = {
+UserForm.propTypes = {
   submitCallBack: PropTypes.func.isRequired,
+  userData: userPropTypes,
+};
+
+UserForm.defaultProps = {
+  userData: null,
 };

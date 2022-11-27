@@ -28,20 +28,25 @@ export function logout() {
   return { success: true, message: 'logout' };
 }
 
+export function modifyUser(formData) {
+  console.log(`${formData.username} ${formData.email}`);
+  return { success: true };
+}
+
 export function checkUsernameAvailability(username) {
   return { success: true, message: `${username} available` };
 }
 
-export function getUserInfoWithCookie() {
+export async function getUserInfo() {
   return {
     // on change la valeur de success pour changer l'état de connexion, true on est connecté
-    success: false,
+    success: true,
     user: {
       username: 'toto',
+      email: 'test@test.fr',
       inscriptionDate: '20/11/2022',
       boards: [5, 1, 6, 3],
       pixelsNb: 12,
-      boardsNb: 4,
     },
   };
 }
