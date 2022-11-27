@@ -45,3 +45,7 @@
 .login-form {
   width: 270px;
 }
+
+.profil-container {
+  max-width: 600px;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import SignupForm from '../components/forms/signup-form/Signup-form';
+import UserForm from '../components/forms/signup-form/user-form';
 import { signup } from '../services/APIService';
 
 export default function ScreenSignup() {
@@ -12,6 +12,6 @@ export default function ScreenSignup() {
     // TODO Error view?
   };
   return (
-    <SignupForm submitCallBack={submitCallBack} />
+    <UserForm submitCallBack={submitCallBack} />
   );
 }
