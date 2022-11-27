@@ -14,7 +14,6 @@ router.get('/statCount', wrapAsync(async (req,res) => {
 	return PixelBoard;
 }));
 
-
 router.patch('/update/:id', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.updatePixelBoard(req,res);
 	return PixelBoards;

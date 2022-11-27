@@ -11,7 +11,7 @@ exports.updatePixel = async (pixelToUpdate,idPixelBoard,req) => {
     if (pixelToUpdate) {     
         pixelToUpdate.occurence +=1;
         if(temp.lastUpdateUser) {
-            user.updateUserNbPixel(temp.lastUpdateUser,idPixelBoard);  
+            user.updateUserNbPixel(temp.lastUpdateUser,idPixelBoard);  //Update User nbPixelModified and pixelboardContributed
         }
         Object.keys(temp).forEach((key) => {
             pixelToUpdate[key] = temp[key];

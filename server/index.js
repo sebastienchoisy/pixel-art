@@ -38,12 +38,7 @@ app.use(session({
 	saveUninitialized: false  }));
 app.use(passport.initialize())
 app.use(passport.session())
-/*const User = new mongoose.model("user", userAPI);
-passport.use(User.createStrategy());
-  
-// Serializing and deserializing
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());*/
+
 app.get('/', (req, res) => {
 	res.status(404).send('notFound');
 });

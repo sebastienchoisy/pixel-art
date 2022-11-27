@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const jwt = require("jsonwebtoken")
+
 exports.getById = async (req, res) => {
     const id = req.params.id;
     try {

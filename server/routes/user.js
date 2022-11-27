@@ -27,19 +27,17 @@ router.patch('/update', wrapAsync(async (req, res) => {
 router.post("/signup", (req, res, next) => {
 	// Verify that first name is not empty
 	
-	if (!req.query.username) {
+	if (!req.body.username) {
 	  res.statusCode = 500
 	  res.send({
 		name: "UserNameError",
 		message: "The userName is required",
 	  })
 	} else {
-		console.log(req.query.password);
 	  User.register(
-		new User({ username: req.query.username,password: req.query.password}),
-		req.query.password,
+		new User({ username: req.body.username,password: req.body.password}),
+		req.body.password,
 		(err, user) => {
-			console.log(req.query.password);
 		  if (err) {
 			res.statusCode = 500
 			res.send(err)
@@ -62,29 +60,28 @@ router.post("/signup", (req, res, next) => {
 	}
   })
 
-  router.post("/login", passport.authenticate("local"), (req, res, next) => {
-	console.log("login")
+router.post("/login", passport.authenticate("local"), (req, res, next) => {
 	User.findById(req.user._id).then(
-	  user => {
+		user => {
 		var token = jwt.sign({user_id:user._id}, "jhdshhds884hfhhs-ew6dhjd");
 		user.save((err, user) => {
-		  if (err) {
+			if (err) {
 			res.statusCode = 500
 			res.send(err)
-		  } else {
+			} else {
 			res.cookie('jwt',token);
 			res.send({ success: true })
-		  }
+			}
 		})
-	  },
-	  err => next(err)
+		},
+		err => next(err)
 	)
-  })
+})
 
-  router.get("/logout", (req, res) => {
+router.get("/logout", (req, res) => {
 	res.clearCookie("jwt")
 	res.send({ success: true })
-  })
+})
 
 passport.deserializeUser((username, done) => {
 	User.findOne({ username: username }, (err, user) => done(err, user));

@@ -31,10 +31,9 @@ exports.createPixelBoard = async (req,res) => {
 
    
     let pixelBoard = await PixelBoard.create(temp);
-    // a exporter dans un fichier helper
     for (let line = 0; line < temp.nbLines; line++) {
         for (let col = 0; col < temp.nbColumns; col++) {
-            pixelBoard.pixels.push( new Pixel({posX: line, posY: col, color: 'white'}));
+            pixelBoard.pixels.push( new Pixel({posX: line, posY: col, color: 'white'})); // Initialise pixels of PixelBoard
         }
     }
 
@@ -56,16 +55,16 @@ exports.updatePixelBoard = async (req, res) => {
 
     const pixelBoard = await PixelBoard.findById(req.params.id);
   
-    if(req.body.nbColumns < pixelBoard.nbColumns){// colonnes en moins
-        for (let col = pixelBoard.nbColumns; col > 0; col--) {
-            if(req.body.nbColumns < col){
+    if(req.body.nbColumns < pixelBoard.nbColumns){// Update if less number of columns than initiated 
+        for (let col = pixelBoard.nbColumns; col > 0; col--) { 
+            if(req.body.nbColumns < col){ // remove all pixels column and line
                 for (let line = pixelBoard.nbLines; line >0; line--) {
                     let pixelToRemove = pixelBoard.pixels.filter(v => v.posX = line && v.posY === col).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
                     pixelBoard.pixels.splice(pixelToRemove,1)
                 }
                
             }
-            else{
+            else{ //remove only pixels of n columns 
                 for (let line = pixelBoard.nbLines; line >req.body.nbLines; line--) {
                     let pixelToRemove = pixelBoard.pixels.filter(v => v.posX = line && v.posY === col).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
                     pixelBoard.pixels.splice(pixelToRemove,1)
@@ -77,7 +76,7 @@ exports.updatePixelBoard = async (req, res) => {
             pixelBoard[field]= req.body[field];
         })
     }
-    else if (req.body.nbLines < pixelBoard.nbLines){//lignes en moins
+    else if (req.body.nbLines < pixelBoard.nbLines){// Update if less number of lines than initiated 
         for (let line = pixelBoard.nbLines; line > 0; line--) {
             if(req.body.nbLines < line){
                 for (let col = pixelBoard.nbColumns; col >0; col--) {
@@ -90,7 +89,7 @@ exports.updatePixelBoard = async (req, res) => {
             pixelBoard[field]= req.body[field];
         })
     }
-    else if(req.body.nbColumns > pixelBoard.nbColumns){//colonnes en +
+    else if(req.body.nbColumns > pixelBoard.nbColumns){// Update if more number of columns than initiated 
         for (let line = 0; line < req.body.nbLines ; line++) {
             if(line < pixelBoard.nbLines){
                 for (let col = pixelBoard.nbColumns; col < req.body.nbColumns ; col++) {
@@ -107,7 +106,7 @@ exports.updatePixelBoard = async (req, res) => {
             pixelBoard[field]= req.body[field];
         })
     }
-    else if(req.body.nbLines > pixelBoard.nbLines ){//lignes en +
+    else if(req.body.nbLines > pixelBoard.nbLines ){// Update if more number of lines than initiated 
         for (let line = pixelBoard.nbLines; line < req.body.nbLines ; line++) {
                 for (let col = 0; col < req.body.nbColumns ; col++) {
                     pixelBoard.pixels.push(new Pixel({posX: line, posY: col, color: 'white'}));
@@ -133,9 +132,9 @@ exports.updatePixelBoard = async (req, res) => {
 }
 exports.updatePixelOfPixelBoard =  async (req, res) => {
     const pixelBoard = await PixelBoard.findById(req.params.id);
-    let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
-    let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex]
-    PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req)
+    let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0] //retrieve index of the pixel to update
+    let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex] // retrieve the object pixel to update
+    PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req) //update pixel 
     let hasErr = false;
     try {
         await pixelBoard.save();
