@@ -147,8 +147,8 @@ exports.updatePixelOfPixelBoard =  async (req, res) => {
 		userName : req.body.lastUpdateUser,
 		dateUpdate : formatedDate,
     };
-    const historiquePixel = await HistoriquePixel.create(temp) //add historique 
-    return res.status(201).json(historiquePixel);
+    await HistoriquePixel.create(temp) //add historique 
+    return res.status(201).json(pixelToUpdate);
 }
 
 exports.deletePixelBoard  = async (req, res) => {
