@@ -1,35 +1,95 @@
 const express = require('express');
 const { wrapAsync } = require('../lib/utils');
 const userService = require('../services/user');
+const User = require("../models/user")
+const passport = require("passport")
+const jwt = require("jsonwebtoken")
+
+const { getToken, COOKIE_OPTIONS, getRefreshToken,verifyUser } = require("../authenticate")
 
 const router = express.Router();
 
-router.use((req, res, next) => {
-	// eslint-disable-next-line no-console
-	console.log(`USER API - ${req.method} request for ${req.url}`);
-	next();
+router.get('/get/:id', wrapAsync(async (req, res) => {
+	const user = await userService.getById(req,res);
+	return user;
+}))
+
+router.get('/statCount', wrapAsync(async (req,res) => {
+	const PixelBoard = await userService.countUser(req,res);
+	return PixelBoard;
+}));
+
+router.patch('/update', wrapAsync(async (req, res) => {
+	const user = await userService.updateUser(req,res);
+	return user;
+}));
+
+router.post("/signup", (req, res, next) => {
+	// Verify that first name is not empty
+	
+	if (!req.body.username) {
+	  res.statusCode = 500
+	  res.send({
+		name: "UserNameError",
+		message: "The userName is required",
+	  })
+	} else {
+	  User.register(
+		new User({ username: req.body.username,password: req.body.password}),
+		req.body.password,
+		(err, user) => {
+		  if (err) {
+			res.statusCode = 500
+			res.send(err)
+			console.error(err)
+		  } else {
+			var token = jwt.sign({user_id:user._id}, "jhdshhds884hfhhs-ew6dhjd");
+			user.save((err, user) => {
+			  if (err) {
+				console.error(err)
+				res.statusCode = 500
+				res.send(err)
+			  } else {
+				res.cookie('jwt',token);
+				res.send({ success: true })
+			  }
+			})
+		  }
+		}
+	  )
+	}
+  })
+
+router.post("/login", passport.authenticate("local"), (req, res, next) => {
+	User.findById(req.user._id).then(
+		user => {
+		var token = jwt.sign({user_id:user._id}, "jhdshhds884hfhhs-ew6dhjd");
+		user.save((err, user) => {
+			if (err) {
+			res.statusCode = 500
+			res.send(err)
+			} else {
+			res.cookie('jwt',token);
+			res.send({ success: true })
+			}
+		})
+		},
+		err => next(err)
+	)
+})
+
+router.get("/logout", (req, res) => {
+	res.clearCookie("jwt")
+	res.send({ success: true })
+})
+
+passport.deserializeUser((username, done) => {
+	User.findOne({ username: username }, (err, user) => done(err, user));
 });
 
-router.get('/',
-	wrapAsync(async (req, res) => {
-		try {
-			const users = await userService.getUser();
-			return res.json(users);// TODO : A MODIFIER
-		} catch (err) {
-			return res.status(500).json({ error: err.message });// TODO : A MODIFIER
-		}
-	}));
-
-router.post('/', wrapAsync(async (req, res) => {
-	const user = req.body;
-	await userService.createUser(user);
-	return res.json(user);// TODO : A MODIFIER
-}));
-
-router.post('/', wrapAsync(async (req, res) => {
-	const user = req.body;
-	await userService.updateUser(user);
-	return res.json(user);// TODO : A MODIFIER
-}));
+router.get("/test",passport.authenticate("jwt"), (req, res) => {
+	console.log(req.user)
+})
 
 module.exports = router;
+
