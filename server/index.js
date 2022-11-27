@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 3001;
 
 const userAPI = require('./routes/user');
 const pixelBoardAPI = require('./routes/pixelBoard');
-const pixelAPI = require('./routes/pixel');
 
 const mongodb     = require('./db/mongo');
 
@@ -57,7 +56,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/user', userAPI);
 app.use('/pixelBoard', pixelBoardAPI);
-app.use('/pixel', pixelAPI);
 
 app.use((err, req, res, next) => {
 	// eslint-disable-next-line no-console

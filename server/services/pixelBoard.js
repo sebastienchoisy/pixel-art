@@ -1,6 +1,7 @@
 const PixelBoard = require('../models/pixelBoard');
 const Pixel = require('../models/pixel');
-//const Pixeldel = require('../service/pixel');
+const PixelUpdate = require('../services/pixel');
+const { isObjectIdOrHexString } = require('mongoose');
 
 exports.getPixelBoard = async (req, res) => {
     const id = req.params.id;
@@ -129,6 +130,25 @@ exports.updatePixelBoard = async (req, res) => {
     } else {
         return res.status(201).json(pixelBoard);
     }
+}
+exports.updatePixelOfPixelBoard =  async (req, res) => {
+    const pixelBoard = await PixelBoard.findById(req.params.id);
+    let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
+    let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex]
+    PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req)
+    let hasErr = false;
+    try {
+        await pixelBoard.save();
+    } catch (e) {
+        console.log(e);
+        hasErr = true;
+    }
+    if(hasErr) {
+        return res.status(501).json(error);
+    } else {
+        return res.status(201).json(pixelBoard);
+    }
+
 }
 
 exports.deletePixelBoard  = async (req, res) => {

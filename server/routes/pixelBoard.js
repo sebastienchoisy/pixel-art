@@ -19,6 +19,10 @@ router.patch('/update/:id', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.updatePixelBoard(req,res);
 	return PixelBoards;
 }));
+router.patch('/updatePixel/:id', wrapAsync(async (req, res) => {
+	const PixelBoards = await PixelBoardService.updatePixelOfPixelBoard(req,res);
+	return PixelBoards;
+}));
 
 router.post('/add', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.createPixelBoard(req,res);

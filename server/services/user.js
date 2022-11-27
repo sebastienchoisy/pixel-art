@@ -13,24 +13,6 @@ exports.getById = async (req, res) => {
         return res.status(501).json(error);
     }
 }
-exports.createUser = async (req,res) => {
-    const temp = {};
-
-    ({ 
-        username    : temp.username,
-        password : temp.password
-    } = req.query);
-
-    Object.keys(temp).forEach((key) => (temp[key] == null) && delete temp[key]);
-
-    try {
-        let user = await User.create(temp);
-        return res.status(201).json(user);
-    } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
-    }
-}
 
 exports.updateUser = async (req, res) => {
     const temp = {};
@@ -39,7 +21,7 @@ exports.updateUser = async (req, res) => {
         password : temp.password,
         pixelboardContributed:temp.pixelboardContributed,
         theme:temp.theme
-    } = req.query);
+    } = req.body);
 
     try {
         let user = await User.findOne({ username: temp.username });

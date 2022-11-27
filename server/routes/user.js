@@ -26,6 +26,7 @@ router.patch('/update', wrapAsync(async (req, res) => {
 
 router.post("/signup", (req, res, next) => {
 	// Verify that first name is not empty
+	
 	if (!req.query.username) {
 	  res.statusCode = 500
 	  res.send({
@@ -33,13 +34,16 @@ router.post("/signup", (req, res, next) => {
 		message: "The userName is required",
 	  })
 	} else {
+		console.log(req.query.password);
 	  User.register(
-		new User({ username: req.query.username}),
+		new User({ username: req.query.username,password: req.query.password}),
 		req.query.password,
 		(err, user) => {
+			console.log(req.query.password);
 		  if (err) {
 			res.statusCode = 500
 			res.send(err)
+			console.error(err)
 		  } else {
 			var token = jwt.sign({user_id:user._id}, "jhdshhds884hfhhs-ew6dhjd");
 			user.save((err, user) => {
