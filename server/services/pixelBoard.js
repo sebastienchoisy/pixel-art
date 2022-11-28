@@ -5,14 +5,18 @@ const HistoriquePixelService = require("../services/historiquePixel")
 const PixelUpdate = require('../services/pixel');
 
 exports.getPixelBoard = async (req, res) => {
-    const id = req.params.id;
     try {
-       let pixelBoard = await PixelBoard.findById(id);
-
-        if (pixelBoard) {
-            return res.status(200).json(pixelBoard);
+        if(req.query.id) {
+            let pixelBoard = await PixelBoard.findById(req.query.id);
+            if (pixelBoard) {
+                res.status(200).json(pixelBoard);
+            } else {
+                res.status(404).json('board_not_found');
+            }
+        } else {
+            let pixelBoards = await PixelBoard.find();
+            res.status(200).json(pixelBoards);
         }
-        return res.status(404).json('board_not_found');
     } catch (error) {
         return res.status(501).json(error);
     }
@@ -35,9 +39,10 @@ const occurenceComparisonCallback = (boardA, boardB) => {
 exports.getPopularBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
+        console.log(boards.length);
         let popularBoards = [];
         boards.forEach((board) => {
-            if (popularBoards.length < 5) {
+            if (popularBoards.length <= 5) {
                 popularBoards.push(board);
             } else {
                 if (getTotaloccurences(board) > getTotaloccurences(popularBoards[0])) {
@@ -56,7 +61,7 @@ exports.getPopularBoards = async (res) => {
 exports.getRecentsBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
-        let recentBoards = boards.length < 5 ? boards : boards.slice(boards.length - 5);
+        let recentBoards = boards.length <= 5 ? boards : boards.slice(boards.length - 5);
         return res.status(200).json(recentBoards);
     } catch (error) {
         console.error(error)
@@ -67,7 +72,7 @@ exports.getRecentsBoards = async (res) => {
 exports.getLastClosedBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
-        let closedBoards = boards.filter((board) => board.closure = true);
+        let closedBoards = boards.filter((board) => board.closure == true);
         closedBoards = closedBoards.length < 5 ? closedBoards : closedBoards.slice(boards.length - 5);
         return res.status(200).json(closedBoards);
     } catch (error) {
@@ -230,7 +235,7 @@ exports.updatePixelOfPixelBoard =  async (req, res) => {
 exports.deletePixelBoard  = async (req, res) => {
     let hasErr = false;
     try {
-        await PixelBoard.deleteOne({_id: req.params.id});
+        await PixelBoard.deleteOne({_id: req.query.id});
     } catch(e) {
         hasErr = true;
     }

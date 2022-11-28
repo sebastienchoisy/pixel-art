@@ -5,7 +5,7 @@ const PixelBoard = require("../models/pixelBoard");
 
 const router = express.Router();
 
-router.get('/:id', wrapAsync(async (req, res) => {
+router.get('/', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
 	return PixelBoards;
 }))
@@ -23,10 +23,6 @@ router.get('/populars', wrapAsync(async (req,res) => {
 
 router.get('/lastcreated', wrapAsync(async (req,res) => {
     await PixelBoardService.getRecentsBoards(res);
-}));
-
-router.get('/', wrapAsync(async (req,res) => {
-    await PixelBoardService.getBoards(res);
 }));
 
 router.get('/lastclosed', wrapAsync(async (req,res) => {
