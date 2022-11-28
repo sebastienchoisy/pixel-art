@@ -49,3 +49,22 @@
 .profil-container {
   max-width: 600px;
 }
+
+.fit-content {
+  width: fit-content;
+}
+
+.board-container {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+.link {
+  text-decoration: none !important;
+  color: #000000E6
+}
+
+.boards-carousel {
+  width: 330px;
+  color: black;
+}

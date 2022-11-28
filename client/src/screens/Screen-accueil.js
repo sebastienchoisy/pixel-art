@@ -1,5 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getBoards } from '../services/APIService';
+import BoardCarousel from '../components/carousel/BoardCarousel';
 
 export default function ScreenAccueil() {
-  return <span> Screen Accueil </span>;
+  const [boards, setBoards] = useState(null);
+  useEffect(() => {
+    getBoards().then((resp) => setBoards(resp.data));
+  }, []);
+  return boards && (<BoardCarousel boards={boards} />);
 }
