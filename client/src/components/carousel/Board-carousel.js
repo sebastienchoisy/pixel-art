@@ -4,7 +4,7 @@ import {
   Carousel,
   CarouselItem,
   CarouselControl,
-  CarouselIndicators,
+  CarouselIndicators, CarouselCaption,
 } from 'reactstrap';
 import BoardPropTypes from '../../proptypes/board-proptypes';
 import BoardDisplay from '../board/Board-display';
@@ -41,11 +41,15 @@ export default function BoardCarousel({ boards }) {
       slide={false}
     >
       <BoardDisplay board={board} side={300} />
+      <CarouselCaption
+        captionText={board.author}
+        captionHeader={(<span>{board.pixelBoardname}</span>)}
+      />
     </CarouselItem>
   ));
   return (
     <Carousel
-      className="boards-carousel"
+      className="boards-carousel m-auto"
       activeIndex={activeIndex}
       next={next}
       previous={previous}

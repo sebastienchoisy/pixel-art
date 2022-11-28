@@ -29,7 +29,6 @@ export default function BoardDisplay({ board, side }) {
     <div>
       {/* eslint-disable-next-line no-underscore-dangle */}
       <Link to={`/board/${board._id}`} className="d-flex flex-column fit-content link m-auto">
-        <span>{board.pixelBoardname}</span>
         <canvas
           id="myCanvas"
           ref={refCanvas}

@@ -14,11 +14,31 @@
 import axios from 'axios';
 
 export async function getBoard(id) {
-  return axios.get(`/pixelBoard/${id}`);
+  return axios.get(`/pixelBoard?id=${id}`);
 }
 
 export function getBoards() {
-  return axios.get('pixelBoard/');
+  return axios.get('/pixelBoard');
+}
+
+export async function getRecentBoards() {
+  return axios.get('/pixelBoard/lastcreated');
+}
+
+export async function getClosedBoards() {
+  return axios.get('/pixelBoard/lastclosed');
+}
+
+export async function getPopularBoards() {
+  return axios.get('/pixelBoard/populars');
+}
+
+export async function getUsersNb() {
+  return axios.get('/user/statCount');
+}
+
+export async function getBoardsNb() {
+  return axios.get('/pixelBoard/statCount');
 }
 
 // FAKE API
