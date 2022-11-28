@@ -4,7 +4,7 @@ const PixelBoardService = require('../services/pixelBoard');
 
 const router = express.Router();
 
-router.get('/get/:id', wrapAsync(async (req, res) => {
+router.get('/:id', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
 	return PixelBoards;
 }))
@@ -14,21 +14,44 @@ router.get('/statCount', wrapAsync(async (req,res) => {
 	return PixelBoard;
 }));
 
-router.patch('/update/:id', wrapAsync(async (req, res) => {
+// a ajouter dans postman
+
+router.get('/populars', wrapAsync(async (req,res) => {
+    await PixelBoardService.getPopularBoards(res);
+}));
+
+router.get('/lastcreated', wrapAsync(async (req,res) => {
+    await PixelBoardService.getRecentsBoards(res);
+}));
+
+router.get('/', wrapAsync(async (req,res) => {
+    await PixelBoardService.getBoards(res);
+}));
+
+router.get('/lastclosed', wrapAsync(async (req,res) => {
+    await PixelBoardService.getLastClosedBoards(res);
+}))
+
+// a ajouter
+
+// TODO : ajouter les stratégies de log dans les routes 
+// TODO : changer tous les id et les mettre dans body PARTOUT
+
+router.patch('/:id', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.updatePixelBoard(req,res);
 	return PixelBoards;
 }));
-router.patch('/updatePixel/:id', wrapAsync(async (req, res) => {
+router.patch('/:id/pixel', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.updatePixelOfPixelBoard(req,res);
 	return PixelBoards;
 }));
 
-router.post('/add', wrapAsync(async (req, res) => {
+router.post('/', wrapAsync(async (req, res) => {
 	const PixelBoards = await PixelBoardService.createPixelBoard(req,res);
 	return PixelBoards;
 }));
 
-router.delete('/delete/:id', wrapAsync(async (req, res) => {
+router.delete('/:id', wrapAsync(async (req, res) => {
 	const PixelBoard = await PixelBoardService.deletePixelBoard(req,res);
 	return PixelBoard;
 }));

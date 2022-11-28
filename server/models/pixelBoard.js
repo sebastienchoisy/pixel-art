@@ -9,7 +9,7 @@ const PixelBoard = new Schema({
         trim    : true,
         required: [true, 'Board name est obligatoire']
     },
-    closure: {
+    isClosed: {
         type: Boolean,
         trim: true,
         default:false
@@ -34,7 +34,8 @@ const PixelBoard = new Schema({
     }, 
     intervalPixel:{
         type: Number,
-        trim:true
+        trim:true,
+        default: 0
     },
     multipleDrawPixel:{
         type: Boolean,

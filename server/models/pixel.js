@@ -20,7 +20,7 @@ const Pixel = new Schema({
     occurence:{
         type: Number, 
         trim:true,
-        default:1
+        default:0
     }, 
     lastUpdateUser:{
         type: String,
