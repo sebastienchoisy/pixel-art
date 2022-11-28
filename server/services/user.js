@@ -2,17 +2,18 @@ const User = require('../models/user');
 const jwt = require("jsonwebtoken")
 
 exports.getById = async (req, res) => {
-    const id = req.params.id;
+    const id = req.body._id;
     try {
        let user = await User.findById(id);
 
         if (user) {
-            return res.status(200).json(user);
+            res.status(200).json({success: true, message:user});
         }
-        return res.status(404).json('user_not_found');
+        else{
+            res.status(404).json({success: false, message:"Utilisateur non trouve"});
+        }
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false,error});
     }
 }
 
@@ -20,9 +21,7 @@ exports.updateUser = async (req, res) => {
     const temp = {};
     ({ 
         username    : temp.username,
-        password : temp.password,
-        pixelboardContributed:temp.pixelboardContributed,
-        theme:temp.theme
+        password : temp.password
     } = req.body);
 
     try {
@@ -32,13 +31,13 @@ exports.updateUser = async (req, res) => {
                 user[key] = temp[key];
             });
             await user.save();
-            return res.status(201).json(user);
+            res.status(201).json({success: true, message:"L'utilisateur a ete mis a jour"+user._id});
         }
-
-        return res.status(404).json('user_not_found');
+        else{
+            res.status(404).json({success: false, message:"Utilisateur non trouve"});
+        }    
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false, message:error});
     }
 }
 
@@ -52,18 +51,18 @@ exports.updateUserNbPixel = async (lastUpdateUser,newPixelboardAssociated) => {
 
             user.nbPixelModified +=1;
             await user.save();
+            res.status(201).json({success: true, message:"L'utilisateur a ete mis a jour"+user._id});
         }
     } catch (error) {
-        console.error(error)
+        res.status(501).json({success: false, message:error});
     }
 }
 
 exports.countUser = async (req,res) => {
     try {
         let countUser = await User.count();
-        return res.status(200).json(countUser);
+        res.status(200).json({success: true, message:countUser});
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false,error});
     }
 }

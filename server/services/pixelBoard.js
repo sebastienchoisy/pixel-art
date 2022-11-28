@@ -6,16 +6,19 @@ const PixelUpdate = require('../services/pixel');
 const { isObjectIdOrHexString } = require('mongoose');
 
 exports.getPixelBoard = async (req, res) => {
-    const id = req.params.id;
+    const id = req.body._id;
     try {
        let pixelBoard = await PixelBoard.findById(id);
 
         if (pixelBoard) {
-            return res.status(200).json(pixelBoard);
+            res.status(200).json({success: true, message:pixelBoard});
         }
-        return res.status(404).json('board_not_found');
+        else{
+            res.status(404).json({success: false, message:"pixelboard non trouve"});
+        }
+        
     } catch (error) {
-        return res.status(501).json(error);
+        res.status(501).json({success: false, message: error});
     }
 }
 
@@ -47,10 +50,10 @@ exports.getPopularBoards = async (res) => {
                 }
             }
         })
-        return res.status(200).json(popularBoards);
+        res.status(200).json({success: true, message:popularBoards});
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        
+        res.status(501).json({success: false, message: error});
     }
 }
 
@@ -58,10 +61,9 @@ exports.getRecentsBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
         let recentBoards = boards.length < 5 ? boards : boards.slice(boards.length - 5);
-        return res.status(200).json(recentBoards);
+        res.status(200).json({success: true, message:recentBoards});
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false, message: error});
     }
 }
 
@@ -70,20 +72,20 @@ exports.getLastClosedBoards = async (res) => {
         let boards = await PixelBoard.find();
         let closedBoards = boards.filter((board) => board.closure = true);
         closedBoards = closedBoards.length < 5 ? closedBoards : closedBoards.slice(boards.length - 5);
-        return res.status(200).json(closedBoards);
+        res.status(200).json({success: true, message:closedBoards});
     } catch (error) {
         console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false, message: error});
     }
 }
 
 exports.getBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
-        return res.status(200).json(boards);
+        res.status(200).json({success: true, message:boards});
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+       
+        res.status(501).json({success: false , message: error});
     }
 }
 
@@ -108,22 +110,16 @@ exports.createPixelBoard = async (req,res) => {
         }
     }
 
-    let hasErr = false;
     try {
         await pixelBoard.save();
-    } catch (e) {
-        console.log(e);
-        hasErr = true;
-    }
-    if(hasErr) {
-        return res.status(501).json(error);
-    } else {
-        return res.status(201).json(pixelBoard);
+        res.status(201).json({success: true, message:"Pixelboard creer "+pixelBoard._id});
+    } catch (error) {
+        res.status(501).json({success: false, message: error});
     }
 }
 
 exports.updatePixelBoard = async (req, res) => {
-    const pixelBoard = await PixelBoard.findById(req.params.id);
+    const pixelBoard = await PixelBoard.findById(req.body._id);
     if(!req.body.nbColumns) {
         req.body.nbColumns = pixelBoard.nbColumns
     }
@@ -135,13 +131,13 @@ exports.updatePixelBoard = async (req, res) => {
         for (let col = pixelBoard.nbColumns; col > 0; col--) { 
             if(req.body.nbColumns < col){ // remove all pixels column and line
                 for (let line = pixelBoard.nbLines; line >0; line--) {
-                    let pixelToRemove = pixelBoard.pixels.filter(v => v.posX = line && v.posY === col).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
+                    let pixelToRemove = pixelBoard.pixels.id(req.body._id) 
                     pixelBoard.pixels.splice(pixelToRemove,1)
                 }
             }
             else{ //remove only pixels of n columns 
                 for (let line = pixelBoard.nbLines; line >req.body.nbLines; line--) {
-                    let pixelToRemove = pixelBoard.pixels.filter(v => v.posX = line && v.posY === col).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
+                    let pixelToRemove = pixelBoard.pixels.id(req.body._id) 
                     pixelBoard.pixels.splice(pixelToRemove,1)
                 }
             }
@@ -152,7 +148,7 @@ exports.updatePixelBoard = async (req, res) => {
         for (let line = pixelBoard.nbLines; line > 0; line--) {
             if(req.body.nbLines < line){
                 for (let col = pixelBoard.nbColumns; col >0; col--) {
-                    let pixelToRemove = pixelBoard.pixels.filter(v => v.posX = line && v.posY === col).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0]
+                    let pixelToRemove = pixelBoard.pixels.id(req.body._id) 
                     pixelBoard.pixels.splice(pixelToRemove,1)
                 }
             }
@@ -192,53 +188,54 @@ exports.updatePixelBoard = async (req, res) => {
         hasErr = true;
     }
     if(hasErr) {
-        return res.status(501).json(error);
+         res.status(501).json({success: false, message: error});
     } else {
-        return res.status(201).json(pixelBoard);
+         res.status(200).json({success: true, message:"Le pixelBoard a ete mis à jour "+pixelBoard._id});
     }
 }
 exports.updatePixelOfPixelBoard =  async (req, res) => {
     const today = new Date()
-    const pixelBoard = await PixelBoard.findById(req.params.id);
+    console.log(req.body.pixelboard_id)
+    const pixelBoard = await PixelBoard.findById(req.body.pixelboard_id);
+    console.log(pixelBoard)
         if(today.getTime() > pixelBoard.dateOfClosure.getTime()) { // TODO : error here !
         //TODO change algo of reduce
-        //let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0] //retrieve index of the pixel to update
-        //let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex] // retrieve the object pixel to update
         let pixelToUpdate = pixelBoard.pixels.id(req.body._id) 
 
         const temp = { 
-            pixelBordId    : req.params.id,
+            pixelBordId    : req.body.pixelboard_id,
             userName : req.body.lastUpdateUser,
         };
 
-        const lastHistorique = await HistoriquePixelService.getHistorique(req.params.id,req.body.lastUpdateUser,res)
+        const lastHistorique = await HistoriquePixelService.getHistorique(req.body.pixelboard_id,req.body.lastUpdateUser,res)
         let timeUnlockPixel = lastHistorique.createdAt
         timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
         if(today.getTime() > timeUnlockPixel.getTime()) {
-            PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req) //update pixel 
+            PixelUpdate.updatePixel(pixelToUpdate,req.body.pixelboard_id,req) //update pixel 
             await HistoriquePixel.create(temp) //add historique
-            return res.status(201).json(pixelToUpdate); 
+            res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate._id}); 
         }
         else {
-            return res.status(201).json("interval not respected, no update");
+            res.status(501).json({success: false, message:"intervalle non respecte, pas de maj"});
         }
     }
     else {
-        return res.status(201).json("Pixel Board is closed");
+        res.status(501).json({success: false, message:"Pixel Board est cloture"});
     }
 }
 
 exports.deletePixelBoard  = async (req, res) => {
+    
     let hasErr = false;
     try {
-        await PixelBoard.deleteOne({_id: req.params.id});
+        await PixelBoard.deleteOne({_id: req.body._id});
     } catch(e) {
         hasErr = true;
     }
     if (hasErr) {
-        return res.status(501).json(error);
+        res.status(501).json({success: false, message: error});
     } else {
-        return res.status(201).json(pixelBoard);
+        res.status(200).json({success: true, message: "Pixelboard a ete supprimer"});
     }
 
 }
@@ -246,9 +243,9 @@ exports.deletePixelBoard  = async (req, res) => {
 exports.countPixelBoard = async (req,res) => {
     try {
         let countPixelBoard = await PixelBoard.count();
-        return res.status(200).json(countPixelBoard);
+        res.status(200).json({success: true, message: countPixelBoard});
     } catch (error) {
         console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false, message: error});
     }
 }

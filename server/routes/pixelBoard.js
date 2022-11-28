@@ -4,18 +4,17 @@ const PixelBoardService = require('../services/pixelBoard');
 
 const router = express.Router();
 
-router.get('/:id', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
-	return PixelBoards;
+router.get('/', wrapAsync(async (req, res) => {
+	await PixelBoardService.getPixelBoard(req,res);
 }))
 
 router.get('/statCount', wrapAsync(async (req,res) => {
-	const PixelBoard = await PixelBoardService.countPixelBoard(req,res);
-	return PixelBoard;
+	await PixelBoardService.countPixelBoard(req,res);
 }));
 
-// a ajouter dans postman
-
+router.get('/boards', wrapAsync(async (req,res) => {
+    await PixelBoardService.getBoards(res);
+}));
 router.get('/populars', wrapAsync(async (req,res) => {
     await PixelBoardService.getPopularBoards(res);
 }));
@@ -23,37 +22,25 @@ router.get('/populars', wrapAsync(async (req,res) => {
 router.get('/lastcreated', wrapAsync(async (req,res) => {
     await PixelBoardService.getRecentsBoards(res);
 }));
-
-router.get('/', wrapAsync(async (req,res) => {
-    await PixelBoardService.getBoards(res);
-}));
-
 router.get('/lastclosed', wrapAsync(async (req,res) => {
     await PixelBoardService.getLastClosedBoards(res);
 }))
 
-// a ajouter
-
 // TODO : ajouter les stratégies de log dans les routes 
-// TODO : changer tous les id et les mettre dans body PARTOUT
 
-router.patch('/:id', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.updatePixelBoard(req,res);
-	return PixelBoards;
+router.patch('/', wrapAsync(async (req, res) => {
+	await PixelBoardService.updatePixelBoard(req,res);
 }));
-router.patch('/:id/pixel', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.updatePixelOfPixelBoard(req,res);
-	return PixelBoards;
+router.patch('/pixel', wrapAsync(async (req, res) => {
+	await PixelBoardService.updatePixelOfPixelBoard(req,res);
 }));
 
 router.post('/', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.createPixelBoard(req,res);
-	return PixelBoards;
+	await PixelBoardService.createPixelBoard(req,res);
 }));
 
-router.delete('/:id', wrapAsync(async (req, res) => {
-	const PixelBoard = await PixelBoardService.deletePixelBoard(req,res);
-	return PixelBoard;
+router.delete('/', wrapAsync(async (req, res) => {
+	await PixelBoardService.deletePixelBoard(req,res);
 }));
 
 module.exports = router;
