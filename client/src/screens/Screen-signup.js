@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserForm from '../components/forms/signup-form/user-form';
+import UserForm from '../components/forms/signup-form/User-form';
 import { signup } from '../services/APIService';
 
 export default function ScreenSignup() {

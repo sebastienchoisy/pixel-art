@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const userPropTypes = PropTypes.shape({
+const userProptypes = PropTypes.shape({
   username: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   inscriptionDate: PropTypes.string.isRequired,
@@ -8,4 +8,4 @@ const userPropTypes = PropTypes.shape({
   pixelsNb: PropTypes.number.isRequired,
 });
 
-export default userPropTypes;
+export default userProptypes;

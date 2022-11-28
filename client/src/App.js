@@ -31,8 +31,8 @@ function App() {
       <Header username={user ? user.username : undefined} />
       <Routes>
         <Route exact path="/" element={<ScreenAccueil />} />
-        <Route path="/boards" element={<ScreenBoard />} />
-        <Route path="/boardForm" element={<ScreenBoardForm />} />
+        <Route path="/board/:id" element={<ScreenBoard />} />
+        <Route path="/boardform" element={<ScreenBoardForm />} />
         <Route path="/profil" element={user ? <ScreenProfile userData={user} /> : <Navigate replace to="/" />} />
         <Route path="/login" element={<ScreenLogin />} />
         <Route path="/signup" element={!user ? <ScreenSignup /> : <Navigate replace to="/" />} />

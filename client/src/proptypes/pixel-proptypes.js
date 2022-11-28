@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const pixelPropTypes = PropTypes.shape({
+const pixelProptypes = PropTypes.shape({
   posX: PropTypes.number.isRequired,
   posY: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
@@ -8,4 +8,4 @@ const pixelPropTypes = PropTypes.shape({
   lastUpdateUser: PropTypes.string,
 });
 
-export default pixelPropTypes;
+export default pixelProptypes;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import userPropTypes from '../propTypes/userPropTypes';
+import userProptypes from '../proptypes/user-proptypes';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import UserForm from '../components/forms/signup-form/user-form';
+import UserForm from '../components/forms/signup-form/User-form';
 import ProfileDisplay from '../components/profile/Profile-display';
 import { modifyUser } from '../services/APIService';
 
@@ -37,5 +37,5 @@ export default function ScreenProfile({ userData }) {
 }
 
 ScreenProfile.propTypes = {
-  userData: userPropTypes.isRequired,
+  userData: userProptypes.isRequired,
 };

@@ -6,8 +6,8 @@ import {
   CarouselControl,
   CarouselIndicators,
 } from 'reactstrap';
-import BoardPropTypes from '../../propTypes/boardPropTypes';
-import BoardDisplay from '../board/BoardDisplay';
+import BoardPropTypes from '../../proptypes/board-proptypes';
+import BoardDisplay from '../board/Board-display';
 
 export default function BoardCarousel({ boards }) {
   const [activeIndex, setActiveIndex] = useState(0);

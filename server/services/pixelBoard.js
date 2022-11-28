@@ -3,7 +3,6 @@ const Pixel = require('../models/pixel');
 const HistoriquePixel = require('../models/historiquePixels')
 const HistoriquePixelService = require("../services/historiquePixel")
 const PixelUpdate = require('../services/pixel');
-const { isObjectIdOrHexString } = require('mongoose');
 
 exports.getPixelBoard = async (req, res) => {
     const id = req.params.id;
@@ -247,16 +246,6 @@ exports.countPixelBoard = async (req,res) => {
     try {
         let countPixelBoard = await PixelBoard.count();
         return res.status(200).json(countPixelBoard);
-    } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
-    }
-}
-
-exports.getAllBoards = async (res) => {
-    try {
-        let boards = await PixelBoard.find();
-        res.status(200).json(boards);
     } catch (error) {
         console.error(error)
         return res.status(501).json(error);

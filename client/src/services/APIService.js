@@ -13,13 +13,12 @@
 
 import axios from 'axios';
 
-export function getBoard(id) {
-  console.log(id);
-  return axios.get('pixelBoard/get/6383815576e3d2aab1c49cfe');
+export async function getBoard(id) {
+  return axios.get(`/pixelBoard/${id}`);
 }
 
 export function getBoards() {
-  return axios.get('pixelBoard/all');
+  return axios.get('pixelBoard/');
 }
 
 // FAKE API

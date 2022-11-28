@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   NavLink as RRNavLink, Link,
@@ -16,17 +16,9 @@ import {
 import PropTypes from 'prop-types';
 import mushroom from '../../assets/mushroom.png';
 
-export default function Header(props) {
+export default function Header({ username }) {
   const [isOpen, setIsOpen] = useState(false);
-  let { username } = props;
   const toggle = () => setIsOpen(!isOpen);
-
-  useEffect(() => {
-    // TODO improve
-    // eslint-disable-next-line react/destructuring-assignment
-    username = props.username;
-    // eslint-disable-next-line react/destructuring-assignment
-  }, [props.username]);
 
   return (
     <header>
