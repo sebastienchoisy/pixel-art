@@ -358,8 +358,17 @@
 					"request": {
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nbColumns\":20,\r\n    \"nbLines\":20,\r\n    \"multipleDrawPixel\":false,\r\n    \"dateOfClosure\":\"20/12/2023\",\r\n    \"isClosed\":false,\r\n    \"intervalPixel\":50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:3001/pixelBoard/update/637c7c0db7ca088afa6349f7?nbLines=40&nbColumns=40",
+							"raw": "http://localhost:3001/pixelBoard/update/63839494386377a3dca69a24",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -368,17 +377,7 @@
 							"path": [
 								"pixelBoard",
 								"update",
-								"637c7c0db7ca088afa6349f7"
-							],
-							"query": [
-								{
-									"key": "nbLines",
-									"value": "40"
-								},
-								{
-									"key": "nbColumns",
-									"value": "40"
-								}
+								"63839494386377a3dca69a24"
 							]
 						}
 					},
@@ -391,7 +390,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"_id\":\"63839494386377a3dca69a26\",\r\n    \"color\":\"blue\",\r\n    \"lastUpdateUser\":\"NicolasC\"\r\n}",
+							"raw": "{\r\n    \"_id\":\"63839494386377a3dca69a26\",\r\n    \"color\":\"red\",\r\n    \"lastUpdateUser\":\"NicolasC\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

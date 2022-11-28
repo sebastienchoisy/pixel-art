@@ -1,6 +1,7 @@
 const PixelBoard = require('../models/pixelBoard');
 const Pixel = require('../models/pixel');
 const HistoriquePixel = require('../models/historiquePixels')
+const HistoriquePixelService = require("../services/historiquePixel")
 const PixelUpdate = require('../services/pixel');
 const { isObjectIdOrHexString } = require('mongoose');
 
@@ -54,6 +55,13 @@ exports.createPixelBoard = async (req,res) => {
 
 exports.updatePixelBoard = async (req, res) => {
     const pixelBoard = await PixelBoard.findById(req.params.id);
+    if(!req.body.nbColumns) {
+        req.body.nbColumns = pixelBoard.nbColumns
+    }
+    if(!req.body.nbLines) {
+        req.body.nbLines = pixelBoard.nbLines
+    }
+
     if(req.body.nbColumns < pixelBoard.nbColumns){// Update if less number of columns than initiated 
         for (let col = pixelBoard.nbColumns; col > 0; col--) { 
             if(req.body.nbColumns < col){ // remove all pixels column and line
@@ -69,9 +77,7 @@ exports.updatePixelBoard = async (req, res) => {
                 }
             }
         }
-        Object.keys(req.body).forEach((field) => {
-            pixelBoard[field]= req.body[field];
-        })
+        
     }
     else if (req.body.nbLines < pixelBoard.nbLines){// Update if less number of lines than initiated 
         for (let line = pixelBoard.nbLines; line > 0; line--) {
@@ -82,9 +88,6 @@ exports.updatePixelBoard = async (req, res) => {
                 }
             }
         }
-        Object.keys(req.body).forEach((field) => {
-            pixelBoard[field]= req.body[field];
-        })
     }
     else if(req.body.nbColumns > pixelBoard.nbColumns){// Update if more number of columns than initiated 
         for (let line = 0; line < req.body.nbLines ; line++) {
@@ -99,20 +102,18 @@ exports.updatePixelBoard = async (req, res) => {
                 }
             }
         }
-        Object.keys(req.body).forEach((field) => {
-            pixelBoard[field]= req.body[field];
-        })
     }
     else if(req.body.nbLines > pixelBoard.nbLines ){// Update if more number of lines than initiated 
         for (let line = pixelBoard.nbLines; line < req.body.nbLines ; line++) {
-                for (let col = 0; col < req.body.nbColumns ; col++) {
-                    pixelBoard.pixels.push(new Pixel({posX: line, posY: col, color: 'white'}));
-                }
+            for (let col = 0; col < req.body.nbColumns ; col++) {
+                pixelBoard.pixels.push(new Pixel({posX: line, posY: col, color: 'white'}));
+            }
         }
-        Object.keys(req.body).forEach((field) => {
-            pixelBoard[field]= req.body[field];
-        })
     }
+
+    Object.keys(req.body).forEach((field) => {
+        pixelBoard[field]= req.body[field];
+    })
  
     let hasErr = false;
     try {
@@ -128,27 +129,27 @@ exports.updatePixelBoard = async (req, res) => {
     }
 }
 exports.updatePixelOfPixelBoard =  async (req, res) => {
+    const today = new Date()
     const pixelBoard = await PixelBoard.findById(req.params.id);
     let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0] //retrieve index of the pixel to update
     let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex] // retrieve the object pixel to update
-    PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req) //update pixel 
 
-    const today = new Date()
-    const days = today.getDate()
-    const months = today.getMonth() + 1 
-    const years = today.getFullYear() 
-    const hours = today.getHours()
-    const minutes = today.getMinutes() 
-    const secondes = today.getSeconds()
-
-    const formatedDate = days + "/" + months +"/" + years + " " + hours + ":" + minutes + ":" + secondes
     const temp = { 
         pixelBordId    : req.params.id,
 		userName : req.body.lastUpdateUser,
-		dateUpdate : formatedDate,
     };
-    await HistoriquePixel.create(temp) //add historique 
-    return res.status(201).json(pixelToUpdate);
+
+    const lastHistorique = await HistoriquePixelService.getHistorique(req.params.id,req.body.lastUpdateUser,res)
+    let timeUnlockPixel = lastHistorique.createdAt
+    timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
+    if(today.getTime() > timeUnlockPixel.getTime()) {
+        PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req) //update pixel 
+        await HistoriquePixel.create(temp) //add historique
+        return res.status(201).json(pixelToUpdate); 
+    }
+    else {
+        return res.status(201).json("interval not respected, no update");
+    }
 }
 
 exports.deletePixelBoard  = async (req, res) => {

@@ -11,11 +11,6 @@ const HistoriquePixel = new Schema({
         type: String,
         trim: true,
         required: [true, 'userName est obligatoire']
-    },
-    dateUpdate:{
-        type:String, 
-        trim:true,
-        required: [true, 'dateUpdate est obligatoire']
     }
 }, {
     timestamps: true // ajoute 2 champs au document createdAt et updatedAt
