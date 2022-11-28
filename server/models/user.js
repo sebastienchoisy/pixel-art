@@ -27,12 +27,11 @@ const User = new Schema({
             type: "string"
         }
     },
-    theme:{
-        type:String, 
+    role:{
+        type: String,
         trim: true,
-        default: "light"
+        required: [true, 'Password est obligatoire']
     }
-   
 }, {
     timestamps: true // add 2 fields auto createdAt et updatedAt
 });

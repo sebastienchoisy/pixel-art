@@ -18,6 +18,75 @@ exports.getPixelBoard = async (req, res) => {
         return res.status(501).json(error);
     }
 }
+
+const getTotaloccurences = (board) => {
+    return board.pixels.reduce((prev, actual) => prev + actual.occurence, 0);
+}
+
+const occurenceComparisonCallback = (boardA, boardB) => {
+    if(getTotaloccurences(boardA) < getTotaloccurences(boardB)) {
+        return -1
+    }
+    if(getTotaloccurences(boardA) > getTotaloccurences(boardB)) {
+        return 1
+    }
+    return 0;
+}
+
+exports.getPopularBoards = async (res) => {
+    try {
+        let boards = await PixelBoard.find();
+        let popularBoards = [];
+        boards.forEach((board) => {
+            if (popularBoards.length < 5) {
+                popularBoards.push(board);
+            } else {
+                if (getTotaloccurences(board) > getTotaloccurences(popularBoards[0])) {
+                    popularBoards[0] = board;
+                    popularBoards.sort(occurenceComparisonCallback);
+                }
+            }
+        })
+        return res.status(200).json(popularBoards);
+    } catch (error) {
+        console.error(error)
+        return res.status(501).json(error);
+    }
+}
+
+exports.getRecentsBoards = async (res) => {
+    try {
+        let boards = await PixelBoard.find();
+        let recentBoards = boards.length < 5 ? boards : boards.slice(boards.length - 5);
+        return res.status(200).json(recentBoards);
+    } catch (error) {
+        console.error(error)
+        return res.status(501).json(error);
+    }
+}
+
+exports.getLastClosedBoards = async (res) => {
+    try {
+        let boards = await PixelBoard.find();
+        let closedBoards = boards.filter((board) => board.closure = true);
+        closedBoards = closedBoards.length < 5 ? closedBoards : closedBoards.slice(boards.length - 5);
+        return res.status(200).json(closedBoards);
+    } catch (error) {
+        console.error(error)
+        return res.status(501).json(error);
+    }
+}
+
+exports.getBoards = async (res) => {
+    try {
+        let boards = await PixelBoard.find();
+        return res.status(200).json(boards);
+    } catch (error) {
+        console.error(error)
+        return res.status(501).json(error);
+    }
+}
+
 exports.createPixelBoard = async (req,res) => {
     const temp = {};
     ({ 
@@ -131,24 +200,31 @@ exports.updatePixelBoard = async (req, res) => {
 exports.updatePixelOfPixelBoard =  async (req, res) => {
     const today = new Date()
     const pixelBoard = await PixelBoard.findById(req.params.id);
-    let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0] //retrieve index of the pixel to update
-    let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex] // retrieve the object pixel to update
+        if(today.getTime() > pixelBoard.dateOfClosure.getTime()) { // TODO : error here !
+        //TODO change algo of reduce
+        //let pixelToUpdateIndex = pixelBoard.pixels.filter(v=> v._id.valueOf() === req.body._id ).reduce((p,c) => p.concat(pixelBoard.pixels.indexOf(c)),[])[0] //retrieve index of the pixel to update
+        //let pixelToUpdate = pixelBoard.pixels[pixelToUpdateIndex] // retrieve the object pixel to update
+        let pixelToUpdate = pixelBoard.pixels.id(req.body._id) 
 
-    const temp = { 
-        pixelBordId    : req.params.id,
-		userName : req.body.lastUpdateUser,
-    };
+        const temp = { 
+            pixelBordId    : req.params.id,
+            userName : req.body.lastUpdateUser,
+        };
 
-    const lastHistorique = await HistoriquePixelService.getHistorique(req.params.id,req.body.lastUpdateUser,res)
-    let timeUnlockPixel = lastHistorique.createdAt
-    timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
-    if(today.getTime() > timeUnlockPixel.getTime()) {
-        PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req) //update pixel 
-        await HistoriquePixel.create(temp) //add historique
-        return res.status(201).json(pixelToUpdate); 
+        const lastHistorique = await HistoriquePixelService.getHistorique(req.params.id,req.body.lastUpdateUser,res)
+        let timeUnlockPixel = lastHistorique.createdAt
+        timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
+        if(today.getTime() > timeUnlockPixel.getTime()) {
+            PixelUpdate.updatePixel(pixelToUpdate,req.params.id,req) //update pixel 
+            await HistoriquePixel.create(temp) //add historique
+            return res.status(201).json(pixelToUpdate); 
+        }
+        else {
+            return res.status(201).json("interval not respected, no update");
+        }
     }
     else {
-        return res.status(201).json("interval not respected, no update");
+        return res.status(201).json("Pixel Board is closed");
     }
 }
 
