@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import boardPropTypes from '../../propTypes/boardPropTypes';
+import boardProptypes from '../../proptypes/board-proptypes';
 
 export default function BoardDisplay({ board, side }) {
   const refCanvas = useRef(null);
@@ -42,6 +42,6 @@ export default function BoardDisplay({ board, side }) {
 }
 
 BoardDisplay.propTypes = {
-  board: boardPropTypes.isRequired,
+  board: boardProptypes.isRequired,
   side: PropTypes.number.isRequired,
 };

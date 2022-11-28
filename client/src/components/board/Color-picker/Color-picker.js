@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import heart from '../../../assets/heart.png';
-import FavoriteColor from './FavoriteColor/FavoriteColor';
-import './ColorPicker.css';
+import FavoriteColor from './Favorite-color/Favorite-color';
+import './Color-picker.css';
 
 export default function ColorPicker({ parentCallback }) {
   const [color, setColor] = useState('#000000');

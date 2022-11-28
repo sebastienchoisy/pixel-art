@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './FavoriteColor.css';
+import './Favorite-color.css';
 
 export default function FavoriteColor(props) {
   const { color, onClick } = props;

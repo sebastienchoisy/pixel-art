@@ -15,7 +15,7 @@ import {
 } from './form-validation/user-custom-messages';
 import { checkUsernameAvailability } from '../../../services/APIService';
 import schema from './form-validation/user-form-schema';
-import userPropTypes from '../../../propTypes/userPropTypes';
+import userProptypes from '../../../proptypes/user-proptypes';
 
 export default function UserForm({ submitCallBack, userData }) {
   const [formData, setFormData] = useState({
@@ -182,7 +182,7 @@ export default function UserForm({ submitCallBack, userData }) {
 
 UserForm.propTypes = {
   submitCallBack: PropTypes.func.isRequired,
-  userData: userPropTypes,
+  userData: userProptypes,
 };
 
 UserForm.defaultProps = {

@@ -1,0 +1,6 @@
+.FavoriteColor {
+    border-radius: 50%;
+    width: 24px;height: 24px;
+    border-color: gray;
+    border-width: 3px;
+}

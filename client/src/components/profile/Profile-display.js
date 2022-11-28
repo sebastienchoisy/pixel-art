@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import userPropTypes from '../../propTypes/userPropTypes';
+import userProptypes from '../../proptypes/user-proptypes';
 
 export default function ProfileDisplay({ userData }) {
   const [user, setUser] = useState(null);
@@ -42,5 +42,5 @@ export default function ProfileDisplay({ userData }) {
 }
 
 ProfileDisplay.propTypes = {
-  userData: userPropTypes.isRequired,
+  userData: userProptypes.isRequired,
 };

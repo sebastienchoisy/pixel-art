@@ -57,8 +57,4 @@ router.delete('/:id', wrapAsync(async (req, res) => {
 	return PixelBoard;
 }));
 
-router.get('/all', wrapAsync(async (req, res) => {
-	await PixelBoardService.getAllBoards(res);
-}));
-
 module.exports = router;
