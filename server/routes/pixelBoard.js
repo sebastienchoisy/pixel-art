@@ -31,11 +31,11 @@ router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
 	await PixelBoardService.updatePixelBoard(req,res);
 }));
 
-router.patch('/pixel', passport.authenticate("local"), wrapAsync(async (req, res) => {
+router.patch('/pixel', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
 	await PixelBoardService.updatePixelOfPixelBoard(req,res);
 }));
 
-router.post('/', passport.authenticate("local"), wrapAsync(async (req, res) => {
+router.post('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
 	await PixelBoardService.createPixelBoard(req,res);
 }));
 

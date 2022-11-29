@@ -1,12 +1,11 @@
 const Pixel = require('../models/pixel');
 const user = require('../services/user');
 
-exports.updatePixel = async (pixelToUpdate,idPixelBoard,req) => {
+exports.updatePixel = async (pixelToUpdate,idPixelBoard,req,res) => {
     const temp = {};
     ({  color: temp.color,
-        lastUpdateUser:temp.lastUpdateUser
     } = req.body);
-
+    temp.lastUpdateUser= req.user.username
         
     if (pixelToUpdate) {     
         pixelToUpdate.occurence +=1;

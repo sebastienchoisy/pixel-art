@@ -49,19 +49,14 @@ exports.updateUser = async (req, res) => {
 }
 
 exports.updateUserNbPixel = async (lastUpdateUser,newPixelboardAssociated) => {
-    try {
-        let user = await User.findOne({ username: lastUpdateUser });
-        if (user) { 
-            if(!user.pixelboardContributed.includes(newPixelboardAssociated)) {
-                user.pixelboardContributed.push(newPixelboardAssociated)
-            }
-
-            user.nbPixelModified +=1;
-            await user.save();
-            res.status(201).json({success: true, message:"L'utilisateur a ete mis a jour"+user._id});
+    let user = await User.findOne({ username: lastUpdateUser });
+    if (user) { 
+        if(!user.pixelboardContributed.includes(newPixelboardAssociated)) {
+            user.pixelboardContributed.push(newPixelboardAssociated)
         }
-    } catch (error) {
-        res.status(501).json({success: false, message:error});
+
+        user.nbPixelModified +=1;
+        await user.save();
     }
 }
 

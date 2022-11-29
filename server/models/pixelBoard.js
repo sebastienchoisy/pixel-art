@@ -25,7 +25,8 @@ const PixelBoard = new Schema({
     dateOfClosure:{
         type: String, 
         trim: true,
-        default: null
+        default: null,
+        format: Date
     }, 
     author:{
         type: String, 

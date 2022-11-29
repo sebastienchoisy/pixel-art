@@ -93,18 +93,17 @@ exports.getBoards = async (res) => {
 }
 
 exports.createPixelBoard = async (req,res) => {
-    const temp = {};
+    let temp = {};
     ({ 
         pixelBoardname    : temp.pixelBoardname,
 		nbLines : temp.nbLines,
 		nbColumns : temp.nbColumns,
         dateOfClosure : temp.dateOfClosure,
 		intervalPixel: temp.intervalPixel,
-        author: temp.author,
         multipleDrawPixel: temp.multipleDrawPixel,
         pixels: temp.pixels
     } = req.body);
-
+    temp.author = req.user.username;
    
     let pixelBoard = await PixelBoard.create(temp);
     for (let line = 0; line < temp.nbLines; line++) {
@@ -204,29 +203,38 @@ exports.updatePixelBoard = async (req, res) => {
 }
 exports.updatePixelOfPixelBoard =  async (req, res) => {
     const today = new Date()
-    console.log(req.body.pixelboard_id)
     const pixelBoard = await PixelBoard.findById(req.body.pixelboard_id);
-    console.log(pixelBoard)
-        if(today.getTime() > pixelBoard.dateOfClosure.getTime()) { // TODO : error here !
-        //TODO change algo of reduce
+    const dateClosure =new Date(pixelBoard.dateOfClosure)
+    if(today.getTime() < dateClosure.getTime()) { 
         let pixelToUpdate = pixelBoard.pixels.id(req.body._id) 
 
         const temp = { 
-            pixelBordId    : req.body.pixelboard_id,
-            userName : req.body.lastUpdateUser,
+            pixelBoardId    : req.body.pixelboard_id,
+            username : req.user.username,
         };
-
-        const lastHistorique = await HistoriquePixelService.getHistorique(req.body.pixelboard_id,req.body.lastUpdateUser,res)
-        let timeUnlockPixel = lastHistorique.createdAt
-        timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
-        if(today.getTime() > timeUnlockPixel.getTime()) {
+        
+        const lastHistorique = await HistoriquePixelService.getHistorique(req.body.pixelboard_id,req.user.username)
+       
+        if(lastHistorique){
+            let timeUnlockPixel = lastHistorique.createdAt
+            timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
+           
+            if(today.getTime() > timeUnlockPixel.getTime()) {
+               
+                PixelUpdate.updatePixel(pixelToUpdate,req.body.pixelboard_id,req) //update pixel 
+                await HistoriquePixel.create(temp) //add historique
+                res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate._id}); 
+            }
+            else {
+                res.status(501).json({success: false, message:"intervalle non respecte, pas de maj"});
+            }
+        }
+        else{
             PixelUpdate.updatePixel(pixelToUpdate,req.body.pixelboard_id,req) //update pixel 
             await HistoriquePixel.create(temp) //add historique
             res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate._id}); 
         }
-        else {
-            res.status(501).json({success: false, message:"intervalle non respecte, pas de maj"});
-        }
+    
     }
     else {
         res.status(501).json({success: false, message:"Pixel Board est cloture"});
