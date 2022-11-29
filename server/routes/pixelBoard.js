@@ -1,21 +1,25 @@
 const express = require('express');
 const { wrapAsync } = require('../lib/utils');
 const PixelBoardService = require('../services/pixelBoard');
+const passport = require("passport")
 const PixelBoard = require("../models/pixelBoard");
 
 const router = express.Router();
 
 router.get('/', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
-	return PixelBoards;
+	if(req.query.id) {
+		const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
+    return PixelBoards;
+	}
+	else {
+		await PixelBoardService.getBoards(res);
+    return PixelBoards;
+	}
 }))
 
 router.get('/statCount', wrapAsync(async (req,res) => {
-	const PixelBoard = await PixelBoardService.countPixelBoard(req,res);
-	return PixelBoard;
+	await PixelBoardService.countPixelBoard(req,res);
 }));
-
-// a ajouter dans postman
 
 router.get('/populars', wrapAsync(async (req,res) => {
     await PixelBoardService.getPopularBoards(res);
@@ -29,28 +33,20 @@ router.get('/lastclosed', wrapAsync(async (req,res) => {
     await PixelBoardService.getLastClosedBoards(res);
 }))
 
-// a ajouter
-
-// TODO : ajouter les stratégies de log dans les routes 
-// TODO : changer tous les id et les mettre dans body PARTOUT
-
-router.patch('/:id', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.updatePixelBoard(req,res);
-	return PixelBoards;
-}));
-router.patch('/:id/pixel', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.updatePixelOfPixelBoard(req,res);
-	return PixelBoards;
+router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
+	await PixelBoardService.updatePixelBoard(req,res);
 }));
 
-router.post('/', wrapAsync(async (req, res) => {
-	const PixelBoards = await PixelBoardService.createPixelBoard(req,res);
-	return PixelBoards;
+router.patch('/pixel', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
+	await PixelBoardService.updatePixelOfPixelBoard(req,res);
 }));
 
-router.delete('/:id', wrapAsync(async (req, res) => {
-	const PixelBoard = await PixelBoardService.deletePixelBoard(req,res);
-	return PixelBoard;
+router.post('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
+	await PixelBoardService.createPixelBoard(req,res);
+}));
+
+router.delete('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
+	await PixelBoardService.deletePixelBoard(req,res);
 }));
 
 module.exports = router;

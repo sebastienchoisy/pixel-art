@@ -1,18 +1,21 @@
 const User = require('../models/user');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const user = require('../models/user');
+
 
 exports.getById = async (req, res) => {
-    const id = req.params.id;
+    const id = req.query.id;
     try {
        let user = await User.findById(id);
 
         if (user) {
-            return res.status(200).json(user);
+            res.status(200).json({success: true, message:user});
         }
-        return res.status(404).json('user_not_found');
+        else{
+            res.status(404).json({success: false, message:"Utilisateur non trouve"});
+        }
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false,error});
     }
 }
 
@@ -20,50 +23,48 @@ exports.updateUser = async (req, res) => {
     const temp = {};
     ({ 
         username    : temp.username,
-        password : temp.password,
-        pixelboardContributed:temp.pixelboardContributed,
-        theme:temp.theme
+        password : temp.password
     } = req.body);
 
     try {
         let user = await User.findOne({ username: temp.username });
-        if (user) {       
-            Object.keys(temp).forEach((key) => {
-                user[key] = temp[key];
-            });
-            await user.save();
-            return res.status(201).json(user);
+        if(req.user._id.valueOf() === user._id.valueOf()){
+            if (user) {       
+                Object.keys(temp).forEach((key) => {
+                    user[key] = temp[key];
+                });
+                await user.save();
+                res.status(201).json({success: true, message:"L'utilisateur a ete mis a jour"+user._id});
+            }
+            else{
+                res.status(404).json({success: false, message:"Utilisateur non trouve"});
+            }    
         }
-
-        return res.status(404).json('user_not_found');
+        else{
+            res.status(501).json({success: false, message:"User connecter != user a maj"});
+        }
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false, message:"Erreur interne" + error});
     }
 }
 
 exports.updateUserNbPixel = async (lastUpdateUser,newPixelboardAssociated) => {
-    try {
-        let user = await User.findOne({ username: lastUpdateUser });
-        if (user) { 
-            if(!user.pixelboardContributed.includes(newPixelboardAssociated)) {
-                user.pixelboardContributed.push(newPixelboardAssociated)
-            }
-
-            user.nbPixelModified +=1;
-            await user.save();
+    let user = await User.findOne({ username: lastUpdateUser });
+    if (user) { 
+        if(!user.pixelboardContributed.includes(newPixelboardAssociated)) {
+            user.pixelboardContributed.push(newPixelboardAssociated)
         }
-    } catch (error) {
-        console.error(error)
+
+        user.nbPixelModified +=1;
+        await user.save();
     }
 }
 
 exports.countUser = async (req,res) => {
     try {
         let countUser = await User.count();
-        return res.status(200).json(countUser);
+        res.status(200).json({success: true, message:countUser});
     } catch (error) {
-        console.error(error)
-        return res.status(501).json(error);
+        res.status(501).json({success: false,error});
     }
 }

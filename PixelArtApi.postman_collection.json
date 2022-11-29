@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "73d5de11-d5dd-4d78-a9c4-16cd0c028044",
+		"_postman_id": "c5d868b9-112e-4211-8cbb-a069ca492470",
 		"name": "ReactApi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23599275"
@@ -11,11 +11,23 @@
 			"item": [
 				{
 					"name": "Get User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:3001/user/get/637c8597120ffa6301f4afaf",
+							"raw": "http://localhost:3001/user/?id=63862ff47a850f50de32b6a7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -23,8 +35,13 @@
 							"port": "3001",
 							"path": [
 								"user",
-								"get",
-								"637c8597120ffa6301f4afaf"
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "63862ff47a850f50de32b6a7"
+								}
 							]
 						}
 					},
@@ -57,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"Nicolas1234\",\r\n    \"password\":\"1234\"\r\n}",
+							"raw": "{\r\n    \"username\":\"Test\",\r\n    \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -65,7 +82,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/user/login/",
+							"raw": "http://localhost:3001/user/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -73,8 +90,7 @@
 							"port": "3001",
 							"path": [
 								"user",
-								"login",
-								""
+								"login"
 							]
 						}
 					},
@@ -87,7 +103,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"NicolasC\",\r\n    \"password\":\"1234\"\r\n}",
+							"raw": "{\r\n    \"username\":\"Marie\",\r\n    \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -95,7 +111,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/user/signup/?username=NicolasC&password=1234",
+							"raw": "http://localhost:3001/user/signup",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -103,18 +119,7 @@
 							"port": "3001",
 							"path": [
 								"user",
-								"signup",
-								""
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "NicolasC"
-								},
-								{
-									"key": "password",
-									"value": "1234"
-								}
+								"signup"
 							]
 						}
 					},
@@ -138,7 +143,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/user/logout/",
+							"raw": "http://localhost:3001/user/logout",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -146,41 +151,7 @@
 							"port": "3001",
 							"path": [
 								"user",
-								"logout",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "test",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3001/user/test/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"user",
-								"test",
-								""
+								"logout"
 							]
 						}
 					},
@@ -191,8 +162,17 @@
 					"request": {
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"Test\",\r\n    \"password\":\"1245\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:3001/user/update?username=Nicolas&password=test5",
+							"raw": "http://localhost:3001/user/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -200,17 +180,7 @@
 							"port": "3001",
 							"path": [
 								"user",
-								"update"
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "Nicolas"
-								},
-								{
-									"key": "password",
-									"value": "test5"
-								}
+								""
 							]
 						}
 					},
@@ -243,11 +213,23 @@
 				},
 				{
 					"name": "Get PixelBoard",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:3001/pixelBoard/get/63839494386377a3dca69a24",
+							"raw": "http://localhost:3001/pixelBoard/?id=6386312cca353f5be7284b48",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -255,8 +237,183 @@
 							"port": "3001",
 							"path": [
 								"pixelBoard",
-								"get",
-								"63839494386377a3dca69a24"
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6386312cca353f5be7284b48"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get PixelBoards",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create PixelBoard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pixelBoardname\": \"ahPixel\",\r\n    \"nbLines\": 20,\r\n    \"nbColumns\": 20,\r\n    \"dateOfClosure\": \"2022-11-30T12:00:00.000Z\",\r\n    \"multipleDrawPixel\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update PixelBoard",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nbColumns\":30,\r\n    \"nbLines\":40,\r\n    \"multipleDrawPixel\":false,\r\n    \"dateOfClosure\":\"2022-11-30T12:00:00.000Z\",\r\n    \"isClosed\":false,\r\n    \"intervalPixel\":50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/?id=6386312cca353f5be7284b48",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6386312cca353f5be7284b48"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pixel",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"color\":\"red\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/pixel?id=6386312cca353f5be7284b48&idPixel=63863148ca353f5be72857cf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								"pixel"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6386312cca353f5be7284b48"
+								},
+								{
+									"key": "idPixel",
+									"value": "63863148ca353f5be72857cf"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PixelBoard",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/pixelBoard/?id=6383399984257aa1ded5138a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"pixelBoard",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "6383399984257aa1ded5138a"
+								}
 							]
 						}
 					},
@@ -272,7 +429,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pixelBordId\":\"63839494386377a3dca69a24\",\r\n    \"userName\":\"NicolasC\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -280,7 +437,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3001/historique/get",
+							"raw": "http://localhost:3001/historique/?id=63839494386377a3dca69a24&username=NicolasC",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -288,65 +445,16 @@
 							"port": "3001",
 							"path": [
 								"historique",
-								"get"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create PixelBoard",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"pixelBoardname\": \"pixelBoardTest10\",\r\n    \"nbLines\": 20,\r\n    \"nbColumns\": 20,\r\n    \"dateOfClosure\": \"30/11/2022\",\r\n    \"author\": \"NicolasC\",\r\n    \"multipleDrawPixel\":true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3001/pixelBoard/add?pixelBoardname=pixelBoardTest10&nbLines=50&nbColumns=50&dateOfClosure=23/11/2022&intervalPixel=30&author=test3&multipleDrawPixel=true",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3001",
-							"path": [
-								"pixelBoard",
-								"add"
+								""
 							],
 							"query": [
 								{
-									"key": "pixelBoardname",
-									"value": "pixelBoardTest10"
+									"key": "id",
+									"value": "63839494386377a3dca69a24"
 								},
 								{
-									"key": "nbLines",
-									"value": "50"
-								},
-								{
-									"key": "nbColumns",
-									"value": "50"
-								},
-								{
-									"key": "dateOfClosure",
-									"value": "23/11/2022"
-								},
-								{
-									"key": "intervalPixel",
-									"value": "30"
-								},
-								{
-									"key": "author",
-									"value": "test3"
-								},
-								{
-									"key": "multipleDrawPixel",
-									"value": "true"
+									"key": "username",
+									"value": "NicolasC"
 								}
 							]
 						}
@@ -354,21 +462,12 @@
 					"response": []
 				},
 				{
-					"name": "Update PixelBoard",
+					"name": "Get popular Boards",
 					"request": {
-						"method": "PATCH",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"nbColumns\":20,\r\n    \"nbLines\":20,\r\n    \"multipleDrawPixel\":false,\r\n    \"dateOfClosure\":\"20/12/2023\",\r\n    \"isClosed\":false,\r\n    \"intervalPixel\":50\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:3001/pixelBoard/update/63839494386377a3dca69a24",
+							"raw": "http://localhost:3001/pixelBoard/populars",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -376,29 +475,19 @@
 							"port": "3001",
 							"path": [
 								"pixelBoard",
-								"update",
-								"63839494386377a3dca69a24"
+								"populars"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Pixel",
+					"name": "Get last Created Boards",
 					"request": {
-						"method": "PATCH",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"_id\":\"63839494386377a3dca69a26\",\r\n    \"color\":\"red\",\r\n    \"lastUpdateUser\":\"NicolasC\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:3001/pixelBoard/updatePixel/63839494386377a3dca69a24",
+							"raw": "http://localhost:3001/pixelBoard/lastcreated",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -406,20 +495,19 @@
 							"port": "3001",
 							"path": [
 								"pixelBoard",
-								"updatePixel",
-								"63839494386377a3dca69a24"
+								"lastcreated"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete PixelBoard",
+					"name": "Get last closed boards",
 					"request": {
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3001/pixelBoard/delete/637c7e6a7949eb005c58e3fd",
+							"raw": "http://localhost:3001/pixelBoard/lastclosed",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -427,8 +515,7 @@
 							"port": "3001",
 							"path": [
 								"pixelBoard",
-								"delete",
-								"637c7e6a7949eb005c58e3fd"
+								"lastclosed"
 							]
 						}
 					},

@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
 const HistoriquePixel = new Schema({
-    pixelBordId: {
+    pixelBoardId: {
         type    : String,
         trim    : true,
         required: [true, 'pixelBordId est obligatoire']
     },
-    userName: {
+    username: {
         type: String,
         trim: true,
         required: [true, 'userName est obligatoire']

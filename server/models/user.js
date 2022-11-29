@@ -30,7 +30,7 @@ const User = new Schema({
     role:{
         type: String,
         trim: true,
-        required: [true, 'Password est obligatoire']
+        default:"user"
     }
 }, {
     timestamps: true // add 2 fields auto createdAt et updatedAt
