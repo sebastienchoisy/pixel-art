@@ -5,7 +5,6 @@ const User = require("../models/user")
 const passport = require("passport")
 const jwt = require("jsonwebtoken")
 
-const { getToken, COOKIE_OPTIONS, getRefreshToken,verifyUser } = require("../authenticate")
 
 const router = express.Router();
 
@@ -17,7 +16,7 @@ router.get('/statCount', wrapAsync(async (req,res) => {
 	await userService.countUser(req,res);
 }));
 
-router.patch('/', wrapAsync(async (req, res) => {
+router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
 	await userService.updateUser(req,res);
 }));
 
@@ -56,7 +55,7 @@ router.post("/signup", (req, res, next) => {
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
 	User.findById(req.user._id).then(
 		user => {
-		var token = jwt.sign({user_id:user._id}, "jhdshhds884hfhhs-ew6dhjd");
+		var token = jwt.sign({user_id:user._id, role:user.role}, "jhdshhds884hfhhs-ew6dhjd");
 		user.save((err, user) => {
 			if (err) {
 				res.status(500).json({success: false,message: err});
@@ -70,7 +69,7 @@ router.post("/login", passport.authenticate("local"), (req, res, next) => {
 	)
 })
 
-router.get("/logout", (req, res) => {
+router.get("/logout", passport.authenticate("jwt"), (req, res) => {
 	res.clearCookie("jwt")
 	res.send({ success: true, message:"l'utilisateur a ete deconnecte" })
 })

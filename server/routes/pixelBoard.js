@@ -1,6 +1,7 @@
 const express = require('express');
 const { wrapAsync } = require('../lib/utils');
 const PixelBoardService = require('../services/pixelBoard');
+const passport = require("passport")
 
 const router = express.Router();
 
@@ -26,20 +27,19 @@ router.get('/lastclosed', wrapAsync(async (req,res) => {
     await PixelBoardService.getLastClosedBoards(res);
 }))
 
-// TODO : ajouter les stratégies de log dans les routes 
-
-router.patch('/', wrapAsync(async (req, res) => {
+router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
 	await PixelBoardService.updatePixelBoard(req,res);
 }));
-router.patch('/pixel', wrapAsync(async (req, res) => {
+
+router.patch('/pixel', passport.authenticate("local"), wrapAsync(async (req, res) => {
 	await PixelBoardService.updatePixelOfPixelBoard(req,res);
 }));
 
-router.post('/', wrapAsync(async (req, res) => {
+router.post('/', passport.authenticate("local"), wrapAsync(async (req, res) => {
 	await PixelBoardService.createPixelBoard(req,res);
 }));
 
-router.delete('/', wrapAsync(async (req, res) => {
+router.delete('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
 	await PixelBoardService.deletePixelBoard(req,res);
 }));
 

@@ -1,5 +1,7 @@
 const User = require('../models/user');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const user = require('../models/user');
+
 
 exports.getById = async (req, res) => {
     const id = req.body._id;
@@ -26,16 +28,21 @@ exports.updateUser = async (req, res) => {
 
     try {
         let user = await User.findOne({ username: temp.username });
-        if (user) {       
-            Object.keys(temp).forEach((key) => {
-                user[key] = temp[key];
-            });
-            await user.save();
-            res.status(201).json({success: true, message:"L'utilisateur a ete mis a jour"+user._id});
+        if(req.user._id === user._id){
+            if (user) {       
+                Object.keys(temp).forEach((key) => {
+                    user[key] = temp[key];
+                });
+                await user.save();
+                res.status(201).json({success: true, message:"L'utilisateur a ete mis a jour"+user._id});
+            }
+            else{
+                res.status(404).json({success: false, message:"Utilisateur non trouve"});
+            }    
         }
         else{
-            res.status(404).json({success: false, message:"Utilisateur non trouve"});
-        }    
+            res.status(501).json({success: false, message:"User connecter != user a maj"});
+        }
     } catch (error) {
         res.status(501).json({success: false, message:error});
     }
