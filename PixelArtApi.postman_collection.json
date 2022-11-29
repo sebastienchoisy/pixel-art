@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "693bc14a-9d64-45c5-976b-2c19cf2f259f",
+		"_postman_id": "c1cf024a-8d07-43c0-aaff-3e5453955ad6",
 		"name": "ReactApi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "23599275"
+		"_exporter_id": "24442849"
 	},
 	"item": [
 		{
@@ -68,7 +68,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"NicolasC\",\r\n    \"password\":\"1234\"\r\n}",
+							"raw": "{\r\n    \"username\":\"MarieC\",\r\n    \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -97,7 +97,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"NicolasC\",\r\n    \"password\":\"1234\",\r\n    \"role\":\"admin\"\r\n}",
+							"raw": "{\r\n    \"username\":\"Marie\",\r\n    \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -158,7 +158,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"NicolasC\",\r\n    \"password\":\"pass\"\r\n}",
+							"raw": "{\r\n    \"username\":\"MarieC\",\r\n    \"password\":\"124\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -244,7 +244,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pixelBoardname\": \"pixelBoardTest2\",\r\n    \"nbLines\": 20,\r\n    \"nbColumns\": 20,\r\n    \"dateOfClosure\": \"2022-11-30T12:00:00.000Z\",\r\n    \"author\": \"NicolasC\",\r\n    \"multipleDrawPixel\":true\r\n}",
+							"raw": "{\r\n    \"pixelBoardname\": \"aaaaPixel\",\r\n    \"nbLines\": 20,\r\n    \"nbColumns\": 20,\r\n    \"dateOfClosure\": \"2022-11-30T12:00:00.000Z\",\r\n    \"multipleDrawPixel\":true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -273,7 +273,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"_id\": \"63839494386377a3dca69a24\",\r\n    \"nbColumns\":20,\r\n    \"nbLines\":20,\r\n    \"multipleDrawPixel\":false,\r\n    \"dateOfClosure\":\"2022-11-30T12:00:00.000Z\",\r\n    \"isClosed\":false,\r\n    \"intervalPixel\":50\r\n}",
+							"raw": "{\r\n    \"_id\": \"63861ac052f0d3b8d0dc12bd\",\r\n    \"nbColumns\":20,\r\n    \"nbLines\":20,\r\n    \"multipleDrawPixel\":false,\r\n    \"dateOfClosure\":\"2022-11-30T12:00:00.000Z\",\r\n    \"isClosed\":false,\r\n    \"intervalPixel\":50\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -302,7 +302,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"pixelboard_id\":\"63839494386377a3dca69a24\",\r\n    \"_id\":\"63839494386377a3dca69a26\",\r\n    \"color\":\"red\",\r\n    \"lastUpdateUser\":\"NicolasC\"\r\n}",
+							"raw": "{\r\n    \"pixelboard_id\":\"63861ac052f0d3b8d0dc12bd\",\r\n    \"_id\":\"63861ac052f0d3b8d0dc12bf\",\r\n    \"color\":\"red\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
