@@ -3,7 +3,6 @@ const Pixel = require('../models/pixel');
 const HistoriquePixel = require('../models/historiquePixels')
 const HistoriquePixelService = require("../services/historiquePixel")
 const PixelUpdate = require('../services/pixel');
-const { isObjectIdOrHexString } = require('mongoose');
 
 function isLoggedIn(userConnected,pixelBoard){
     return userConnected.role === "admin" || userConnected.username === pixelBoard.author; 
@@ -19,7 +18,6 @@ exports.getPixelBoard = async (req, res) => {
         else{
             res.status(404).json({success: false, message:"pixelboard non trouve"});
         }
-        
     } catch (error) {
         res.status(501).json({success: false, message: error});
     }
@@ -42,9 +40,10 @@ const occurenceComparisonCallback = (boardA, boardB) => {
 exports.getPopularBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
+        console.log(boards.length);
         let popularBoards = [];
         boards.forEach((board) => {
-            if (popularBoards.length < 5) {
+            if (popularBoards.length <= 5) {
                 popularBoards.push(board);
             } else {
                 if (getTotaloccurences(board) > getTotaloccurences(popularBoards[0])) {
@@ -63,8 +62,8 @@ exports.getPopularBoards = async (res) => {
 exports.getRecentsBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
-        let recentBoards = boards.length < 5 ? boards : boards.slice(boards.length - 5);
-        res.status(200).json({success: true, message:recentBoards});
+        let recentBoards = boards.length <= 5 ? boards : boards.slice(boards.length - 5);
+        return res.status(200).json(recentBoards);
     } catch (error) {
         res.status(501).json({success: false, message: error});
     }
@@ -73,7 +72,7 @@ exports.getRecentsBoards = async (res) => {
 exports.getLastClosedBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
-        let closedBoards = boards.filter((board) => board.closure = true);
+        let closedBoards = boards.filter((board) => board.closure == true);
         closedBoards = closedBoards.length < 5 ? closedBoards : closedBoards.slice(boards.length - 5);
         res.status(200).json({success: true, message:closedBoards});
     } catch (error) {

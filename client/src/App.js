@@ -1,26 +1,29 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import {
   Route, Routes, Navigate, useLocation,
 } from 'react-router-dom';
 import ScreenAccueil from './screens/Screen-accueil';
 import ScreenBoard from './screens/Screen-board';
-import ScreenProfil from './screens/Screen-profil';
+import ScreenProfile from './screens/Screen-profile';
 import ScreenLogin from './screens/Screen-login';
 import Header from './components/header/Header';
-import ScreenSignin from './screens/Screen-signin';
-import { getUserInfoWithCookie } from './services/APIService';
+import ScreenSignup from './screens/Screen-signup';
+import { getUserInfo } from './services/APIService';
+import ScreenBoardForm from './screens/Screen-boardForm';
 
 function App() {
   const location = useLocation();
-  const [user, setIsUser] = useState(undefined);
+  const [user, setUser] = useState(undefined);
 
   useEffect(() => {
-    const response = getUserInfoWithCookie();
-    if (response.success) {
-      setIsUser(getUserInfoWithCookie().user);
-    }
+    getUserInfo().then((userResp) => {
+      if (userResp.success) {
+        setUser(userResp.user);
+      }
+    });
   }, [location]);
 
   return (
@@ -28,10 +31,11 @@ function App() {
       <Header username={user ? user.username : undefined} />
       <Routes>
         <Route exact path="/" element={<ScreenAccueil />} />
-        <Route path="/boards" element={<ScreenBoard />} />
-        <Route path="/profil" element={user ? <ScreenProfil /> : <Navigate replace to="/" />} />
+        <Route path="/board/:id" element={<ScreenBoard />} />
+        <Route path="/boardform" element={<ScreenBoardForm />} />
+        <Route path="/profil" element={user ? <ScreenProfile userData={user} /> : <Navigate replace to="/" />} />
         <Route path="/login" element={<ScreenLogin />} />
-        <Route path="/signin" element={!user ? <ScreenSignin /> : <Navigate replace to="/" />} />
+        <Route path="/signup" element={!user ? <ScreenSignup /> : <Navigate replace to="/" />} />
       </Routes>
     </div>
   );

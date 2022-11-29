@@ -1,37 +1,42 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect,
+  useRef, useState,
 } from 'react';
 import './Board.css';
-import PropTypes from 'prop-types';
-import Pixel from '../../models/Pixel';
-import ColorPicker from './ColorPicker/ColorPicker';
+import ColorPicker from './Color-picker/Color-picker';
+import BoardPropTypes from '../../proptypes/board-proptypes';
 
-export default function Board(props) {
+export default function Board({ board }) {
   const refCanvas = useRef(null);
   const pixelSize = 12;
   const pixelBorderColor = '#D3D3D3';
-  const [pixels, setPixels] = useState([]);
   const [color, setColor] = useState('#000000');
-  const { linesNb, colsNb } = props;
-
-  const generateEmptyPixels = () => {
-    const pixelTab = [];
-    for (let i = 0; i < linesNb; i += 1) {
-      for (let j = 0; j < colsNb; j += 1) {
-        const newPixel = new Pixel(i, j);
-        pixelTab.push(newPixel);
-      }
-    }
-    return pixelTab;
-  };
 
   const drawPixel = useCallback((pixel) => {
     refCanvas.current.getContext('2d').fillStyle = pixel.color;
     refCanvas.current.getContext('2d').strokeStyle = pixelBorderColor;
-    refCanvas.current.getContext('2d').strokeRect(pixel.line * pixelSize, pixel.column * pixelSize, pixelSize, pixelSize);
-    refCanvas.current.getContext('2d').fillRect((pixel.line * pixelSize) + 1, (pixel.column * pixelSize) + 1, pixelSize - 2, pixelSize - 2);
+    refCanvas.current.getContext('2d')
+      .strokeRect(
+        pixel.posX * pixelSize,
+        pixel.posY * pixelSize,
+        pixelSize,
+        pixelSize,
+      );
+    refCanvas.current.getContext('2d')
+      .fillRect(
+        (pixel.posX * pixelSize) + 1,
+        (pixel.posY * pixelSize) + 1,
+        pixelSize - 2,
+        pixelSize - 2,
+      );
     pixel.occurrence += 1; // eslint-disable-line no-param-reassign
   }, []);
+
+  const generateBoard = () => {
+    board.pixels.forEach((pixel) => {
+      drawPixel(pixel);
+    });
+  };
 
   const getMousePos = (evt) => {
     const rect = refCanvas.current.getBoundingClientRect();
@@ -44,15 +49,18 @@ export default function Board(props) {
   };
 
   const handleClick = useCallback((evt) => {
-    const getPixel = (x, y) => pixels.find((pixel) => pixel.line === x && pixel.column === y);
-
+    const getPixel = (x, y) => board.pixels.find((pixel) => pixel.posX === x && pixel.posY === y);
     const mousePos = getMousePos(evt);
     const x = Math.floor(mousePos.x / pixelSize);
     const y = Math.floor(mousePos.y / pixelSize);
     const clickedPixel = getPixel(x, y);
     clickedPixel.color = color;
     drawPixel(clickedPixel);
-  }, [color, drawPixel, pixels]);
+  }, [drawPixel, board.pixels, color]);
+
+  useEffect(() => {
+    generateBoard();
+  }, []);
 
   useEffect(() => {
     const canvas = refCanvas.current;
@@ -60,28 +68,18 @@ export default function Board(props) {
     return () => canvas.removeEventListener('click', handleClick);
   }, [handleClick]);
 
-  useEffect(() => {
-    setPixels(generateEmptyPixels());
-  }, []);
-
-  useEffect(() => {
-    pixels.forEach((pixel) => {
-      drawPixel(pixel);
-    });
-  });
-
   const callbackColor = (colorValue) => {
     setColor(colorValue);
   };
 
-  return (
+  return board && (
     <div className="board d-flex justify-content-around">
       <div>
         <canvas
           id="myCanvas"
           ref={refCanvas}
-          width={colsNb * pixelSize}
-          height={linesNb * pixelSize}
+          width={board.nbColumns * pixelSize}
+          height={board.nbLines * pixelSize}
         />
       </div>
       <div>
@@ -92,6 +90,5 @@ export default function Board(props) {
 }
 
 Board.propTypes = {
-  linesNb: PropTypes.number.isRequired,
-  colsNb: PropTypes.number.isRequired,
+  board: BoardPropTypes.isRequired,
 };

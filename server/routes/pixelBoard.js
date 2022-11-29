@@ -2,15 +2,18 @@ const express = require('express');
 const { wrapAsync } = require('../lib/utils');
 const PixelBoardService = require('../services/pixelBoard');
 const passport = require("passport")
+const PixelBoard = require("../models/pixelBoard");
 
 const router = express.Router();
 
 router.get('/', wrapAsync(async (req, res) => {
 	if(req.query.id) {
-		await PixelBoardService.getPixelBoard(req,res);
+		const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
+    return PixelBoards;
 	}
 	else {
 		await PixelBoardService.getBoards(res);
+    return PixelBoards;
 	}
 }))
 
@@ -25,6 +28,7 @@ router.get('/populars', wrapAsync(async (req,res) => {
 router.get('/lastcreated', wrapAsync(async (req,res) => {
     await PixelBoardService.getRecentsBoards(res);
 }));
+
 router.get('/lastclosed', wrapAsync(async (req,res) => {
     await PixelBoardService.getLastClosedBoards(res);
 }))
