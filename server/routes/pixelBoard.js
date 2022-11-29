@@ -6,16 +6,18 @@ const passport = require("passport")
 const router = express.Router();
 
 router.get('/', wrapAsync(async (req, res) => {
-	await PixelBoardService.getPixelBoard(req,res);
+	if(req.query.id) {
+		await PixelBoardService.getPixelBoard(req,res);
+	}
+	else {
+		await PixelBoardService.getBoards(res);
+	}
 }))
 
 router.get('/statCount', wrapAsync(async (req,res) => {
 	await PixelBoardService.countPixelBoard(req,res);
 }));
 
-router.get('/boards', wrapAsync(async (req,res) => {
-    await PixelBoardService.getBoards(res);
-}));
 router.get('/populars', wrapAsync(async (req,res) => {
     await PixelBoardService.getPopularBoards(res);
 }));

@@ -4,7 +4,7 @@ const user = require('../models/user');
 
 
 exports.getById = async (req, res) => {
-    const id = req.body._id;
+    const id = req.query.id;
     try {
        let user = await User.findById(id);
 
@@ -28,7 +28,7 @@ exports.updateUser = async (req, res) => {
 
     try {
         let user = await User.findOne({ username: temp.username });
-        if(req.user._id === user._id){
+        if(req.user._id.valueOf() === user._id.valueOf()){
             if (user) {       
                 Object.keys(temp).forEach((key) => {
                     user[key] = temp[key];
@@ -44,7 +44,7 @@ exports.updateUser = async (req, res) => {
             res.status(501).json({success: false, message:"User connecter != user a maj"});
         }
     } catch (error) {
-        res.status(501).json({success: false, message:error});
+        res.status(501).json({success: false, message:"Erreur interne" + error});
     }
 }
 

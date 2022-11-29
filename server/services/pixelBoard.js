@@ -9,7 +9,7 @@ function isLoggedIn(userConnected,pixelBoard){
     return userConnected.role === "admin" || userConnected.username === pixelBoard.author; 
 }
 exports.getPixelBoard = async (req, res) => {
-    const id = req.body._id;
+    const id = req.query.id;
     try {
        let pixelBoard = await PixelBoard.findById(id);
 
@@ -87,7 +87,6 @@ exports.getBoards = async (res) => {
         let boards = await PixelBoard.find();
         res.status(200).json({success: true, message:boards});
     } catch (error) {
-       
         res.status(501).json({success: false , message: error});
     }
 }
@@ -121,7 +120,7 @@ exports.createPixelBoard = async (req,res) => {
 }
 
 exports.updatePixelBoard = async (req, res) => {
-    const pixelBoard = await PixelBoard.findById(req.body._id);
+    const pixelBoard = await PixelBoard.findById(req.query.id);
     if(isLoggedIn(req.user,pixelBoard)){
         if(!req.body.nbColumns) {
             req.body.nbColumns = pixelBoard.nbColumns
@@ -134,13 +133,13 @@ exports.updatePixelBoard = async (req, res) => {
             for (let col = pixelBoard.nbColumns; col > 0; col--) { 
                 if(req.body.nbColumns < col){ // remove all pixels column and line
                     for (let line = pixelBoard.nbLines; line >0; line--) {
-                        let pixelToRemove = pixelBoard.pixels.id(req.body._id) 
+                        let pixelToRemove = pixelBoard.pixels.id(req.query.id) 
                         pixelBoard.pixels.splice(pixelToRemove,1)
                     }
                 }
                 else{ //remove only pixels of n columns 
                     for (let line = pixelBoard.nbLines; line >req.body.nbLines; line--) {
-                        let pixelToRemove = pixelBoard.pixels.id(req.body._id) 
+                        let pixelToRemove = pixelBoard.pixels.id(req.query.id) 
                         pixelBoard.pixels.splice(pixelToRemove,1)
                     }
                 }
@@ -151,7 +150,7 @@ exports.updatePixelBoard = async (req, res) => {
             for (let line = pixelBoard.nbLines; line > 0; line--) {
                 if(req.body.nbLines < line){
                     for (let col = pixelBoard.nbColumns; col >0; col--) {
-                        let pixelToRemove = pixelBoard.pixels.id(req.body._id) 
+                        let pixelToRemove = pixelBoard.pixels.id(req.query.id) 
                         pixelBoard.pixels.splice(pixelToRemove,1)
                     }
                 }
@@ -203,36 +202,31 @@ exports.updatePixelBoard = async (req, res) => {
 }
 exports.updatePixelOfPixelBoard =  async (req, res) => {
     const today = new Date()
-    const pixelBoard = await PixelBoard.findById(req.body.pixelboard_id);
+    const pixelBoard = await PixelBoard.findById(req.query.id);
     const dateClosure =new Date(pixelBoard.dateOfClosure)
     if(today.getTime() < dateClosure.getTime()) { 
-        let pixelToUpdate = pixelBoard.pixels.id(req.body._id) 
-
+        let pixelToUpdate = pixelBoard.pixels.id(req.query.idPixel) 
         const temp = { 
-            pixelBoardId    : req.body.pixelboard_id,
+            pixelBoardId    : req.query.id,
             username : req.user.username,
         };
-        
-        const lastHistorique = await HistoriquePixelService.getHistorique(req.body.pixelboard_id,req.user.username)
-       
+        const lastHistorique = await HistoriquePixelService.getHistorique(req.query.id,req.user.username)
         if(lastHistorique){
             let timeUnlockPixel = lastHistorique.createdAt
             timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
-           
             if(today.getTime() > timeUnlockPixel.getTime()) {
-               
-                PixelUpdate.updatePixel(pixelToUpdate,req.body.pixelboard_id,req) //update pixel 
+                PixelUpdate.updatePixel(pixelToUpdate,req.query.pixelboard_id,req) //update pixel 
                 await HistoriquePixel.create(temp) //add historique
-                res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate._id}); 
+                res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate.id}); 
             }
             else {
                 res.status(501).json({success: false, message:"intervalle non respecte, pas de maj"});
             }
         }
         else{
-            PixelUpdate.updatePixel(pixelToUpdate,req.body.pixelboard_id,req) //update pixel 
+            PixelUpdate.updatePixel(pixelToUpdate,req.query.pixelboard_id,req) //update pixel 
             await HistoriquePixel.create(temp) //add historique
-            res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate._id}); 
+            res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate.id}); 
         }
     
     }
@@ -242,11 +236,11 @@ exports.updatePixelOfPixelBoard =  async (req, res) => {
 }
 
 exports.deletePixelBoard  = async (req, res) => {
-    const pixelBoard = await PixelBoard.findById(req.body.pixelboard_id); 
+    const pixelBoard = await PixelBoard.findById(req.query.pixelboard_id); 
     if(isLoggedIn(req.user,pixelBoard)){
             let hasErr = false;
         try {
-            await PixelBoard.deleteOne({_id: req.body._id});
+            await PixelBoard.deleteOne({_id: req.query.id});
         } catch(e) {
             hasErr = true;
         }

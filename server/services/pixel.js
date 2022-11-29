@@ -6,7 +6,6 @@ exports.updatePixel = async (pixelToUpdate,idPixelBoard,req,res) => {
     ({  color: temp.color,
     } = req.body);
     temp.lastUpdateUser= req.user.username
-        
     if (pixelToUpdate) {     
         pixelToUpdate.occurence +=1;
         if(temp.lastUpdateUser) {
