@@ -1,18 +1,41 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createBoard } from '../services/APIService';
+import { postBoard } from '../services/APIService';
 import BoardForm from '../components/forms/board-form/Board-form';
+import userProptypes from '../proptypes/user-proptypes';
 
-export default function ScreenBoardForm() {
+export default function ScreenBoardForm({ userData }) {
   const navigate = useNavigate();
+
+  const padTo2Digits = (num) => num.toString().padStart(2, '0');
+
+  const formatDate = (date) => [
+    padTo2Digits(date.getDate()),
+    padTo2Digits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join('/');
+
   const submitCallBack = (formData) => {
-    console.log(formData);
-    if (createBoard(formData).success) {
-      navigate('/boards');
-    }
-    // TODO Error view?
+    const boardData = {
+      pixelBoardname: formData.name,
+      nbLines: formData.nbLine,
+      nbColumns: formData.nbColumn,
+      dateOfClosure: formatDate(new Date(formData.dateOfClosure)),
+      intervalPixelformData: formData.intervalPixel,
+      username: userData.username,
+      multipleDrawPixel: formData.multipleDrawPixel,
+    };
+    postBoard(boardData).then((res) => {
+      if (res.data.success) {
+        navigate(`/board/${res.data.id}`);
+      }
+    });
   };
   return (
     <BoardForm submitCallBack={submitCallBack} />
   );
 }
+
+ScreenBoardForm.propTypes = {
+  userData: userProptypes.isRequired,
+};
