@@ -33,7 +33,7 @@ export default function LoginForm(props) {
       errorMessages={{
         required: () => formData.defaultMessage,
       }}
-      className="form m-auto mt-5 login-form"
+      className="form m-auto mt-5 size-form"
     >
       <div className="text-start">
         <FormGroup>

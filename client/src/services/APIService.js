@@ -41,6 +41,10 @@ export async function getBoardsNb() {
   return axios.get('/pixelBoard/statCount');
 }
 
+export async function postBoard(boardData) {
+  return axios.post('/pixelBoard', boardData);
+}
+
 // FAKE API
 export function login(formData) {
   if (formData.email === 'toto@gmail.com' && formData.password === 'tata') {
@@ -80,10 +84,11 @@ export async function getUserInfo() {
     },
   };
 }
-
+/*
 export function createBoard(formBoard) {
   return { success: true, message: formBoard };
 }
+*/
 
 export function checkBoardTitleAvailable(formBoard) {
   return { success: true, message: formBoard };
