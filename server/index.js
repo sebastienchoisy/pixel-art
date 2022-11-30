@@ -19,18 +19,10 @@ const mongodb     = require('./db/mongo');
 mongodb.initClientDbConnection();
 
 const corsOptions = {
-	origin: function (origin, callback) {
-	  if (!origin || whitelist.indexOf(origin) !== -1) {
-		callback(null, true)
-	  } else {
-		callback(new Error("Not allowed by CORS"))
-	  }
-	},
-  
-	credentials: true,
-  }
+	origin: 'http://localhost:3000/',
+}
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions)) //Enable CORS Requests only for origin set in options
 app.use(cookieParser("jhdshhds884hfhhs-ew6dhjd"))
 app.use(session({  
 	secret: 'coder-session', 
