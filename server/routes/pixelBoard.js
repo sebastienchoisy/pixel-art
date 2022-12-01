@@ -8,12 +8,10 @@ const router = express.Router();
 
 router.get('/', wrapAsync(async (req, res) => {
 	if(req.query.id) {
-		const PixelBoards = await PixelBoardService.getPixelBoard(req,res);
-    return PixelBoards;
+		await PixelBoardService.getPixelBoard(req,res);
 	}
 	else {
 		await PixelBoardService.getBoards(res);
-    return PixelBoards;
 	}
 }))
 

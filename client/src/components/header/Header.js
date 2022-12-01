@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-  NavLink as RRNavLink, Link,
+  NavLink as RRNavLink, Link, useNavigate,
 } from 'react-router-dom';
 import {
   Collapse,
@@ -15,10 +15,13 @@ import {
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import mushroom from '../../assets/mushroom.png';
+import { logout } from '../../services/APIService';
 
 export default function Header({ username }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
+  const disconnect = () => logout().then(navigate('/'));
 
   return (
     <header>
@@ -60,7 +63,7 @@ export default function Header({ username }) {
             <NavbarText className="me-2">{username}</NavbarText>)}
           {username
             && (
-            <Button outline color="secondary">Deconnexion</Button>)}
+            <Button onClick={disconnect} outline color="secondary">Deconnexion</Button>)}
         </Collapse>
       </Navbar>
     </header>

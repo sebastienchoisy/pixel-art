@@ -1,6 +1,4 @@
 const User = require('../models/user');
-const jwt = require("jsonwebtoken");
-const user = require('../models/user');
 
 
 exports.getById = async (req, res) => {
@@ -64,6 +62,16 @@ exports.countUser = async (req,res) => {
     try {
         let countUser = await User.count();
         res.status(200).json({success: true, message:countUser});
+    } catch (error) {
+        res.status(501).json({success: false,error});
+    }
+}
+
+exports.isUsernameAvailable = async(req,res) => {
+    try {
+        let user = await User.findOne({username: req.query.username});
+        user ? res.status(403).json({success: false, message: 'username déjà pris'})
+            : res.status(200).json({success: true, message: 'username disponible'});
     } catch (error) {
         res.status(501).json({success: false,error});
     }

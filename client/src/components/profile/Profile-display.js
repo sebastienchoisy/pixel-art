@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Moment from 'react-moment';
 import userProptypes from '../../proptypes/user-proptypes';
 
 export default function ProfileDisplay({ userData }) {
@@ -23,17 +24,17 @@ export default function ProfileDisplay({ userData }) {
       <div className="row d-flex justify-content-between mt-5">
         <div className="col-5 text-start">
           <div className="fw-bold">Date d&apos;inscription</div>
-          <div>{user.inscriptionDate}</div>
+          <div><Moment format="DD/M/YY">{user.createdAt}</Moment></div>
         </div>
         <div className="col-5 text-start">
           <div className="fw-bold">Participations boards</div>
-          <div>{user.boards.length}</div>
+          <div>{user.pixelboardContributed.length}</div>
         </div>
       </div>
       <div className="row d-flex justify-content-between mt-5">
         <div className="col-5 text-start">
           <div className="fw-bold">Participations pixels</div>
-          <div>{user.pixelsNb}</div>
+          <div>{user.nbPixelModified}</div>
         </div>
       </div>
       {/* TODO carrousel de composants displayBoard (board non modifiable) */}

@@ -5,8 +5,10 @@ import { signup } from '../services/APIService';
 
 export default function ScreenSignup() {
   const navigate = useNavigate();
-  const submitCallBack = (formData) => {
-    if (signup(formData).success) {
+  const submitCallBack = async (formData) => {
+    const resp = await signup(formData);
+    console.log(resp);
+    if (resp.data.success) {
       navigate('/');
     }
     // TODO Error view?

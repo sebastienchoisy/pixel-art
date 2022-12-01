@@ -1,12 +1,12 @@
 export default {
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email' },
+    username: { type: 'string' },
     password: { type: 'string' },
 
   },
   required: [
-    'email',
+    'username',
     'password',
   ],
 };
