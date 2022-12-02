@@ -111,7 +111,7 @@ exports.createPixelBoard = async (req,res) => {
 
     try {
         await pixelBoard.save();
-        res.status(201).json({success: true, message:"Pixelboard creer "+pixelBoard._id});
+        res.status(201).json({success: true, id: pixelBoard._id});
     } catch (error) {
         res.status(501).json({success: false, message: error});
     }

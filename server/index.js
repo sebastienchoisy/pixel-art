@@ -22,7 +22,7 @@ const corsOptions = {
 	credentials: true,
   }
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions)) //Enable CORS Requests only for origin set in options
 app.use(cookieParser("jhdshhds884hfhhs-ew6dhjd"))
 app.use(session({  
 	secret: 'coder-session', 
