@@ -7,20 +7,12 @@ import userProptypes from '../proptypes/user-proptypes';
 export default function ScreenBoardForm({ userData }) {
   const navigate = useNavigate();
 
-  const padTo2Digits = (num) => num.toString().padStart(2, '0');
-
-  const formatDate = (date) => [
-    padTo2Digits(date.getDate()),
-    padTo2Digits(date.getMonth() + 1),
-    date.getFullYear(),
-  ].join('/');
-
   const submitCallBack = (formData) => {
     const boardData = {
       pixelBoardname: formData.name,
       nbLines: formData.nbLine,
       nbColumns: formData.nbColumn,
-      dateOfClosure: formatDate(new Date(formData.dateOfClosure)),
+      dateOfClosure: formData.dateOfClosure,
       intervalPixelformData: formData.intervalPixel,
       username: userData.username,
       multipleDrawPixel: formData.multipleDrawPixel,

@@ -13,6 +13,7 @@ import Header from './components/header/Header';
 import ScreenSignup from './screens/Screen-signup';
 import { getUserInfo } from './services/APIService';
 import ScreenBoardForm from './screens/Screen-boardForm';
+import ScreenBoards from './screens/Screen-boards';
 
 function App() {
   const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<ScreenAccueil />} />
         <Route path="/board/:id" element={<ScreenBoard />} />
+        <Route path="/boards" element={<ScreenBoards />} />
         <Route path="/boardform" element={user ? <ScreenBoardForm userData={user} /> : <Navigate replace to="/" />} />
         <Route path="/profil" element={user ? <ScreenProfile userData={user} /> : <Navigate replace to="/" />} />
         <Route path="/login" element={<ScreenLogin />} />

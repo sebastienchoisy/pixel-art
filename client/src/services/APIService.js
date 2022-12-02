@@ -33,17 +33,26 @@ export async function postBoard(boardData) {
 }
 
 export async function logout() {
-  return axios.get('user/logout');
+  return axios.get('/user/logout');
 }
 
 export async function login(formData) {
-  return axios.post('user/login', formData);
+  return axios.post('/user/login', formData);
 }
 
 export function signup(formData) {
-  return axios.post('user/signup', formData);
+  return axios.post('/user/signup', formData);
 }
 
+export async function getUserInfo() {
+  return axios.get('/user/loginstatus');
+}
+
+export async function patchPixelFromBoard(idBoard, idPixel, patchData) {
+  return axios.patch(`/pixelBoard/pixel?idBoard=${idBoard}&idPixel=${idPixel}`, patchData);
+}
+
+// TODO:Remove
 export function modifyUser(formData) {
   console.log(`${formData.username} ${formData.email}`);
   return { success: true };
@@ -53,9 +62,6 @@ export function checkUsernameAvailability(username) {
   return { success: true, message: `${username} available` };
 }
 
-export async function getUserInfo() {
-  return axios.get('user/loginstatus');
-}
 /*
 export function createBoard(formBoard) {
   return { success: true, message: formBoard };
