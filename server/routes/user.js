@@ -55,7 +55,7 @@ router.post("/signup", (req, res, next) => {
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
 	User.findById(req.user._id).then(
 		user => {
-		var token = jwt.sign({user_id:user._id, role:user.role}, "jhdshhds884hfhhs-ew6dhjd");
+		const token = jwt.sign({user_id:user._id, role:user.role}, "jhdshhds884hfhhs-ew6dhjd");
 		user.save((err, user) => {
 			if (err) {
 				res.status(500).json({success: false,message: err});

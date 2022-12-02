@@ -9,7 +9,7 @@ export default function ScreenBoard() {
 
   useEffect(() => {
     getBoard(params.id).then((resp) => {
-      const respBoard = resp.data;
+      const respBoard = resp.data.message;
       setBoard(respBoard);
     });
   }, []);
