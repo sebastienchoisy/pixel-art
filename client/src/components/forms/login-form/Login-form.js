@@ -4,23 +4,22 @@ import {
   Button, FormGroup, Input, Label,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { defaultMessage, formatEmailCustomMessage } from './form-validation/login-custom-messages';
+import { defaultMessage } from './form-validation/login-custom-messages';
 import loginSchema from './form-validation/login-form-schema';
 import 'react-jsonschema-form-validation/dist/react-jsonschema-form-validation.css';
 
 export default function LoginForm(props) {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
     defaultMessage,
-    formatEmailCustomMessage,
   });
 
   const [hasCredentialsError, setHasCredentialsError] = useState(false);
   const { submitCallBack } = props;
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setHasCredentialsError(submitCallBack(formData));
+    setHasCredentialsError(await submitCallBack(formData));
   };
   const handleChange = (newData) => { setFormData(newData); };
 
@@ -37,23 +36,18 @@ export default function LoginForm(props) {
     >
       <div className="text-start">
         <FormGroup>
-          <Label for="exampleEmail">
-            Email
+          <Label for="username">
+            Pseudo
           </Label>
           <Field
             component={Input}
-            id="exampleEmail"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
+            id="username"
+            name="username"
+            placeholder="Pseudo"
+            value={formData.username}
             onKeyDown={() => setHasCredentialsError(false)}
           />
-          <FieldError
-            errorMessages={{
-              format: () => formData.formatEmailCustomMessage,
-            }}
-            name="email"
-          />
+          <FieldError name="username" />
         </FormGroup>
         <FormGroup>
           <Label for="examplePassword">

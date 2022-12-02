@@ -40,7 +40,6 @@ const occurenceComparisonCallback = (boardA, boardB) => {
 exports.getPopularBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
-        console.log(boards.length);
         let popularBoards = [];
         boards.forEach((board) => {
             if (popularBoards.length <= 5) {

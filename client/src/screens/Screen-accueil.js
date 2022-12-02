@@ -15,11 +15,11 @@ export default function ScreenAccueil() {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const loadData = async () => {
-      setClosedBoards((await getClosedBoards()).data);
-      setPopularBoards((await getPopularBoards()).data);
-      setRecentBoards((await getRecentBoards()).data);
-      setUsersNb((await getUsersNb()).data);
-      setBoardsNb((await getBoardsNb()).data);
+      setClosedBoards((await getClosedBoards()).data.message);
+      setPopularBoards((await getPopularBoards()).data.message);
+      setRecentBoards((await getRecentBoards()).data.message);
+      setUsersNb((await getUsersNb()).data.message);
+      setBoardsNb((await getBoardsNb()).data.message);
     };
     loadData().then(() => setIsLoading(false));
   }, []);

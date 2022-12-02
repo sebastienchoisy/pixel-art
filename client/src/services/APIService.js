@@ -1,16 +1,3 @@
-// export function login(emailInput, pwdInput) {
-//   return axios.post('/user/login', { email: emailInput, pwd: pwdInput });
-// }
-//
-// export function logout() {
-//   return axios.get('/user/logout');
-//   return { success: true, message: 'logout' };
-// }
-//
-// export function getUserInfoWithCookie() {
-//   return axios.get('/user/info');
-// }
-
 import axios from 'axios';
 
 export async function getBoard(id) {
@@ -45,21 +32,16 @@ export async function postBoard(boardData) {
   return axios.post('/pixelBoard', boardData);
 }
 
-// FAKE API
-export function login(formData) {
-  if (formData.email === 'toto@gmail.com' && formData.password === 'tata') {
-    return { success: true, username: 'toto' };
-  }
-  return { success: false };
+export async function logout() {
+  return axios.get('user/logout');
+}
+
+export async function login(formData) {
+  return axios.post('user/login', formData);
 }
 
 export function signup(formData) {
-  console.log(`${formData.username} ${formData.email} ${formData.password}`);
-  return { success: true, username: 'toto' };
-}
-
-export function logout() {
-  return { success: true, message: 'logout' };
+  return axios.post('user/signup', formData);
 }
 
 export function modifyUser(formData) {
@@ -72,17 +54,7 @@ export function checkUsernameAvailability(username) {
 }
 
 export async function getUserInfo() {
-  return {
-    // on change la valeur de success pour changer l'état de connexion, true on est connecté
-    success: true,
-    user: {
-      username: 'toto',
-      email: 'test@test.fr',
-      inscriptionDate: '20/11/2022',
-      boards: [5, 1, 6, 3],
-      pixelsNb: 12,
-    },
-  };
+  return axios.get('user/loginstatus');
 }
 /*
 export function createBoard(formBoard) {

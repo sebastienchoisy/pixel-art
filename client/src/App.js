@@ -20,8 +20,10 @@ function App() {
 
   useEffect(() => {
     getUserInfo().then((userResp) => {
-      if (userResp.success) {
-        setUser(userResp.user);
+      if (userResp.data.success) {
+        setUser(userResp.data.user);
+      } else {
+        setUser(null);
       }
     });
   }, [location]);
@@ -32,7 +34,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<ScreenAccueil />} />
         <Route path="/board/:id" element={<ScreenBoard />} />
-        <Route path="/boardform" element={<ScreenBoardForm userData={user} />} />
+        <Route path="/boardform" element={user ? <ScreenBoardForm userData={user} /> : <Navigate replace to="/" />} />
         <Route path="/profil" element={user ? <ScreenProfile userData={user} /> : <Navigate replace to="/" />} />
         <Route path="/login" element={<ScreenLogin />} />
         <Route path="/signup" element={!user ? <ScreenSignup /> : <Navigate replace to="/" />} />

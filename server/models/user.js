@@ -14,6 +14,11 @@ const User = new Schema({
         trim: true,
         required: [true, 'Password est obligatoire']
     },
+    email: {
+        type: String,
+        trim: true,
+        required: [true, 'Email est obligatoire']
+    },
     nbPixelModified:{
         type: Number,
         trim: true, 

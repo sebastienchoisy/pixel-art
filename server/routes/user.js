@@ -31,11 +31,11 @@ router.post("/signup", (req, res, next) => {
 	  })
 	} else {
 	  User.register(
-		new User({ username: req.body.username,password: req.body.password,role: req.body.role}),
+		new User({ username: req.body.username,password: req.body.password,email: req.body.email}),
 		req.body.password,
 		(err, user) => {
 		  if (err) {
-			res.status(500).json({success: false,message: err});
+			res.status(403).json({success: false,message: err});
 		  } else {
 			var token = jwt.sign({user_id:user._id}, "jhdshhds884hfhhs-ew6dhjd");
 			user.save((err, user) => {
@@ -43,7 +43,7 @@ router.post("/signup", (req, res, next) => {
 				res.status(500).json({success: false,message: err});
 			  } else {
 				res.cookie('jwt',token);
-				res.status(200).json({ success: true, message: "l'utilisateur a ete creer "+user._id })
+				res.status(200).json({ success: true, message: "l'utilisateur a été créé "+user._id })
 			  }
 			})
 		  }
@@ -72,6 +72,24 @@ router.post("/login", passport.authenticate("local"), (req, res, next) => {
 router.get("/logout", passport.authenticate("jwt"), (req, res) => {
 	res.clearCookie("jwt")
 	res.send({ success: true, message:"l'utilisateur a ete deconnecte" })
+})
+
+router.get("/loginstatus", (req, res, next) => {
+	passport.authenticate("jwt", { session: false }, (err, user) => {
+		if(err) {
+			res.status(500).json({success: false,message: err});
+		}
+
+		if(user) {
+			res.status(200).json({success: true, user: user});
+		} else {
+			res.status(200).json({success: false, user: null});
+		}
+	})(req, res, next)
+})
+
+router.get("/usernameavail", async (req, res) => {
+	await userService.isUsernameAvailable(req, res);
 })
 
 passport.deserializeUser((username, done) => {

@@ -19,8 +19,8 @@ const mongodb     = require('./db/mongo');
 mongodb.initClientDbConnection();
 
 const corsOptions = {
-	origin: 'http://localhost:3000/',
-}
+	credentials: true,
+  }
 
 app.use(cors(corsOptions)) //Enable CORS Requests only for origin set in options
 app.use(cookieParser("jhdshhds884hfhhs-ew6dhjd"))
