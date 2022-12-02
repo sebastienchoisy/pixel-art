@@ -1,18 +1,12 @@
-const Pixel = require('../models/pixel');
 const user = require('../services/user');
 
-exports.updatePixel = async (pixelToUpdate,idPixelBoard,req,res) => {
-    const temp = {};
-    ({  color: temp.color,
-    } = req.body);
-    temp.lastUpdateUser= req.user.username
-    if (pixelToUpdate) {     
+// Modification d'un pixel
+exports.updatePixel = async (pixelToUpdate,idPixelBoard,username, color) => {
+    if (pixelToUpdate) {
+        pixelToUpdate.lastUpdateUser = username;
+        pixelToUpdate.color = color;
         pixelToUpdate.occurence +=1;
-        if(temp.lastUpdateUser) {
-            await user.updateUserNbPixel(temp.lastUpdateUser, idPixelBoard);  //Update User nbPixelModified and pixelboardContributed
-        }
-        Object.keys(temp).forEach((key) => {
-            pixelToUpdate[key] = temp[key];
-        });
+        await user.updateUserNbPixel(username, idPixelBoard);  //Update User nbPixelModified and pixelboardContributed
     }
+
 }

@@ -1,42 +1,46 @@
 const PixelBoard = require('../models/pixelBoard');
 const Pixel = require('../models/pixel');
-const HistoriquePixel = require('../models/historiquePixels')
-const HistoriquePixelService = require("../services/historiquePixel")
+const HistoriquePixel = require('../models/historiquePixels');
+const HistoriquePixelService = require("../services/historiquePixel");
 const PixelUpdate = require('../services/pixel');
 
-function isAuthorized(userConnected,pixelBoard){
+// Vérification des droits pour modifier un pixel ou une pixel board
+function isAuthorized(userConnected, pixelBoard) {
     return userConnected.role === "admin" || userConnected.username === pixelBoard.author;
 }
+
+// Récupération d'une pixel board par son ID
 exports.getPixelBoard = async (req, res) => {
-    const id = req.query.id;
     try {
-       let pixelBoard = await PixelBoard.findById(id);
+        let pixelBoard = await PixelBoard.findById(req.query.id);
 
         if (pixelBoard) {
-            res.status(200).json({success: true, message:pixelBoard});
-        }
-        else{
-            res.status(404).json({success: false, message:"pixelboard non trouve"});
+            res.status(200).json({success: true, message: pixelBoard});
+        } else {
+            res.status(404).json({success: false, message: "pixelboard non trouve"});
         }
     } catch (error) {
         res.status(501).json({success: false, message: error});
     }
 }
 
+// Calcul du nombre total d'occurences sur une board (nb de fois où les pixels ont été modifié)
 const getTotaloccurences = (board) => {
     return board.pixels.reduce((prev, actual) => prev + actual.occurence, 0);
 }
 
+// Triage d'un array de board pour avoir la board avec le moins d'occurences en première position
 const occurenceComparisonCallback = (boardA, boardB) => {
-    if(getTotaloccurences(boardA) < getTotaloccurences(boardB)) {
-        return -1
+    if (getTotaloccurences(boardA) < getTotaloccurences(boardB)) {
+        return -1;
     }
-    if(getTotaloccurences(boardA) > getTotaloccurences(boardB)) {
-        return 1
+    if (getTotaloccurences(boardA) > getTotaloccurences(boardB)) {
+        return 1;
     }
     return 0;
 }
 
+// Récupération des 5 boards avec le plus d'occurences (les plus populaires)
 exports.getPopularBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
@@ -51,60 +55,61 @@ exports.getPopularBoards = async (res) => {
                 }
             }
         })
-        res.status(200).json({success: true, message:popularBoards});
+        res.status(200).json({success: true, message: popularBoards});
     } catch (error) {
         res.status(501).json({success: false, message: error});
     }
 }
 
+// Récupération des 5 boards les plus récentes (les 5 dernières enregistrées)
 exports.getRecentsBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
         let recentBoards = boards.length <= 5 ? boards : boards.slice(boards.length - 5);
-        return res.status(200).json({success: true, message:recentBoards});
+        return res.status(200).json({success: true, message: recentBoards});
     } catch (error) {
         res.status(501).json({success: false, message: error});
     }
 }
 
+// Récupération des 5 boards fermées en dernières
 exports.getLastClosedBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
         let closedBoards = boards.filter((board) => board.isClosed === true);
         closedBoards = closedBoards.length < 5 ? closedBoards : closedBoards.slice(boards.length - 5);
-        res.status(200).json({success: true, message:closedBoards});
+        res.status(200).json({success: true, message: closedBoards});
     } catch (error) {
-        console.error(error)
         res.status(501).json({success: false, message: error});
     }
 }
 
+// Récupération de toutes les boards
 exports.getBoards = async (res) => {
     try {
         let boards = await PixelBoard.find();
-        res.status(200).json({success: true, message:boards});
+        res.status(200).json({success: true, message: boards});
     } catch (error) {
-        res.status(501).json({success: false , message: error});
+        res.status(501).json({success: false, message: error});
     }
 }
 
-exports.createPixelBoard = async (req,res) => {
-    let temp = {};
-    ({
-        pixelBoardname    : temp.pixelBoardname,
-		nbLines : temp.nbLines,
-		nbColumns : temp.nbColumns,
-        dateOfClosure : temp.dateOfClosure,
-		intervalPixel: temp.intervalPixel,
-        multipleDrawPixel: temp.multipleDrawPixel,
-        pixels: temp.pixels
-    } = req.body);
-    temp.author = req.user.username;
+// Création d'une pixel board
+exports.createPixelBoard = async (req, res) => {
+    let board = {
+        pixelBoardname: req.body.pixelBoardname,
+        author: req.user.username,
+        nbLines: req.body.nbLines,
+        nbColumns: req.body.nbColumns,
+        dateOfClosure: req.body.dateOfClosure,
+        intervalPixel: req.body.intervalPixel,
+        multipleDrawPixel: req.body.multipleDrawPixel,
+    };
 
-    let pixelBoard = await PixelBoard.create(temp);
-    for (let line = 0; line < temp.nbLines; line++) {
-        for (let col = 0; col < temp.nbColumns; col++) {
-            pixelBoard.pixels.push( new Pixel({posX: line, posY: col, color: 'white'})); // Initialise pixels of PixelBoard
+    let pixelBoard = await PixelBoard.create(board);
+    for (let line = 0; line < board.nbLines; line++) {
+        for (let col = 0; col < board.nbColumns; col++) {
+            pixelBoard.pixels.push(new Pixel({posX: line, posY: col, color: 'white'})); // Initialisation des pixels de la board
         }
     }
 
@@ -116,145 +121,139 @@ exports.createPixelBoard = async (req,res) => {
     }
 }
 
+// Modification d'une pixel board
 exports.updatePixelBoard = async (req, res) => {
     const pixelBoard = await PixelBoard.findById(req.query.id);
-    if(isAuthorized(req.user,pixelBoard)){
-        if(!req.body.nbColumns) {
-            req.body.nbColumns = pixelBoard.nbColumns
+    if (isAuthorized(req.user, pixelBoard)) {
+        if (!req.body.nbColumns) {
+            req.body.nbColumns = pixelBoard.nbColumns;
         }
-        if(!req.body.nbLines) {
-            req.body.nbLines = pixelBoard.nbLines
+        if (!req.body.nbLines) {
+            req.body.nbLines = pixelBoard.nbLines;
         }
-        if(req.body.nbColumns < pixelBoard.nbColumns){// Update if less number of columns than initiated
+        if (req.body.nbColumns < pixelBoard.nbColumns) {// Update if less number of columns than initiated
             for (let col = pixelBoard.nbColumns; col > 0; col--) {
-                if(req.body.nbColumns < col){ // remove all pixels column and line
-                    for (let line = pixelBoard.nbLines; line >0; line--) {
-                        let pixelToRemove = pixelBoard.pixels.id(req.query.id)
-                        pixelBoard.pixels.splice(pixelToRemove,1)
+                if (req.body.nbColumns < col) { // remove all pixels column and line
+                    for (let line = pixelBoard.nbLines; line > 0; line--) {
+                        let pixelToRemove = pixelBoard.pixels.id(req.query.id);
+                        pixelBoard.pixels.splice(pixelToRemove, 1);
                     }
-                }
-                else{ //remove only pixels of n columns
-                    for (let line = pixelBoard.nbLines; line >req.body.nbLines; line--) {
-                        let pixelToRemove = pixelBoard.pixels.id(req.query.id)
-                        pixelBoard.pixels.splice(pixelToRemove,1)
+                } else { //remove only pixels of n columns
+                    for (let line = pixelBoard.nbLines; line > req.body.nbLines; line--) {
+                        let pixelToRemove = pixelBoard.pixels.id(req.query.id);
+                        pixelBoard.pixels.splice(pixelToRemove, 1);
                     }
                 }
             }
-        }
-        else if (req.body.nbLines < pixelBoard.nbLines){// Update if less number of lines than initiated
+        } else if (req.body.nbLines < pixelBoard.nbLines) {// Update if less number of lines than initiated
             for (let line = pixelBoard.nbLines; line > 0; line--) {
-                if(req.body.nbLines < line){
-                    for (let col = pixelBoard.nbColumns; col >0; col--) {
-                        let pixelToRemove = pixelBoard.pixels.id(req.query.id)
-                        pixelBoard.pixels.splice(pixelToRemove,1)
+                if (req.body.nbLines < line) {
+                    for (let col = pixelBoard.nbColumns; col > 0; col--) {
+                        let pixelToRemove = pixelBoard.pixels.id(req.query.id);
+                        pixelBoard.pixels.splice(pixelToRemove, 1);
                     }
                 }
             }
-        }
-        else if(req.body.nbColumns > pixelBoard.nbColumns){// Update if more number of columns than initiated
-            for (let line = 0; line < req.body.nbLines ; line++) {
-                if(line < pixelBoard.nbLines){
-                    for (let col = pixelBoard.nbColumns; col < req.body.nbColumns ; col++) {
+        } else if (req.body.nbColumns > pixelBoard.nbColumns) {// Update if more number of columns than initiated
+            for (let line = 0; line < req.body.nbLines; line++) {
+                if (line < pixelBoard.nbLines) {
+                    for (let col = pixelBoard.nbColumns; col < req.body.nbColumns; col++) {
                         pixelBoard.pixels.push(new Pixel({posX: line, posY: col, color: 'white'}));
                     }
-                }
-                else{
+                } else {
                     for (let col = 0; col < req.body.nbColumns; col++) {
                         pixelBoard.pixels.push(new Pixel({posX: line, posY: col, color: 'white'}));
                     }
                 }
             }
-        }
-        else if(req.body.nbLines > pixelBoard.nbLines ){// Update if more number of lines than initiated
-            for (let line = pixelBoard.nbLines; line < req.body.nbLines ; line++) {
-                for (let col = 0; col < req.body.nbColumns ; col++) {
+        } else if (req.body.nbLines > pixelBoard.nbLines) {// Update if more number of lines than initiated
+            for (let line = pixelBoard.nbLines; line < req.body.nbLines; line++) {
+                for (let col = 0; col < req.body.nbColumns; col++) {
                     pixelBoard.pixels.push(new Pixel({posX: line, posY: col, color: 'white'}));
                 }
             }
         }
         Object.keys(req.body).forEach((field) => {
-            pixelBoard[field]= req.body[field];
+            pixelBoard[field] = req.body[field];
         })
-        let hasErr = false;
         try {
             await pixelBoard.save();
+            res.status(200).json({success: true, message: "Le pixelBoard a ete mis à jour " + pixelBoard._id});
         } catch (e) {
-            console.log(e);
-            hasErr = true;
+            res.status(501).json({success: false, message: e});
         }
-        if(hasErr) {
-             res.status(501).json({success: false, message: error});
-        } else {
-             res.status(200).json({success: true, message:"Le pixelBoard a ete mis à jour "+pixelBoard._id});
-        }
+    } else {
+        res.status(501).json({
+            success: false,
+            message: "Soit user connecté n'est pas admin soit n'est pas l'auteur du pixelboard"
+        });
     }
-    else{
-        res.status(501).json({success: false, message: "Soit user connecter n'est pas admin soit n'est pas l'auteur du pixelboard"});
-    }
-
 }
-exports.updatePixelOfPixelBoard =  async (req, res) => {
-    const today = new Date()
+
+// Modification d'un pixel d'une board
+exports.updatePixelOfPixelBoard = async (req, res) => {
+    const today = new Date();
     const pixelBoard = await PixelBoard.findById(req.query.idBoard);
-    const dateClosure =new Date(pixelBoard.dateOfClosure)
-    if(today.getTime() < dateClosure.getTime()) {
-        let pixelToUpdate = pixelBoard.pixels.id(req.query.idPixel)
+    const dateClosure = new Date(pixelBoard.dateOfClosure);
+    if (today.getTime() < dateClosure.getTime()) {
+        let pixelToUpdate = pixelBoard.pixels.id(req.query.idPixel);
         const temp = {
-            pixelBoardId    : req.query.idPixel,
-            username        :req.user.username,
+            pixelBoardId: req.query.idPixel,
+            username: req.user.username,
         };
-        const lastHistorique = await HistoriquePixelService.getHistorique(req.query.id,req.user.username)
-        if(lastHistorique){
-            let timeUnlockPixel = lastHistorique.createdAt
+        // L'historique permet de garder une trace des dernières actions d'un user avec une board
+        const lastHistorique = await HistoriquePixelService.getLastHistorique(req.query.id, req.user.username);
+        if (lastHistorique) {
+            let timeUnlockPixel = lastHistorique.createdAt;
             timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
-            if(today.getTime() > timeUnlockPixel.getTime()) {
-                await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req) //update pixel
-                await HistoriquePixel.create(temp) //add historique
-                res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate.id});
+            if (today.getTime() > timeUnlockPixel.getTime()) {
+                await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color); //update pixel
+                await HistoriquePixel.create(temp); //add historique
+                res.status(200).json({
+                    success: true,
+                    message: "le Pixel a ete mis a jour dans le pixelboard " + pixelToUpdate.id
+                });
+            } else {
+                res.status(501).json({success: false, message: "intervalle non respecte, pas de maj"});
             }
-            else {
-                res.status(501).json({success: false, message:"intervalle non respecte, pas de maj"});
-            }
-        }
-        else{
-            await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req) //update pixel
+        } else {
+            await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color) //update pixel
             await HistoriquePixel.create(temp) //add historique
-            res.status(200).json({success: true, message:"le Pixel a ete mis a jour dans le pixelboard "+pixelToUpdate.id});
+            res.status(200).json({
+                success: true,
+                message: "le Pixel a ete mis a jour dans le pixelboard " + pixelToUpdate.id
+            });
         }
+    } else {
+        res.status(501).json({success: false, message: "Pixel Board est cloture"});
     }
-    else {
-        res.status(501).json({success: false, message:"Pixel Board est cloture"});
-    }
-    pixelBoard.save()
+    pixelBoard.save();
 }
 
-exports.deletePixelBoard  = async (req, res) => {
+// Suppression d'une pixel board
+exports.deletePixelBoard = async (req, res) => {
     const pixelBoard = await PixelBoard.findById(req.query.id);
-    if(isAuthorized(req.user,pixelBoard)){
-            let hasErr = false;
+    if (isAuthorized(req.user, pixelBoard)) {
         try {
             await PixelBoard.deleteOne({_id: req.query.id});
-        } catch(e) {
-            hasErr = true;
+            res.status(200).json({success: true, message: "Pixelboard a été supprimée"});
+        } catch (e) {
+            res.status(501).json({success: false, message: e});
         }
-        if (hasErr) {
-            res.status(501).json({success: false, message: error});
-        } else {
-            res.status(200).json({success: true, message: "Pixelboard a ete supprimer"});
-        }
+    } else {
+        res.status(401).json({
+            success: false,
+            message: "Soit user connecté n'est pas admin soit n'est pas l'auteur du pixelboard"
+        });
     }
-    else{
-        res.status(501).json({success: false, message: "Soit user connecter n'est pas admin soit n'est pas l'auteur du pixelboard"});
-    }
-
 }
 
-exports.countPixelBoard = async (req,res) => {
+// total de boards en db
+exports.countPixelBoard = async (req, res) => {
     try {
         let countPixelBoard = await PixelBoard.count();
         res.status(200).json({success: true, message: countPixelBoard});
     } catch (error) {
-        console.error(error)
         res.status(501).json({success: false, message: error});
     }
 }
