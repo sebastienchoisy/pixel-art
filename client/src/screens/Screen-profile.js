@@ -29,7 +29,7 @@ export default function ScreenProfile({ userData }) {
   };
 
   return user && (
-  <div className="w-50 m-auto mt-5 mb-5 profil-container">
+  <div className={`m-auto mt-5 mb-5 ${!shouldModifyInformation ? 'col-6' : ''}`}>
     {!shouldModifyInformation
         && (
         <div className="text-end mt-5 mb-5">

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  min-width: 350px;
 }
 
 .App-logo {
@@ -44,10 +45,6 @@
 
 .size-form {
   width: 270px;
-}
-
-.profil-container {
-  max-width: 600px;
 }
 
 .fit-content {

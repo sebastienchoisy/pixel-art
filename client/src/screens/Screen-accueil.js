@@ -13,6 +13,7 @@ export default function ScreenAccueil() {
   const [usersNb, setUsersNb] = useState(null);
   const [boardsNb, setBoardsNb] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const loadData = async () => {
       setClosedBoards((await getClosedBoards()).data.message);
@@ -29,7 +30,7 @@ export default function ScreenAccueil() {
         : (
           <>
             <div className="row flex-row mt-5">
-              <div className="col">
+              <div className="col-md mb-3">
                 <div>
                   <span>Bienvenue sur Pixel-Art</span>
                   <br />
@@ -40,29 +41,23 @@ export default function ScreenAccueil() {
                   </span>
                 </div>
                 <div className="mt-4">
-                  {boardsNb && usersNb && (<Stats boardsNb={boardsNb} usersNb={usersNb} />)}
+                  <Stats boardsNb={boardsNb} usersNb={usersNb} />
                 </div>
               </div>
-              {recentBoards?.length > 0 && (
-              <div className="col align-content-center">
+              <div className="col-md align-content-center mb-3">
                 <span className="fw-bold"> Les boards les plus récentes</span>
                 <BoardCarousel boards={recentBoards} />
               </div>
-              )}
             </div>
             <div className="row flex-row mt-5">
-              {popularBoards?.length && (
-              <div className="col">
+              <div className="col-md mb-3">
                 <span className="fw-bold"> Les boards les plus populaires </span>
                 <BoardCarousel boards={popularBoards} />
               </div>
-              )}
-              {closedBoards?.length ? (
-                <div className="col">
-                  <span className="fw-bold"> Les boards terminés </span>
-                  <BoardCarousel boards={closedBoards} />
-                </div>
-              ) : <div className="col"><span className="fw-bold"> Aucune board terminée pour le moment </span></div>}
+              <div className="col-md mb-3">
+                <span className="fw-bold"> Les boards terminés </span>
+                <BoardCarousel boards={closedBoards} />
+              </div>
             </div>
           </>
         )}

@@ -7,7 +7,6 @@ export default function BoardDisplay({ board, side }) {
   const refCanvas = useRef(null);
   const [pixelSize, setPixelSize] = useState(0);
   const pixelBorderColor = '#D3D3D3';
-
   const drawPixel = (pixel) => {
     refCanvas.current.getContext('2d').fillStyle = pixel.color;
     refCanvas.current.getContext('2d').strokeStyle = pixelBorderColor;
@@ -23,12 +22,18 @@ export default function BoardDisplay({ board, side }) {
 
   useEffect(() => {
     setPixelSize(side / board.nbLines);
-    generateBoard();
   }, [board]);
+
+  useEffect(() => {
+    if (pixelSize) {
+      generateBoard();
+    }
+  }, [pixelSize]);
   return (
     <div>
       {/* eslint-disable-next-line no-underscore-dangle */}
       <Link to={`/board/${board._id}`} className="d-flex flex-column fit-content link m-auto">
+        <span>{board.pixelBoardname}</span>
         <canvas
           id="myCanvas"
           ref={refCanvas}
