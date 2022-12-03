@@ -3,10 +3,24 @@ const Pixel = require('../models/pixel');
 const HistoriquePixel = require('../models/historiquePixels');
 const HistoriquePixelService = require("../services/historiquePixel");
 const PixelUpdate = require('../services/pixel');
+const User = require("../models/user");
 
 // Vérification des droits pour modifier un pixel ou une pixel board
 function isAuthorized(userConnected, pixelBoard) {
     return userConnected.role === "admin" || userConnected.username === pixelBoard.author;
+}
+
+exports.checkRights = async (req, res) => {
+    try{
+        const pixelBoard = await PixelBoard.findById(req.query.id);
+        if (isAuthorized(req.user, pixelBoard)) {
+            res.status(200).json({success: true, message: true});
+        } else {
+            res.status(200).json({success: true, message: false});
+        }
+    } catch (error){
+        res.status(501).json({success: false, message: error});
+    }
 }
 
 // Récupération d'une pixel board par son ID
@@ -253,6 +267,21 @@ exports.countPixelBoard = async (req, res) => {
     try {
         let countPixelBoard = await PixelBoard.count();
         res.status(200).json({success: true, message: countPixelBoard});
+    } catch (error) {
+        res.status(501).json({success: false, message: error});
+    }
+}
+
+// Vérification de la validité d'un username
+exports.isNameAvailable = async (req, res) => {
+    try {
+        // Regex pour ne pas prendre en compte les majuscules/minuscules
+        let pixelBoard = await PixelBoard.findOne({pixelBoardname: new RegExp('^'+req.query.pixelBoardname+'$', "i")});
+        if (pixelBoard) {
+            res.status(200).json({success: false, message: 'Nom de grille déjà pris'});
+        } else {
+            res.status(200).json({success: true, message: 'Nom de grille disponible'});
+        }
     } catch (error) {
         res.status(501).json({success: false, message: error});
     }

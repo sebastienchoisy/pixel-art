@@ -57,15 +57,17 @@ export function modifyUser(userData) {
 }
 
 export function checkUsernameAvailability(username) {
-  return axios.get(`user/usernameavail?username=${username}`);
+  return axios.get(`/user/usernameavail?username=${username}`);
 }
 
-/*
-export function createBoard(formBoard) {
-  return { success: true, message: formBoard };
+export async function checkBoardNameAvailability(boardName) {
+  return axios.get(`/pixelBoard/nameavail?pixelBoardname=${boardName}`);
 }
-*/
 
-export function checkBoardTitleAvailable(formBoard) {
-  return { success: true, message: formBoard };
+export async function checkRights(boardId) {
+  return axios.get(`/pixelBoard/checkrights?id=${boardId}`);
+}
+
+export async function delBoard(boardId) {
+  return axios.delete(`/pixelBoard?id=${boardId}`);
 }

@@ -3,10 +3,13 @@ import React, {
   useRef, useState, useContext,
 } from 'react';
 import './Board.css';
+import { Button } from 'reactstrap';
+import { useNavigate } from 'react-router-dom';
 import ColorPicker from './Color-picker/Color-picker';
 import BoardPropTypes from '../../proptypes/board-proptypes';
-import { patchPixelFromBoard } from '../../services/APIService';
 import { ThemeContext } from '../../context/theme';
+import { checkRights, delBoard, patchPixelFromBoard } from '../../services/APIService';
+import trash from '../../assets/trash.png';
 
 export default function Board({ board }) {
   const refCanvas = useRef(null);
@@ -15,6 +18,17 @@ export default function Board({ board }) {
   const [color, setColor] = useState('#000000');
   const [error, setError] = useState('');
   const theme = useContext(ThemeContext);
+
+  const [upperRights, setUpperRights] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadData = async () => {
+      // eslint-disable-next-line no-underscore-dangle
+      setUpperRights((await checkRights(board._id)).data.message);
+    };
+    loadData().then();
+  }, []);
 
   const drawPixel = useCallback(async (pixel) => {
     refCanvas.current.getContext('2d').fillStyle = pixel.color;
@@ -46,6 +60,8 @@ export default function Board({ board }) {
     const rect = refCanvas.current.getBoundingClientRect();
     const scaleX = refCanvas.current.width / rect.width;
     const scaleY = refCanvas.current.height / rect.height;
+    console.log(scaleX);
+    console.log(scaleY);
     return {
       x: (evt.clientX - rect.left) * scaleX,
       y: (evt.clientY - rect.top) * scaleY,
@@ -91,22 +107,53 @@ export default function Board({ board }) {
     setColor(colorValue);
   };
 
+  const handleDelBoard = async () => {
+    // eslint-disable-next-line no-underscore-dangle
+    const res = await delBoard(board._id);
+    if (res.data.success) {
+      navigate('/');
+    } else {
+      setError(res.data.message);
+    }
+  };
+
   return board && (
     <div className={theme}>
+      {upperRights && (
+        <div className="d-flex justify-content-end m-4">
+          <Button color="danger" onClick={() => handleDelBoard()}>
+            <img src={trash} alt="mushroom" width="24" />
+          </Button>
+        </div>
+      )}
+
       <h1>{board.pixelBoardname}</h1>
-      <h4>{board.dateOfClosure}</h4>
-      <p>{error}</p>
-      <div className="board d-flex justify-content-around">
-        <div>
+      <div className="d-flex justify-content-around flex-wrap my-3">
+        <div className="board d-flex justify-content-center flex-wrap">
           <canvas
             id="myCanvas"
             ref={refCanvas}
             width={board.nbColumns * pixelSize}
             height={board.nbLines * pixelSize}
           />
+          {!board.isClosed && (<ColorPicker parentCallback={callbackColor} />)}
         </div>
         <div>
-          {!board.isClosed && (<ColorPicker parentCallback={callbackColor} />)}
+          <div className="d-flex justify-content-start">
+            <h6>Date de fin : </h6>
+            <h6>{board.dateOfClosure}</h6>
+          </div>
+          <div className="d-flex justify-content-start">
+            <h6>Taille : </h6>
+            <h6>{board.nbLines}</h6>
+          </div>
+          <div className="d-flex justify-content-start">
+            <h6>Interval de temps : </h6>
+            <h6>{`${board.nbLines} s`}</h6>
+          </div>
+          <div className="d-flex justify-content-start">
+            <p>{error}</p>
+          </div>
         </div>
       </div>
     </div>
