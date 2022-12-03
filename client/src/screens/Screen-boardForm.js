@@ -11,8 +11,8 @@ export default function ScreenBoardForm() {
   const submitCallBack = (formData) => {
     const boardData = {
       pixelBoardname: formData.name,
-      nbLines: formData.nbLine,
-      nbColumns: formData.nbColumn,
+      nbLines: formData.length,
+      nbColumns: formData.length,
       dateOfClosure: formData.dateOfClosure,
       intervalPixel: formData.intervalPixel,
       multipleDrawPixel: formData.multipleDrawPixel,

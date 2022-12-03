@@ -2,6 +2,7 @@ const express = require('express');
 const { wrapAsync } = require('../lib/utils');
 const PixelBoardService = require('../services/pixelBoard');
 const passport = require("passport")
+const userService = require("../services/user");
 
 const router = express.Router();
 
@@ -34,6 +35,16 @@ router.get('/lastcreated', wrapAsync(async (req,res) => {
 router.get('/lastclosed', wrapAsync(async (req,res) => {
     await PixelBoardService.getLastClosedBoards(res);
 }))
+
+// Renvoi  la validité ou non d'un nom de grille
+router.get('/nameavail', async (req,res) => {
+	await PixelBoardService.isNameAvailable(req, res);
+});
+
+// Vérifie si l'utilisateur à les droits supplémentaire sur la board
+router.get('/checkrights', passport.authenticate("jwt"), wrapAsync(async (req,res) => {
+	await PixelBoardService.checkRights(req, res);
+}));
 
 // Modification des propriétés d'une pixel board
 router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {

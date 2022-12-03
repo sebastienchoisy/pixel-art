@@ -13,14 +13,13 @@ import {
   maxLengthCustomMessage,
   patternBoardTitleCustomMessage,
 } from './form-validation/board-custom-message';
-import { checkBoardTitleAvailable } from '../../../services/APIService';
+import { checkBoardNameAvailability } from '../../../services/APIService';
 
 export default function BoardForm({ submitCallBack }) {
   const [isBoardTitleAvailable, setIsBoardTitleAvailable] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    nbLine: 64,
-    nbColumn: 64,
+    length: 32,
     dateOfClosure: '',
     intervalPixel: 60,
     multipleDrawPixel: false,
@@ -32,13 +31,17 @@ export default function BoardForm({ submitCallBack }) {
   }
 
   const checkBoardTitle = async () => {
-    setIsBoardTitleAvailable(checkBoardTitleAvailable(formData.name).success);
+    const res = await checkBoardNameAvailability(formData.name);
+    if (res.data.success) {
+      setIsBoardTitleAvailable(true);
+    } else {
+      setIsBoardTitleAvailable(false);
+    }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Check valid date
-    if (new Date(formData.dateOfClosure).getTime() < Date.now()) {
+    if (new Date(formData.dateOfClosure).getTime() < Date.now() && !isBoardTitleAvailable) {
       return;
     }
     submitCallBack(formData);
@@ -69,6 +72,7 @@ export default function BoardForm({ submitCallBack }) {
             valid={
               !!isBoardNameValid(formData.name) && isBoardTitleAvailable
             }
+            invalid={!isBoardTitleAvailable}
             value={formData.name}
             onBlur={() => checkBoardTitle(formData.name)}
           />
@@ -88,41 +92,22 @@ export default function BoardForm({ submitCallBack }) {
           </FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Label for="nbLine">Nombre de lignes</Label>
+          <Label for="length">Nombre de lignes</Label>
           <Field
             component={Input}
             type="number"
-            name="nbLine"
-            id="nbLine"
+            name="length"
+            id="length"
             placeholder="Entrer le nombre de ligne de la grille ..."
-            value={formData.nbLine}
-            valid={formData.nbLine >= 8 && formData.nbLine <= 128}
+            value={formData.length}
+            valid={formData.length >= 8 && formData.length <= 128}
           />
           <FieldError
             errorMessages={{
               minimum: () => minLengthCustomMessage,
               maximum: () => maxLengthCustomMessage,
             }}
-            name="nbLine"
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label for="nbColumn">Nombre de colonnes</Label>
-          <Field
-            component={Input}
-            type="number"
-            name="nbColumn"
-            id="nbColumn"
-            placeholder="Entrer le nombre de colonne de la grille ..."
-            value={formData.nbColumn}
-            valid={formData.nbColumn >= 8 && formData.nbColumn <= 128}
-          />
-          <FieldError
-            errorMessages={{
-              minimum: () => minLengthCustomMessage,
-              maximum: () => maxLengthCustomMessage,
-            }}
-            name="nbColumn"
+            name="length"
           />
         </FormGroup>
         <FormGroup>

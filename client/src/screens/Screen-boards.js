@@ -83,7 +83,7 @@ export default function ScreenBoards({ isLogged }) {
             <div className="d-flex justify-content-around align-items-center mb-3">
               {isLogged && (
               <div className="ms-4">
-                <Button onClick={() => navigate('/boardform')}>Create New Board</Button>
+                <Button onClick={() => navigate('/boardform')}>Créer une nouvelle grille</Button>
               </div>
               )}
               <div className="mx-2">
