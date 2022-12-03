@@ -138,7 +138,7 @@ export default function BoardForm({ submitCallBack }) {
             }
             invalid={new Date(formData.dateOfClosure).getTime() < Date.now()}
           />
-          <FormFeedback invalid>
+          <FormFeedback invalid="true">
             La date de fin doit être postérieur à la date actuelle
           </FormFeedback>
         </FormGroup>
