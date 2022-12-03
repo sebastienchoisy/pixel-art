@@ -12,7 +12,7 @@ export default function ScreenBoardForm() {
       nbLines: formData.nbLine,
       nbColumns: formData.nbColumn,
       dateOfClosure: formData.dateOfClosure,
-      intervalPixelformData: formData.intervalPixel,
+      intervalPixel: formData.intervalPixel,
       multipleDrawPixel: formData.multipleDrawPixel,
     };
     postBoard(boardData).then((res) => {
