@@ -21,7 +21,10 @@ export default function Header({ username }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
-  const disconnect = () => logout().then(navigate('/'));
+  const disconnect = async () => {
+    await logout();
+    navigate('/');
+  };
 
   return (
     <header>

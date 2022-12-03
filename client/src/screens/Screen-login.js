@@ -6,7 +6,11 @@ import { login } from '../services/APIService';
 export default function ScreenLogin() {
   const navigate = useNavigate();
   const submitCallBack = async (formData) => {
-    const response = await login(formData);
+    const userData = {
+      username: formData.username,
+      password: formData.password,
+    };
+    const response = await login(userData);
     if (response.data.success) {
       navigate('/');
     }

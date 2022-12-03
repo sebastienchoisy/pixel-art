@@ -32,6 +32,7 @@ export default function UserForm({ submitCallBack, userData }) {
     maxPasswordCustomMessage,
   });
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(undefined);
+  const [isUsernameTouched, setIsUsernameTouched] = useState(false);
   const [arePwdDifferents, setArePwdDifferents] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,13 +54,17 @@ export default function UserForm({ submitCallBack, userData }) {
   const handleChange = (newData) => setFormData(newData);
 
   const checkUsername = async () => {
-    setIsUsernameAvailable(checkUsernameAvailability(formData.username).success);
+    const resp = await checkUsernameAvailability(formData.username);
+    setIsUsernameAvailable(
+      resp.data.success || (userData && formData.username === userData.username),
+    );
+    if (!isUsernameTouched) {
+      setIsUsernameTouched(true);
+    }
   };
 
-  function isUsernameValid(username) {
-    return username.match(/^[a-zA-Z0-9]+$/)
-        && username.length >= 4 && username.length <= 20;
-  }
+  const isUsernameValid = (username) => username.match(/^[a-zA-Z0-9]+$/)
+      && username.length >= 4 && username.length <= 20;
 
   return (
     <Form
@@ -86,6 +91,7 @@ export default function UserForm({ submitCallBack, userData }) {
             valid={
               isUsernameAvailable && !!formData.username && !!isUsernameValid(formData.username)
             }
+            invalid={isUsernameTouched && !isUsernameAvailable}
             value={formData.username}
             onBlur={() => checkUsername(formData.username)}
           />

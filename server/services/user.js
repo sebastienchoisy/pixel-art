@@ -63,7 +63,7 @@ exports.signup = async (req, res) => {
 // Modification d'un utilisateur
 exports.updateUser = async (req, res) => {
     try {
-        let user = await User.findOne({username: req.body.username});
+        let user = await User.findOne({_id: req.user._id});
         if (user) {
             if (req.user._id.valueOf() === user._id.valueOf()) {
                 Object.keys(req.body).forEach((key) => {
@@ -110,7 +110,7 @@ exports.isUsernameAvailable = async (req, res) => {
         // Regex pour ne pas prendre en compte les majuscules/minuscules
         let user = await User.findOne({username: new RegExp('^'+req.query.username+'$', "i")});
         if (user) {
-            res.status(403).json({success: false, message: 'username déjà pris'});
+            res.status(200).json({success: false, message: 'username déjà pris'});
         } else {
             res.status(200).json({success: true, message: 'username disponible'});
         }
