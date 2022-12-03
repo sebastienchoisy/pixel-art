@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserForm from '../components/forms/signup-form/User-form';
 import { signup } from '../services/APIService';
+import { ThemeContext } from '../context/theme';
 
 export default function ScreenSignup() {
+  const theme = useContext(ThemeContext);
   const navigate = useNavigate();
   const submitCallBack = async (formData) => {
     const userData = {
@@ -18,6 +20,8 @@ export default function ScreenSignup() {
     // TODO Error view?
   };
   return (
-    <UserForm submitCallBack={submitCallBack} />
+    <div className={theme}>
+      <UserForm submitCallBack={submitCallBack} />
+    </div>
   );
 }

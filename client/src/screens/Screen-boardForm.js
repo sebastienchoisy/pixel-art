@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postBoard } from '../services/APIService';
 import BoardForm from '../components/forms/board-form/Board-form';
+import { ThemeContext } from '../context/theme';
 
 export default function ScreenBoardForm() {
   const navigate = useNavigate();
+  const theme = useContext(ThemeContext);
 
   const submitCallBack = (formData) => {
     const boardData = {
@@ -22,6 +24,8 @@ export default function ScreenBoardForm() {
     });
   };
   return (
-    <BoardForm submitCallBack={submitCallBack} />
+    <div className={theme}>
+      <BoardForm submitCallBack={submitCallBack} />
+    </div>
   );
 }

@@ -75,7 +75,7 @@ export default function UserForm({ submitCallBack, userData }) {
       errorMessages={{
         required: () => formData.defaultMessage,
       }}
-      className="form m-auto mt-5 size-form"
+      className="form m-auto pt-5 size-form"
     >
       <div className="text-start">
         <FormGroup>

@@ -8,7 +8,7 @@ import { defaultMessage } from './form-validation/login-custom-messages';
 import loginSchema from './form-validation/login-form-schema';
 import 'react-jsonschema-form-validation/dist/react-jsonschema-form-validation.css';
 
-export default function LoginForm(props) {
+export default function LoginForm({ submitCallBack }) {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -16,7 +16,6 @@ export default function LoginForm(props) {
   });
 
   const [hasCredentialsError, setHasCredentialsError] = useState(false);
-  const { submitCallBack } = props;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasCredentialsError(await submitCallBack(formData));
@@ -32,7 +31,7 @@ export default function LoginForm(props) {
       errorMessages={{
         required: () => formData.defaultMessage,
       }}
-      className="form m-auto mt-5 size-form"
+      className="form m-auto pt-5 size-form"
     >
       <div className="text-start">
         <FormGroup>

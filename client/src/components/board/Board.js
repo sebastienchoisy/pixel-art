@@ -1,11 +1,12 @@
 import React, {
   useCallback, useEffect,
-  useRef, useState,
+  useRef, useState, useContext,
 } from 'react';
 import './Board.css';
 import ColorPicker from './Color-picker/Color-picker';
 import BoardPropTypes from '../../proptypes/board-proptypes';
 import { patchPixelFromBoard } from '../../services/APIService';
+import { ThemeContext } from '../../context/theme';
 
 export default function Board({ board }) {
   const refCanvas = useRef(null);
@@ -13,7 +14,7 @@ export default function Board({ board }) {
   const pixelBorderColor = '#D3D3D3';
   const [color, setColor] = useState('#000000');
   const [error, setError] = useState('');
-  console.log(board);
+  const theme = useContext(ThemeContext);
 
   const drawPixel = useCallback(async (pixel) => {
     refCanvas.current.getContext('2d').fillStyle = pixel.color;
@@ -91,7 +92,7 @@ export default function Board({ board }) {
   };
 
   return board && (
-    <div>
+    <div className={theme}>
       <h1>{board.pixelBoardname}</h1>
       <h4>{board.dateOfClosure}</h4>
       <p>{error}</p>

@@ -55,7 +55,7 @@ export default function BoardForm({ submitCallBack }) {
       errorMessages={{
         required: () => defaultMessage,
       }}
-      className="form m-auto mt-5 size-form"
+      className="form m-auto pt-5 size-form"
     >
       <div className="text-start">
         <FormGroup>
