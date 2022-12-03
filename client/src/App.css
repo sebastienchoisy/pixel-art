@@ -68,3 +68,12 @@
   width: 330px;
   color: black;
 }
+
+.Card:hover {
+  cursor: pointer;
+  box-shadow: 5px 5px 5px lightblue;
+}
+
+.Card {
+  width: 330px;
+}

@@ -2,9 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postBoard } from '../services/APIService';
 import BoardForm from '../components/forms/board-form/Board-form';
-import userProptypes from '../proptypes/user-proptypes';
 
-export default function ScreenBoardForm({ userData }) {
+export default function ScreenBoardForm() {
   const navigate = useNavigate();
 
   const submitCallBack = (formData) => {
@@ -14,7 +13,6 @@ export default function ScreenBoardForm({ userData }) {
       nbColumns: formData.nbColumn,
       dateOfClosure: formData.dateOfClosure,
       intervalPixelformData: formData.intervalPixel,
-      username: userData.username,
       multipleDrawPixel: formData.multipleDrawPixel,
     };
     postBoard(boardData).then((res) => {
@@ -27,7 +25,3 @@ export default function ScreenBoardForm({ userData }) {
     <BoardForm submitCallBack={submitCallBack} />
   );
 }
-
-ScreenBoardForm.propTypes = {
-  userData: userProptypes.isRequired,
-};
