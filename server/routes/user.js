@@ -3,83 +3,47 @@ const { wrapAsync } = require('../lib/utils');
 const userService = require('../services/user');
 const User = require("../models/user")
 const passport = require("passport")
-const jwt = require("jsonwebtoken")
 
 
 const router = express.Router();
 
+// Renvoi d'un utilisateur avec l'id correspond passé en query
 router.get('/', wrapAsync(async (req, res) => {
 	await userService.getById(req,res);
 }))
 
-router.get('/statCount', wrapAsync(async (req,res) => {
+// Renvoi du nombre total d'utilisateur
+router.get('/count', wrapAsync(async (req,res) => {
 	await userService.countUser(req,res);
 }));
 
+// Modification d'un utilisateur (strategie jwt => connexion requise)
 router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
 	await userService.updateUser(req,res);
 }));
 
-router.post("/signup", (req, res, next) => {
-	// Verify that first name is not empty
-	
-	if (!req.body.username) {
-	  res.statusCode = 500
-	  res.send({
-		name: "UserNameError",
-		message: "The userName is required",
-	  })
-	} else {
-	  User.register(
-		new User({ username: req.body.username,password: req.body.password,email: req.body.email}),
-		req.body.password,
-		(err, user) => {
-		  if (err) {
-			res.status(403).json({success: false,message: err});
-		  } else {
-			var token = jwt.sign({user_id:user._id}, "jhdshhds884hfhhs-ew6dhjd");
-			user.save((err, user) => {
-			  if (err) {
-				res.status(500).json({success: false,message: err});
-			  } else {
-				res.cookie('jwt',token);
-				res.status(200).json({ success: true, message: "l'utilisateur a été créé "+user._id })
-			  }
-			})
-		  }
-		}
-	  )
-	}
-  })
+// Création d'un utilisateur
+router.post("/signup", async (req, res) => {
+	await userService.signup(req, res);
+});
 
-router.post("/login", passport.authenticate("local"), (req, res, next) => {
-	User.findById(req.user._id).then(
-		user => {
-		const token = jwt.sign({user_id:user._id, role:user.role}, "jhdshhds884hfhhs-ew6dhjd");
-		user.save((err, user) => {
-			if (err) {
-				res.status(500).json({success: false,message: err});
-			} else {
-			res.cookie('jwt',token);
-			res.status(200).json({ success: true, message: "l'utilisateur est connecte "+user._id })
-			}
-		})
-		},
-		err => next(err)
-	)
-})
+// Connexion d'un utilisateur (stratégie local => on compare les identifiants données avec ceux en db)
+router.post("/login", passport.authenticate("local"), wrapAsync(async (req, res, next) => {
+	await userService.login(req, res, next);
+}));
 
+// Déconnexion d'un utilisateur (strategie jwt => connexion requise)
 router.get("/logout", passport.authenticate("jwt"), (req, res) => {
-	res.clearCookie("jwt")
-	res.send({ success: true, message:"l'utilisateur a ete deconnecte" })
+	res.clearCookie("jwt");
+	res.send({ success: true, message:"l'utilisateur a ete deconnecte" });
 })
 
+// Renvoi de l'état de connexion pour garder la connexion tant que le token est valide (strategie jwt => connexion requise)
 router.get("/loginstatus", (req, res, next) => {
 	passport.authenticate("jwt", { session: false }, (err, user) => {
 		if(err) {
 			res.status(500).json({success: false,message: err});
 		}
-
 		if(user) {
 			res.status(200).json({success: true, user: user});
 		} else {
@@ -88,6 +52,7 @@ router.get("/loginstatus", (req, res, next) => {
 	})(req, res, next)
 })
 
+// Renvoi de la validité ou non d'un username
 router.get("/usernameavail", async (req, res) => {
 	await userService.isUsernameAvailable(req, res);
 })

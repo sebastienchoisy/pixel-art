@@ -21,11 +21,11 @@ export async function getPopularBoards() {
 }
 
 export async function getUsersNb() {
-  return axios.get('/user/statCount');
+  return axios.get('/user/count');
 }
 
 export async function getBoardsNb() {
-  return axios.get('/pixelBoard/statCount');
+  return axios.get('/pixelBoard/count');
 }
 
 export async function postBoard(boardData) {

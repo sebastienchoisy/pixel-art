@@ -9,11 +9,6 @@ const User = new Schema({
         trim    : true,
         required: [true, 'Username est obligatoire']
     },
-    password: {
-        type: String,
-        trim: true,
-        required: [true, 'Password est obligatoire']
-    },
     email: {
         type: String,
         trim: true,
