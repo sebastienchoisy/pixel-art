@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   NavLink as RRNavLink, Link, useNavigate,
@@ -11,16 +11,19 @@ import {
   Nav,
   NavItem,
   NavLink,
-  NavbarText, Button,
+  NavbarText, Button, FormGroup, Input, Form,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import mushroom from '../../assets/mushroom.png';
 import { logout } from '../../services/APIService';
+import { ThemeContext } from '../../context/theme';
 
-export default function Header({ username }) {
+export default function Header({ username, changeTheme }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
+  const theme = useContext(ThemeContext);
+  const isDark = () => theme === 'dark';
   const disconnect = async () => {
     await logout();
     navigate('/');
@@ -28,7 +31,7 @@ export default function Header({ username }) {
 
   return (
     <header>
-      <Navbar className="navbar-expand-md navbar-light bg-light">
+      <Navbar color={theme} dark={isDark()} className="navbar-expand-md navbar-light bg-light">
         <NavbarBrand tag={Link} to="/">
           <img className="logo" src={mushroom} alt="mushroom" />
           PixelArt
@@ -63,10 +66,15 @@ export default function Header({ username }) {
           </Nav>
           {username
             && (
-            <NavbarText className="me-2">{username}</NavbarText>)}
+            <NavbarText className="me-4">{username}</NavbarText>)}
           {username
             && (
-            <Button onClick={disconnect} outline color="secondary">Deconnexion</Button>)}
+            <Button onClick={disconnect} className="me-4" outline={theme === 'light'} color="secondary">Deconnexion</Button>)}
+          <Form>
+            <FormGroup switch>
+              <Input type="switch" role="switch" onClick={changeTheme} />
+            </FormGroup>
+          </Form>
         </Collapse>
       </Navbar>
     </header>
@@ -75,6 +83,7 @@ export default function Header({ username }) {
 
 Header.propTypes = {
   username: PropTypes.string,
+  changeTheme: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {

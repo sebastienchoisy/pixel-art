@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { getBoards } from '../services/APIService';
 import Loader from '../components/loader/Loader';
 import BoardDisplay from '../components/board/Board-display';
+import { ThemeContext } from '../context/theme';
 
 export default function ScreenBoards({ isLogged }) {
   const [boards, setBoards] = useState([]);
@@ -12,6 +13,7 @@ export default function ScreenBoards({ isLogged }) {
   const [isOpen, setIsOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [nameFilter, setNameFilter] = useState('');
+  const theme = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const checkCurrentBoards = () => {
@@ -39,7 +41,7 @@ export default function ScreenBoards({ isLogged }) {
     [boards, isOpen, nameFilter],
   );
   const renderBoardItem = (board) => (
-    <div key={board.pixelBoardname}>
+    <div key={board.pixelBoardname} className="mb-5">
       {isOpen === !board.isClosed && (
       // eslint-disable-next-line no-underscore-dangle
       <div className="Card card m-2" onKeyDown={() => navBoard(board._id)} role="button" tabIndex={board.pixelBoardname}>
@@ -73,11 +75,11 @@ export default function ScreenBoards({ isLogged }) {
     setIsOpen(!isOpen);
   };
   return (
-    <div>
+    <div className={theme}>
       {isLoading ? <Loader />
         : (
-          <>
-            <h1 className="my-4">Boards</h1>
+          <div className="pt-5 pb-5">
+            <h1>Boards</h1>
             <div className="d-flex justify-content-around align-items-center mb-3">
               {isLogged && (
               <div className="ms-4">
@@ -94,7 +96,7 @@ export default function ScreenBoards({ isLogged }) {
             <div className="d-flex justify-content-around flex-wrap">
               {currentBoards.map((board) => renderBoardItem(board))}
             </div>
-          </>
+          </div>
         )}
     </div>
   );

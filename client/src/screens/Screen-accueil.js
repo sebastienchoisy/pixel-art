@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import {
   getBoardsNb, getClosedBoards, getPopularBoards, getRecentBoards, getUsersNb,
 } from '../services/APIService';
 import BoardCarousel from '../components/carousel/Board-carousel';
 import Stats from '../components/stats/Stats';
 import Loader from '../components/loader/Loader';
+import { ThemeContext } from '../context/theme';
 
 export default function ScreenAccueil() {
   const [closedBoards, setClosedBoards] = useState(null);
@@ -13,6 +14,7 @@ export default function ScreenAccueil() {
   const [usersNb, setUsersNb] = useState(null);
   const [boardsNb, setBoardsNb] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     const loadData = async () => {
@@ -25,11 +27,11 @@ export default function ScreenAccueil() {
     loadData().then(() => setIsLoading(false));
   }, []);
   return (
-    <div>
+    <div className={theme}>
       {isLoading ? <Loader />
         : (
           <>
-            <div className="row flex-row mt-5">
+            <div className="row flex-row pt-5 w-100">
               <div className="col-md mb-3">
                 <div>
                   <span>Bienvenue sur Pixel-Art</span>
@@ -44,17 +46,17 @@ export default function ScreenAccueil() {
                   <Stats boardsNb={boardsNb} usersNb={usersNb} />
                 </div>
               </div>
-              <div className="col-md align-content-center mb-3">
+              <div className="col-md align-content-center mb-3 ">
                 <span className="fw-bold"> Les boards les plus récentes</span>
                 <BoardCarousel boards={recentBoards} />
               </div>
             </div>
-            <div className="row flex-row mt-5">
+            <div className="row flex-row mt-5 w-100">
               <div className="col-md mb-3">
                 <span className="fw-bold"> Les boards les plus populaires </span>
                 <BoardCarousel boards={popularBoards} />
               </div>
-              <div className="col-md mb-3">
+              <div className="col-md pb-3">
                 <span className="fw-bold"> Les boards terminés </span>
                 <BoardCarousel boards={closedBoards} />
               </div>
