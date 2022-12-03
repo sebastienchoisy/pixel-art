@@ -6,8 +6,12 @@ import { signup } from '../services/APIService';
 export default function ScreenSignup() {
   const navigate = useNavigate();
   const submitCallBack = async (formData) => {
-    const resp = await signup(formData);
-    console.log(resp);
+    const userData = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+    };
+    const resp = await signup(userData);
     if (resp.data.success) {
       navigate('/');
     }

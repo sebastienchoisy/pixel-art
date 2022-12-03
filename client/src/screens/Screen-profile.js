@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import userProptypes from '../proptypes/user-proptypes';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserForm from '../components/forms/signup-form/User-form';
@@ -8,14 +9,23 @@ import { modifyUser } from '../services/APIService';
 export default function ScreenProfile({ userData }) {
   const [user, setUser] = useState(null);
   const [shouldModifyInformation, setShouldModifyInformation] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setUser(userData);
   }, [userData]);
 
-  const callBack = (formData) => {
-    setShouldModifyInformation(false);
-    modifyUser(formData);
+  const callBack = async (formData) => {
+    const userFormData = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+    };
+    const resp = await modifyUser(userFormData);
+    if (resp.data.success) {
+      navigate('/profil');
+      setShouldModifyInformation(false);
+    }
   };
 
   return user && (
