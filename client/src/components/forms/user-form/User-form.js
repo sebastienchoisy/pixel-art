@@ -17,7 +17,9 @@ import { checkUsernameAvailability } from '../../../services/APIService';
 import schema from './form-validation/user-form-schema';
 import userProptypes from '../../../proptypes/user-proptypes';
 
+// Composant correspondant au form de création/modification d'utilisateur'
 export default function UserForm({ submitCallBack, userData }) {
+  // On initialise le formData
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -34,6 +36,8 @@ export default function UserForm({ submitCallBack, userData }) {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(undefined);
   const [isUsernameTouched, setIsUsernameTouched] = useState(false);
   const [arePwdDifferents, setArePwdDifferents] = useState(false);
+
+  // Méthode pour envoyer le formData au server à travers le callback du parent
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.password2) {
@@ -42,6 +46,8 @@ export default function UserForm({ submitCallBack, userData }) {
       submitCallBack(formData);
     }
   };
+
+  // Méthode pour ajouter le pseudo et le mail dans un cas de modification de profil
   useEffect(() => {
     if (userData) {
       setFormData({
@@ -51,8 +57,11 @@ export default function UserForm({ submitCallBack, userData }) {
       });
     }
   }, [userData]);
+
+  // Mise à jour du formData lorsqu'on change une valeur dans le form
   const handleChange = (newData) => setFormData(newData);
 
+  // Méthode pour vérifier que le nom d'utilisateur est disponible (unique)
   const checkUsername = async () => {
     const resp = await checkUsernameAvailability(formData.username);
     setIsUsernameAvailable(
@@ -63,6 +72,8 @@ export default function UserForm({ submitCallBack, userData }) {
     }
   };
 
+  // Méthode pour vérifier que le nom de la board est bien valide
+  // pour la props valid/invalid de reactStrap Input
   const isUsernameValid = (username) => username.match(/^[a-zA-Z0-9]+$/)
       && username.length >= 4 && username.length <= 20;
 

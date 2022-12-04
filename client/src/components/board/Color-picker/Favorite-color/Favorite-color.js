@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Favorite-color.css';
 
+// Composant pour afficher une couleur favorite
 export default function FavoriteColor(props) {
   const { color, onClick } = props;
   return (

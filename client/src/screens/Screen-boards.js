@@ -7,6 +7,7 @@ import Loader from '../components/loader/Loader';
 import BoardDisplay from '../components/board/Board-display';
 import { ThemeContext } from '../context/theme';
 
+// Vue correspondante à l'affichage de la liste des boards
 export default function ScreenBoards({ isLogged }) {
   const [boards, setBoards] = useState([]);
   const [currentBoards, setCurrentBoards] = useState([]);
@@ -16,6 +17,7 @@ export default function ScreenBoards({ isLogged }) {
   const theme = useContext(ThemeContext);
   const navigate = useNavigate();
 
+  // On fitre les boards pour récupérer les boards qui ne sont pas fermées
   const checkCurrentBoards = () => {
     const newBoards = [];
     boards.forEach((board) => {
@@ -25,15 +27,21 @@ export default function ScreenBoards({ isLogged }) {
     });
     setCurrentBoards(newBoards);
   };
+
+  // On récupère toutes les boards à partir du serveur
   useEffect(() => {
     const loadData = async () => {
       setBoards((await getBoards()).data.message);
     };
     loadData().then(() => setIsLoading(false));
   }, []);
+
+  // Méthode pour rediriger vers l'affichage d'une board spécifique
   const navBoard = (id) => {
     navigate(`/board/${id}`);
   };
+
+  // On filtre
   useEffect(
     () => {
       checkCurrentBoards();

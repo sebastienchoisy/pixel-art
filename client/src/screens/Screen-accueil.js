@@ -7,6 +7,7 @@ import Stats from '../components/stats/Stats';
 import Loader from '../components/loader/Loader';
 import { ThemeContext } from '../context/theme';
 
+// Vue correspondante à l'accueil
 export default function ScreenAccueil() {
   const [closedBoards, setClosedBoards] = useState(null);
   const [popularBoards, setPopularBoards] = useState(null);
@@ -16,6 +17,7 @@ export default function ScreenAccueil() {
   const [isLoading, setIsLoading] = useState(true);
   const theme = useContext(ThemeContext);
 
+  // récupération des boards à afficher sur l'accueil (fermées, populaires, récentes et les stats)
   useEffect(() => {
     const loadData = async () => {
       setClosedBoards((await getClosedBoards()).data.message);
@@ -24,6 +26,7 @@ export default function ScreenAccueil() {
       setUsersNb((await getUsersNb()).data.message);
       setBoardsNb((await getBoardsNb()).data.message);
     };
+    // On gère le loader
     loadData().then(() => setIsLoading(false));
   }, []);
   return (

@@ -1,3 +1,4 @@
+// Schema pour le form du login
 export default {
   type: 'object',
   properties: {

@@ -1,3 +1,4 @@
+// Schema pour le form utilisateur
 export default {
   type: 'object',
   properties: {

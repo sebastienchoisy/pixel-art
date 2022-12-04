@@ -8,18 +8,25 @@ import { defaultMessage } from './form-validation/login-custom-messages';
 import loginSchema from './form-validation/login-form-schema';
 import 'react-jsonschema-form-validation/dist/react-jsonschema-form-validation.css';
 
+// Composant correspondant au form de connexion d'utilisateur
 export default function LoginForm({ submitCallBack }) {
+  // On initialise le formData
   const [formData, setFormData] = useState({
     username: '',
     password: '',
     defaultMessage,
   });
 
+  // Variable pour afficher un message d'erreur si les credentials ne sont pas bons
   const [hasCredentialsError, setHasCredentialsError] = useState(false);
+
+  // Méthode pour envoyer le formData au server à travers le callback du parent
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasCredentialsError(await submitCallBack(formData));
   };
+
+  // Mise à jour du formData lorsqu'on change une valeur dans le form
   const handleChange = (newData) => { setFormData(newData); };
 
   return (

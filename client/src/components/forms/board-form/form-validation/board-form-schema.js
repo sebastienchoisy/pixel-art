@@ -1,3 +1,4 @@
+// Schema pour le form des boards
 export default {
   type: 'object',
   properties: {

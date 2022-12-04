@@ -4,15 +4,18 @@ import heart from '../../../assets/heart.png';
 import FavoriteColor from './Favorite-color/Favorite-color';
 import './Color-picker.css';
 
+// Composant pour choisir une couleur
 export default function ColorPicker({ parentCallback }) {
   const [color, setColor] = useState('#000000');
   const [favoriteColors, setFavoriteColors] = useState([]);
 
+  // Changer l'état de la couleur
   const handleChange = (event) => {
     setColor(event.target.value);
     parentCallback(event.target.value);
   };
 
+  // Ajouter une couleur favorite
   // TODO: Set Maximum favorite color (8)+ delete
   const addFavoriteColor = () => {
     let exist = false;
@@ -22,6 +25,7 @@ export default function ColorPicker({ parentCallback }) {
     if (!exist) { setFavoriteColors(() => [...favoriteColors, color]); }
   };
 
+  // Afficher la couleur favorite
   const renderFavoriteColor = (favColor, index) => (
     <FavoriteColor
       color={favColor}

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import pixelProptypes from './pixel-proptypes';
 
+// Proptypes pour le board
 const boardProptypes = PropTypes.shape({
   pixelBoardname: PropTypes.string.isRequired,
   closure: PropTypes.bool,
