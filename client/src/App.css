@@ -95,3 +95,9 @@ html, body, #root, .App {
 .error-msg {
   color: #b61212;
 }
+
+.no-border {
+  border: none;
+  background: none;
+  padding: 0;
+}
