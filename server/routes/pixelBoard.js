@@ -42,9 +42,19 @@ router.get('/nameavail', async (req,res) => {
 });
 
 // Vérifie si l'utilisateur à les droits supplémentaire sur la board
-router.get('/checkrights', passport.authenticate("jwt"), wrapAsync(async (req,res) => {
-	await PixelBoardService.checkRights(req, res);
-}));
+router.get('/checkrights', async (req, res, next) => {
+	passport.authenticate("jwt", {session: false}, async (err, user) => {
+		if (err) {
+			res.status(500).json({success: false, message: err});
+		}
+		if (user) {
+			await PixelBoardService.checkRights(req, res);
+		} else {
+			res.status(200).json({success: false, message: "Vous n'êtes pas connectés"});
+		}
+	})(req, res, next)
+});
+
 
 // Modification des propriétés d'une pixel board
 router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {

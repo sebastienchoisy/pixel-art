@@ -10,6 +10,8 @@ import BoardPropTypes from '../../proptypes/board-proptypes';
 import { ThemeContext } from '../../context/theme';
 import { checkRights, delBoard, patchPixelFromBoard } from '../../services/APIService';
 import trash from '../../assets/trash.png';
+import heatMap from '../../assets/heat-map.png';
+import HeatMap from './HeatMap';
 
 const ws = new WebSocket('ws://localhost:3001');
 export default function Board({ board }) {
@@ -18,6 +20,7 @@ export default function Board({ board }) {
   const pixelBorderColor = '#D3D3D3';
   const [color, setColor] = useState('#000000');
   const [error, setError] = useState('');
+  const [showHeatMap, setShowHeatMap] = useState(false);
   const theme = useContext(ThemeContext);
 
   const [upperRights, setUpperRights] = useState(false);
@@ -25,7 +28,6 @@ export default function Board({ board }) {
 
   useEffect(() => {
     const loadData = async () => {
-      // eslint-disable-next-line no-underscore-dangle
       setUpperRights((await checkRights(board._id)).data.message);
     };
     loadData().then();
@@ -99,8 +101,10 @@ export default function Board({ board }) {
   }, [drawPixel, board.pixels, color]);
 
   useEffect(() => {
-    generateBoard();
-  }, []);
+    if (!showHeatMap) {
+      generateBoard();
+    }
+  }, [showHeatMap]);
 
   useEffect(() => {
     const canvas = refCanvas.current;
@@ -111,9 +115,7 @@ export default function Board({ board }) {
   const callbackColor = (colorValue) => {
     setColor(colorValue);
   };
-
   const handleDelBoard = async () => {
-    // eslint-disable-next-line no-underscore-dangle
     const res = await delBoard(board._id);
     if (res.data.success) {
       navigate('/');
@@ -121,13 +123,19 @@ export default function Board({ board }) {
       setError(res.data.message);
     }
   };
+  const handleShowHeatMap = () => {
+    setShowHeatMap(!showHeatMap);
+  };
 
   return board && (
     <div className={theme}>
       {upperRights && (
         <div className="d-flex justify-content-end m-4">
-          <Button color="danger" onClick={() => handleDelBoard()}>
-            <img src={trash} alt="mushroom" width="24" />
+          <button type="button" className="mx-2 no-border" color="danger" onClick={() => handleShowHeatMap()}>
+            <img src={heatMap} alt="heatmap" />
+          </button>
+          <Button className="mx-2" color="danger" onClick={() => handleDelBoard()}>
+            <img src={trash} alt="trash" width="24" />
           </Button>
         </div>
       )}
@@ -135,12 +143,15 @@ export default function Board({ board }) {
       <h1>{board.pixelBoardname}</h1>
       <div className="d-flex justify-content-around flex-wrap my-3">
         <div className="board d-flex justify-content-center flex-wrap">
-          <canvas
-            id="myCanvas"
-            ref={refCanvas}
-            width={board.nbColumns * pixelSize}
-            height={board.nbLines * pixelSize}
-          />
+          {showHeatMap ? <HeatMap board={board} /> : (
+            <canvas
+              id="myCanvas"
+              ref={refCanvas}
+              width={board.nbColumns * pixelSize}
+              height={board.nbLines * pixelSize}
+            />
+          )}
+
           {!board.isClosed && (<ColorPicker parentCallback={callbackColor} />)}
         </div>
         <div>
