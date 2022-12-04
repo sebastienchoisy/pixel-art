@@ -1,6 +1,14 @@
 # Pixel Art React
+CHOISY Sébastien (**sebastienchoisy**) - CORBIERE Nicolas (**Nicolas-Corbiere**) - PARIZET Nicolas (**NicolasParizet**) - SANCHEZ Marie-Céleste (**Marie74300**)
+## Tâches effectuées
 
-## Comment faire marcher le projet
+Pour les tâches effectués, il est possible de consulter les issues du projet [ici](https://github.com/users/sebastienchoisy/projects/1/views/1).
+
+On peut y voir la majorité des features et qui les a développé.
+
+Globalement, Nicolas P et Sébastien ont travaillé sur le front-end, alors que Nicolas C et Marie ont travaillé sur le back-end.
+
+## Comment lancer le projet
 
 ### I. Installer les dépendances
 
