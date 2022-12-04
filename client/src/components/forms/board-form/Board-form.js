@@ -16,7 +16,7 @@ import {
 import { checkBoardNameAvailability } from '../../../services/APIService';
 
 export default function BoardForm({ submitCallBack }) {
-  const [isBoardTitleAvailable, setIsBoardTitleAvailable] = useState(false);
+  const [isBoardTitleAvailable, setIsBoardTitleAvailable] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     length: 32,
@@ -98,7 +98,7 @@ export default function BoardForm({ submitCallBack }) {
             type="number"
             name="length"
             id="length"
-            placeholder="Entrer le nombre de ligne de la grille ..."
+            placeholder="Entrer la taille de la grille ..."
             value={formData.length}
             valid={formData.length >= 8 && formData.length <= 128}
           />
