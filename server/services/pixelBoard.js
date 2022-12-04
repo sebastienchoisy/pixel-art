@@ -209,37 +209,48 @@ exports.updatePixelOfPixelBoard = async (req, res) => {
     const today = new Date();
     const pixelBoard = await PixelBoard.findById(req.query.idBoard);
     const dateClosure = new Date(pixelBoard.dateOfClosure);
-    if (today.getTime() < dateClosure.getTime()) {
-        let pixelToUpdate = pixelBoard.pixels.id(req.query.idPixel);
-        const temp = {
-            pixelBoardId: req.query.idPixel,
-            username: req.user.username,
-        };
-        // L'historique permet de garder une trace des dernières actions d'un user avec une board
-        const lastHistorique = await HistoriquePixelService.getLastHistorique(req.query.id, req.user.username);
-        if (lastHistorique) {
-            let timeUnlockPixel = lastHistorique.createdAt;
-            timeUnlockPixel.setSeconds(timeUnlockPixel.getSeconds() + pixelBoard.intervalPixel);
-            if (today.getTime() > timeUnlockPixel.getTime()) {
-                await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color); //update pixel
-                await HistoriquePixel.create(temp); //add historique
-                res.status(200).json({
-                    success: true,
-                    message: "le Pixel a ete mis a jour dans le pixelboard " + pixelToUpdate.id
-                });
-            } else {
-                res.status(501).json({success: false, message: "intervalle non respecte, pas de maj"});
-            }
-        } else {
-            await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color) //update pixel
-            await HistoriquePixel.create(temp) //add historique
+
+    // Check date de cloture du board
+    if (today.getTime() > dateClosure.getTime()) {
+        return res.status(200).json({success: false, message: "Pixel Board est cloture"});
+    }
+    let pixelToUpdate = pixelBoard.pixels.id(req.query.idPixel);
+    const historyData = {
+        pixelBoardId: req.query.idBoard,
+        pixelId: req.query.idPixel,
+        username: req.user.username,
+    };
+
+    // Check edition multiple
+    if(!pixelBoard.multipleDrawPixel) {
+        const isPixelAlreadyExist = await HistoriquePixel.exists({pixelBoardId: req.query.idBoard, pixelId: req.query.idPixel})
+        if (isPixelAlreadyExist) {
+            return res.status(200).json({success: false, message: "Un pixel de cette grille ne peut être édité qu'une seule fois !"});
+        }
+    }
+
+    // L'historique permet de garder une trace des dernières actions d'un user avec une board
+    const lastUserHistorique = await HistoriquePixelService.getLastHistorique(req.query.idBoard, req.user.username);
+    if (lastUserHistorique) {
+        // Check interval dernière modification
+        let diffTime = today.getTime() - (new Date (lastUserHistorique.updatedAt)).getTime()
+        if((pixelBoard.intervalPixel*1000) < diffTime) {
+            await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color); //update pixel
+            await HistoriquePixel.create(historyData); //add historique
             res.status(200).json({
                 success: true,
                 message: "le Pixel a ete mis a jour dans le pixelboard " + pixelToUpdate.id
             });
+        } else {
+            return res.status(200).json({success: false, message: "Il faut attendre encore : " + Math.round((pixelBoard.intervalPixel*1000 - diffTime)/1000) + " s"});
         }
     } else {
-        res.status(501).json({success: false, message: "Pixel Board est cloture"});
+        await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color) //update pixel
+        await HistoriquePixel.create(historyData) //add historique
+        res.status(200).json({
+            success: true,
+            message: "le Pixel a ete mis a jour dans le pixelboard " + pixelToUpdate.id
+        });
     }
     pixelBoard.save();
 }
