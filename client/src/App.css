@@ -61,7 +61,8 @@ html, body, #root, .App {
 
 .link {
   text-decoration: none !important;
-  color: #000000E6
+  color: #320dd3e6;
+  font-weight: bold;
 }
 
 .boards-carousel {

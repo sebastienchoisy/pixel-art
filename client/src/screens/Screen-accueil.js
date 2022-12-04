@@ -32,7 +32,7 @@ export default function ScreenAccueil() {
         : (
           <>
             <div className="row flex-row pt-5 w-100">
-              <div className="col-md mb-3">
+              <div className="col-md mb-3 fw-light">
                 <div>
                   <span>Bienvenue sur Pixel-Art</span>
                   <br />
@@ -47,17 +47,17 @@ export default function ScreenAccueil() {
                 </div>
               </div>
               <div className="col-md align-content-center mb-3 ">
-                <span className="fw-bold"> Les boards les plus récentes</span>
+                <span className="fw-bold">Récentes</span>
                 <BoardCarousel boards={recentBoards} />
               </div>
             </div>
             <div className="row flex-row mt-5 w-100">
               <div className="col-md mb-3">
-                <span className="fw-bold"> Les boards les plus populaires </span>
+                <span className="fw-bold">Populaires</span>
                 <BoardCarousel boards={popularBoards} />
               </div>
               <div className="col-md pb-3">
-                <span className="fw-bold"> Les boards terminés </span>
+                <span className="fw-bold">Terminées</span>
                 <BoardCarousel boards={closedBoards} />
               </div>
             </div>

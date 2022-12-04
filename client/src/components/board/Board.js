@@ -5,6 +5,7 @@ import React, {
 import './Board.css';
 import { Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import ColorPicker from './Color-picker/Color-picker';
 import BoardPropTypes from '../../proptypes/board-proptypes';
 import { ThemeContext } from '../../context/theme';
@@ -14,21 +15,21 @@ import heatMap from '../../assets/heat-map.png';
 import HeatMap from './HeatMap';
 
 const ws = new WebSocket('ws://localhost:3001');
-export default function Board({ board }) {
+
+export default function Board({ board, side }) {
   const refCanvas = useRef(null);
-  const pixelSize = 12;
   const pixelBorderColor = '#D3D3D3';
+  const pixelSize = side / board.nbLines;
   const [color, setColor] = useState('#000000');
   const [error, setError] = useState('');
   const [showHeatMap, setShowHeatMap] = useState(false);
   const theme = useContext(ThemeContext);
-
   const [upperRights, setUpperRights] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
-      setUpperRights((await checkRights(board._id)).data.message);
+      setUpperRights((await checkRights(board._id)).data.success);
     };
     loadData().then();
   }, []);
@@ -107,6 +108,12 @@ export default function Board({ board }) {
   }, [showHeatMap]);
 
   useEffect(() => {
+    if (pixelSize) {
+      generateBoard();
+    }
+  }, [pixelSize]);
+
+  useEffect(() => {
     const canvas = refCanvas.current;
     canvas.addEventListener('click', handleClick, false);
     return () => canvas.removeEventListener('click', handleClick);
@@ -127,48 +134,72 @@ export default function Board({ board }) {
     setShowHeatMap(!showHeatMap);
   };
 
+  const handleChartDownload = () => {
+    const url = refCanvas.current.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = `${board.pixelBoardname}.png`;
+    link.href = url;
+    link.click();
+    link.del();
+  };
+
   return board && (
     <div className={theme}>
-      {upperRights && (
-        <div className="d-flex justify-content-end m-4">
-          <button type="button" className="mx-2 no-border" color="danger" onClick={() => handleShowHeatMap()}>
-            <img src={heatMap} alt="heatmap" />
-          </button>
+
+      <div className="d-flex justify-content-end m-4">
+        <button type="button" className="mx-2 no-border" color="danger" onClick={() => handleShowHeatMap()}>
+          <img src={heatMap} alt="heatmap" />
+        </button>
+        {upperRights && (
           <Button className="mx-2" color="danger" onClick={() => handleDelBoard()}>
             <img src={trash} alt="trash" width="24" />
           </Button>
-        </div>
-      )}
+        )}
+      </div>
 
       <h1>{board.pixelBoardname}</h1>
-      <div className="d-flex justify-content-around flex-wrap my-3">
-        <div className="board d-flex justify-content-center flex-wrap">
-          {showHeatMap ? <HeatMap board={board} /> : (
+
+      <div className="row mx-0 my-5 justify-content-center">
+        <div className="row mx-0 col-sm-10 m-auto">
+          {showHeatMap ? <HeatMap board={board} side={side} /> : (
             <canvas
+              className="col-md-6 p-0 m-auto"
               id="myCanvas"
               ref={refCanvas}
               width={board.nbColumns * pixelSize}
               height={board.nbLines * pixelSize}
             />
           )}
-
-          {!board.isClosed && (<ColorPicker parentCallback={callbackColor} />)}
+          <div className="col-md-3 col-10 text-start">
+            {!board.isClosed && !showHeatMap && (<ColorPicker parentCallback={callbackColor} />)}
+            <button type="button" className="mt-2 btn btn-success" onClick={() => handleChartDownload()}>Télécharger</button>
+          </div>
         </div>
-        <div>
-          <div className="d-flex justify-content-start">
-            <h6>Date de fin : </h6>
-            <h6>{board.dateOfClosure}</h6>
+        <div className="row mx-0 my-5 justify-content-center text-start">
+          <div className="row mx-0 col-12 col-sm-10 col-md-8 col-xl-6">
+            <div className="col-4">
+              <h6>Date de fin</h6>
+              <h6>{board.dateOfClosure}</h6>
+            </div>
+            <div className="col-4">
+              <h6>Taille</h6>
+              <h6>
+                {board.nbLines}
+                x
+                {board.nbLines}
+              </h6>
+            </div>
+            <div className="col-4">
+              <h6>Interval de temps</h6>
+              <h6>{`${board.intervalPixel} s`}</h6>
+            </div>
           </div>
-          <div className="d-flex justify-content-start">
-            <h6>Taille : </h6>
-            <h6>{board.nbLines}</h6>
-          </div>
-          <div className="d-flex justify-content-start">
-            <h6>Interval de temps : </h6>
-            <h6>{`${board.intervalPixel} s`}</h6>
-          </div>
-          <div className="d-flex justify-content-start">
-            <p className="error-msg">{error}</p>
+        </div>
+        <div className="row mx-0 my-5 justify-content-center text-start">
+          <div className="row mx-0 col-12 col-sm-10 col-md-8 col-xl-6">
+            <div className="col-12 text-center">
+              <p className="error-msg">{error}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -178,4 +209,5 @@ export default function Board({ board }) {
 
 Board.propTypes = {
   board: BoardPropTypes.isRequired,
+  side: PropTypes.number.isRequired,
 };

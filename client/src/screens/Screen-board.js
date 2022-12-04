@@ -18,7 +18,7 @@ export default function ScreenBoard() {
 
   return (
     <div className={`py-5 ${theme}`}>
-      {board && (<Board board={board} />)}
+      {board && (<Board board={board} side={400} />)}
     </div>
   );
 }
