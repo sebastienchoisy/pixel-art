@@ -1,3 +1,4 @@
+// Custom messages pour le form utilisateur
 export const defaultMessage = 'Ce champ est obligatoire';
 export const formatEmailCustomMessage = 'Ce champs doit être au format email (@)';
 export const minUsernameCustomMessage = 'Le pseudo doit faire au minimum 4 caractères';

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 
+// Proptypes pour le pixel
 const pixelProptypes = PropTypes.shape({
   posX: PropTypes.number.isRequired,
   posY: PropTypes.number.isRequired,

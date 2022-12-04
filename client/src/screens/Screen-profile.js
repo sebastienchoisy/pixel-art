@@ -2,11 +2,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userProptypes from '../proptypes/user-proptypes';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import UserForm from '../components/forms/signup-form/User-form';
+import UserForm from '../components/forms/user-form/User-form';
 import ProfileDisplay from '../components/profile/Profile-display';
 import { modifyUser } from '../services/APIService';
 import { ThemeContext } from '../context/theme';
 
+// Vue correspondante à l'affichaque du profil de l'utilisateur
 export default function ScreenProfile({ userData }) {
   const [user, setUser] = useState(null);
   const [shouldModifyInformation, setShouldModifyInformation] = useState(false);
@@ -17,6 +18,7 @@ export default function ScreenProfile({ userData }) {
     setUser(userData);
   }, [userData]);
 
+  // callBack passé au composant enfant en cas de modification du profil
   const callBack = async (formData) => {
     const userFormData = {
       username: formData.username,

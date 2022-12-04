@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import './loader.css';
 import { ThemeContext } from '../../context/theme';
 
+// Composant correspondant au loader
 export default function Loader() {
   const theme = useContext(ThemeContext);
   return (

@@ -18,12 +18,15 @@ import mushroom from '../../assets/mushroom.png';
 import { logout } from '../../services/APIService';
 import { ThemeContext } from '../../context/theme';
 
+// Composant correspondant au header de l'application
 export default function Header({ username, changeTheme }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
   const theme = useContext(ThemeContext);
   const isDark = () => theme === 'dark';
+
+  // Méthode de déconnexion
   const disconnect = async () => {
     await logout();
     navigate('/');

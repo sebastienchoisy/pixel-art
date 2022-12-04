@@ -15,8 +15,10 @@ import {
 } from './form-validation/board-custom-message';
 import { checkBoardNameAvailability } from '../../../services/APIService';
 
+// Composant correspondant au form de création de board
 export default function BoardForm({ submitCallBack }) {
   const [isBoardTitleAvailable, setIsBoardTitleAvailable] = useState(true);
+  // On initialise le formData
   const [formData, setFormData] = useState({
     name: '',
     length: 32,
@@ -25,11 +27,14 @@ export default function BoardForm({ submitCallBack }) {
     multipleDrawPixel: false,
   });
 
+  // Méthode pour vérifier que le nom de la board est bien valide
+  // pour la props valid/invalid de reactStrap Input
   function isBoardNameValid(username) {
     return username.match(/^[a-zA-Z0-9]+$/)
       && username.length >= 4 && username.length <= 50;
   }
 
+  // Méthode pour vérifier que le titre de la board est disponible (unique)
   const checkBoardTitle = async () => {
     const res = await checkBoardNameAvailability(formData.name);
     if (res.data.success) {
@@ -38,6 +43,8 @@ export default function BoardForm({ submitCallBack }) {
       setIsBoardTitleAvailable(false);
     }
   };
+
+  // Méthode pour envoyer le formData au server à travers le callback du parent
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Check valid date
@@ -46,6 +53,8 @@ export default function BoardForm({ submitCallBack }) {
     }
     submitCallBack(formData);
   };
+
+  // Mise à jour du formData lorsqu'on change une valeur dans le form
   const handleChange = (newData) => {
     setFormData(newData);
   };

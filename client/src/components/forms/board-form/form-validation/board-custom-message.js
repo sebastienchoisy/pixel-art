@@ -1,3 +1,4 @@
+// Custom message pour le form des boards
 export const defaultMessage = 'Ce champ est obligatoire';
 export const minBoardTitleCustomMessage = 'Le titre doit faire au minimum 4 caractères';
 export const maxBoardTitleCustomMessage = 'Le titre doit faire au maximum 50 caractères';

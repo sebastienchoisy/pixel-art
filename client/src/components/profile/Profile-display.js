@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Moment from 'react-moment';
 import userProptypes from '../../proptypes/user-proptypes';
 
+// Composant correspondant à l'affichage du profil d'utilisateur
 export default function ProfileDisplay({ userData }) {
   const [user, setUser] = useState(null);
 

@@ -14,8 +14,10 @@ import trash from '../../assets/trash.png';
 import heatMap from '../../assets/heat-map.png';
 import HeatMap from './HeatMap';
 
+// Création de la socket pour la mise à jour de la board en temps réel
 const ws = new WebSocket('ws://localhost:3001');
 
+// Composant pour afficher une board modifiable (sur laquelle on peut dessiner)
 export default function Board({ board, side }) {
   const refCanvas = useRef(null);
   const pixelBorderColor = '#D3D3D3';
@@ -27,6 +29,7 @@ export default function Board({ board, side }) {
   const [upperRights, setUpperRights] = useState(false);
   const navigate = useNavigate();
 
+  // On vérifie que l'utilisateur est connecté et à les droits pour supprimer
   useEffect(() => {
     const loadData = async () => {
       setUpperRights((await checkRights(board._id)).data.success);
@@ -34,6 +37,7 @@ export default function Board({ board, side }) {
     loadData().then();
   }, []);
 
+  // Méthode pour dessiner un pixel sur le canvas (la board)
   const drawPixel = useCallback((pixel) => {
     refCanvas.current.getContext('2d').fillStyle = pixel.color;
     refCanvas.current.getContext('2d').strokeStyle = pixelBorderColor;
@@ -54,6 +58,7 @@ export default function Board({ board, side }) {
     pixel.occurrence += 1; // eslint-disable-line no-param-reassign
   }, []);
 
+  // On récupére le message du server et on update le pixel si nécessaire
   ws.onmessage = (evt) => {
     const message = JSON.parse(evt.data);
     if (message.pixelBoardId === board._id) {
@@ -63,12 +68,14 @@ export default function Board({ board, side }) {
     }
   };
 
+  // Méthode pour dessiner une board dans le canvas
   const generateBoard = () => {
     board.pixels.forEach((pixel) => {
       drawPixel(pixel);
     });
   };
 
+  // Méthode pour récupérer la position de la souris sur le canvas
   const getMousePos = (evt) => {
     const rect = refCanvas.current.getBoundingClientRect();
     const scaleX = refCanvas.current.width / rect.width;
@@ -79,11 +86,14 @@ export default function Board({ board, side }) {
     };
   };
 
+  // Méthode pour mettre à jour le pixel, une fois que l'action a été approuvé par le serveur
   const patchSucces = (clickedPixel) => {
     drawPixel(clickedPixel);
     setError('');
   };
 
+  // Callback pour gérer le click sur le canvas, on récupère le pixel concerné
+  // et on le met à jour si c'est possible
   const handleClick = useCallback(async (evt) => {
     const getPixel = (x, y) => board.pixels.find((pixel) => pixel.posX === x && pixel.posY === y);
     const mousePos = getMousePos(evt);
@@ -101,27 +111,33 @@ export default function Board({ board, side }) {
       .then((res) => (res.data.success ? patchSucces(clickedPixel) : setError(res.data.message)));
   }, [drawPixel, board.pixels, color]);
 
+  // Méthode pour regénérer la board lorsqu'on affiche plus la heatmap
   useEffect(() => {
     if (!showHeatMap) {
       generateBoard();
     }
   }, [showHeatMap]);
 
+  // On génére la board une fois que la pixelSize est bien définie
   useEffect(() => {
     if (pixelSize) {
       generateBoard();
     }
   }, [pixelSize]);
 
+  // UseEffect pour gérer l'event listener sur le canvas
   useEffect(() => {
     const canvas = refCanvas.current;
     canvas.addEventListener('click', handleClick, false);
     return () => canvas.removeEventListener('click', handleClick);
   }, [handleClick]);
 
+  // Callback passé au color picker pour récupérer la couleur choisie
   const callbackColor = (colorValue) => {
     setColor(colorValue);
   };
+
+  // Requête vers le serveur pour supprimer une board
   const handleDelBoard = async () => {
     const res = await delBoard(board._id);
     if (res.data.success) {
@@ -130,10 +146,13 @@ export default function Board({ board, side }) {
       setError(res.data.message);
     }
   };
+
+  // Modification de l'état de showHeatMap avec le bouton associé
   const handleShowHeatMap = () => {
     setShowHeatMap(!showHeatMap);
   };
 
+  // Méthode pour télécharger la pixel board
   const handleChartDownload = () => {
     const url = refCanvas.current.toDataURL('image/png');
     const link = document.createElement('a');

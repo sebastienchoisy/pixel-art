@@ -16,6 +16,7 @@ export default function BoardCarousel({ boards }) {
   // Warning: findDOMNode is deprecated in StrictMode quand le carousel est utilisé
   // issue connue mais toujours pas fixé par reactStrap
 
+  // Méthodes venant de reactStrap pour la navigation du carousel
   const next = () => {
     if (animating) return;
     const nextIndex = activeIndex === boards.length - 1 ? 0 : activeIndex + 1;
@@ -33,6 +34,7 @@ export default function BoardCarousel({ boards }) {
     setActiveIndex(newIndex);
   };
 
+  // Création des items du carousel à partir des boards reçues en props
   const slides = boards.map((board) => (
     <CarouselItem
       onExiting={() => setAnimating(true)}

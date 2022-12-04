@@ -20,12 +20,15 @@ function App() {
   const location = useLocation();
   const [user, setUser] = useState(undefined);
   const [theme, setTheme] = useState('light');
+
+  // CallBack passé au header en cas de changement de theme
   const handleClick = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
   };
 
+  // On vérifie si l'utilisateur est connecté grâce au cookie à chaque changement de vue
   useEffect(() => {
     getUserInfo().then((userResp) => {
       if (userResp.data.success) {
@@ -33,6 +36,7 @@ function App() {
       } else {
         setUser(null);
       }
+      // On récupère le theme habituel de l'utilisateur
       if (localStorage.getItem('theme')) {
         setTheme(localStorage.getItem('theme'));
       }
@@ -41,8 +45,11 @@ function App() {
 
   return (
     <div className="App">
+      {/* Mise en place du context pour le theme */}
       <ThemeContext.Provider value={theme}>
         <Header username={user ? user.username : undefined} changeTheme={handleClick} />
+        {/* Mise en place du router, on autorise ou non certaines routes
+        si l'utilisateur est connecté ou pas */}
         <Routes>
           <Route exact path="/" element={<ScreenAccueil />} />
           <Route path="/board/:id" element={<ScreenBoard />} />
