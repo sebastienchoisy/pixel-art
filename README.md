@@ -35,7 +35,8 @@ Faire ``npm run app`` à la racine du projet, l'app se lance sur localhost:3000
 - Filtre des grilles (status/nom),
 - Loader,
 - Responsive design,
-- Couleurs favorites.
+- Couleurs favorites,
+- Batch quotidien qui à pour but de fermer les grilles.
 
 #### Bonus :
 
@@ -76,6 +77,8 @@ Front End
 * screens => écrans de l'application redirigé par le routeur.
 * services => permet l'envois de requête au BE afin de consommer ses services.
 
+_NB: Boostrap et reactstrap ayant été principalement utilisépour le style, les quelques classes css créés ont été mises dans le fichier App.css._
+
 Back End
 
 * db => initialisation de la communication avec MongoDb Atlas,
@@ -101,4 +104,3 @@ Back End
 * WS => WebSocket.
 * JsonWebToken => Serialiser et construire tokens.
 * Mongoose => communication MongoDb Atlas.
-
