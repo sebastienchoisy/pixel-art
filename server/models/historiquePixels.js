@@ -7,6 +7,11 @@ const HistoriquePixel = new Schema({
         trim    : true,
         required: [true, 'pixelBordId est obligatoire']
     },
+    pixelId: {
+        type    : String,
+        trim    : true,
+        required: [true, 'pixelId est obligatoire']
+    },
     username: {
         type: String,
         trim: true,

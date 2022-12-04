@@ -149,10 +149,10 @@ export default function Board({ board }) {
           </div>
           <div className="d-flex justify-content-start">
             <h6>Interval de temps : </h6>
-            <h6>{`${board.nbLines} s`}</h6>
+            <h6>{`${board.intervalPixel} s`}</h6>
           </div>
           <div className="d-flex justify-content-start">
-            <p>{error}</p>
+            <p className="error-msg">{error}</p>
           </div>
         </div>
       </div>
