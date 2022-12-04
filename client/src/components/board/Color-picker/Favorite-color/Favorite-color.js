@@ -8,7 +8,7 @@ export default function FavoriteColor(props) {
     <div>
       <button
         type="button"
-        className="FavoriteColor my-1"
+        className="FavoriteColor my-1 ms-1"
         value={color}
         onClick={onClick}
         style={{ backgroundColor: color }}

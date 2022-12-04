@@ -10,10 +10,10 @@ function isAuthorized(userConnected, pixelBoard) {
     return userConnected.role === "admin" || userConnected.username === pixelBoard.author;
 }
 
-exports.checkRights = async (req, res) => {
+exports.checkRights = async (req, res, user) => {
     try{
         const pixelBoard = await PixelBoard.findById(req.query.id);
-        if (isAuthorized(req.user, pixelBoard)) {
+        if (isAuthorized(user, pixelBoard)) {
             res.status(200).json({success: true, message: true});
         } else {
             res.status(200).json({success: true, message: false});

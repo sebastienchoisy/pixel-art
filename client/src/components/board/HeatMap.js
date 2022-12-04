@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-
+import PropTypes from 'prop-types';
 import BoardPropTypes from '../../proptypes/board-proptypes';
 
-export default function HeatMap({ board }) {
+export default function HeatMap({ board, side }) {
   const refCanvas = useRef(null);
-  const pixelSize = 12;
+  const pixelSize = side / board.nbLines;
   const pixelBorderColor = '#D3D3D3';
   const [occurenceMax, setOccurenceMax] = useState(null);
 
@@ -42,17 +42,17 @@ export default function HeatMap({ board }) {
     }
   }, [occurenceMax]);
   return board && (
-    <div>
-      <canvas
-        id="myCanvas"
-        ref={refCanvas}
-        width={board.nbColumns * pixelSize}
-        height={board.nbLines * pixelSize}
-      />
-    </div>
+  <canvas
+    id="myHeatMapCanvas"
+    className="col-md-6 p-0 m-auto"
+    ref={refCanvas}
+    width={board.nbColumns * pixelSize}
+    height={board.nbLines * pixelSize}
+  />
   );
 }
 
 HeatMap.propTypes = {
   board: BoardPropTypes.isRequired,
+  side: PropTypes.number.isRequired,
 };

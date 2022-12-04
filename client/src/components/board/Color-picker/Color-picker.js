@@ -31,10 +31,7 @@ export default function ColorPicker({ parentCallback }) {
   );
 
   return (
-    <div className="d-flex justify-content-around align-items-start">
-      <div className="me-3">
-        {favoriteColors.map((favColor, index) => renderFavoriteColor(favColor, index))}
-      </div>
+    <div>
       <div className="d-flex align-items-center m-2">
         <input
           type="color"
@@ -51,6 +48,9 @@ export default function ColorPicker({ parentCallback }) {
             alt="add a favorite color"
           />
         </button>
+      </div>
+      <div className="me-3 d-flex justify-content-start">
+        {favoriteColors.map((favColor, index) => renderFavoriteColor(favColor, index))}
       </div>
     </div>
   );

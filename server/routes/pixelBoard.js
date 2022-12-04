@@ -2,7 +2,6 @@ const express = require('express');
 const { wrapAsync } = require('../lib/utils');
 const PixelBoardService = require('../services/pixelBoard');
 const passport = require("passport")
-const userService = require("../services/user");
 
 const router = express.Router();
 
@@ -48,7 +47,7 @@ router.get('/checkrights', async (req, res, next) => {
 			res.status(500).json({success: false, message: err});
 		}
 		if (user) {
-			await PixelBoardService.checkRights(req, res);
+			await PixelBoardService.checkRights(req, res, user);
 		} else {
 			res.status(200).json({success: false, message: "Vous n'êtes pas connectés"});
 		}
