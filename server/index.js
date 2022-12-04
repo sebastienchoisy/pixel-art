@@ -80,12 +80,6 @@ const server = app.listen(PORT, () => {
 
 const wss = new WebSocket.Server({server});
 
-wss.on('connection', (ws) => {
-	ws.on('close', () => console.log('Client disconnected'));
-});
-
-
-
 const sendMessageToClients = (message) => {
 	wss.clients.forEach((client) => {
 		client.send(message);

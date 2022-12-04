@@ -20,7 +20,7 @@ exports.login = async (req, res, next) => {
     User.findOne({username: req.body.username}).then(
         user => {
             // Création du token avec jwt
-            const token = jwt.sign({user_id:user._id, role:user.role}, process.env.JWT_SECRET);
+            const token = jwt.sign({user_id:user._id, role: user.role}, process.env.JWT_SECRET);
             user.save((err, user) => {
                 if (err) {
                     res.status(500).json({success: false,message: err});
@@ -34,7 +34,6 @@ exports.login = async (req, res, next) => {
         },
         err => next(err)
     )
-
 }
 
 // Création d'un utilisateur
@@ -46,7 +45,7 @@ exports.signup = async (req, res) => {
             if (err) {
                 res.status(403).json({success: false, message: err});
             } else {
-                const token = jwt.sign({user_id: user._id}, process.env.JWT_SECRET);
+                const token = jwt.sign({user_id: user._id, role: user.role}, process.env.JWT_SECRET);
                 user.save((err, user) => {
                     if (err) {
                         res.status(500).json({success: false, message: err});

@@ -34,7 +34,9 @@ Faire ``npm run app`` à la racine du projet, l'app se lance sur localhost:3000
 - Édition d'un grille en fonction de paramètres de restrictions (édition multiple, interval de temps),
 - Thème de l'application (light/dark),
 - Filtre des grilles (status/nom),
-- Loader
+- Loader,
+- Responsive design,
+- Couleurs favorites,
 
 #### Bonus :
 

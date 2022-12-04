@@ -54,16 +54,34 @@ router.get('/checkrights', async (req, res, next) => {
 	})(req, res, next)
 });
 
-
 // Modification des propriétés d'une pixel board
-router.patch('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
-	await PixelBoardService.updatePixelBoard(req,res);
-}));
+router.patch('/', async (req, res, next) => {
+	passport.authenticate("jwt", {session: false}, async (err, user) => {
+		console.log(user);
+		if (err) {
+			res.status(500).json({success: false, message: err});
+		}
+		if (user) {
+			await PixelBoardService.updatePixelBoard(req,res);
+		} else {
+			res.status(200).json({success: false, message: "Vous n'êtes pas connectés"});
+		}
+	})(req, res, next)
+});
 
 // Modification d'un pixel d'une pixel board
-router.patch('/pixel', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
-	await PixelBoardService.updatePixelOfPixelBoard(req,res);
-}));
+router.patch('/pixel', async (req, res, next) => {
+	passport.authenticate("jwt", {session: false}, async (err, user) => {
+		if (err) {
+			res.status(500).json({success: false, message: err});
+		}
+		if (user) {
+			await PixelBoardService.updatePixelOfPixelBoard(req,res, user);
+		} else {
+			res.status(200).json({success: false, message: "Vous n'êtes pas connectés"});
+		}
+	})(req, res, next)
+});
 
 // Création d'une pixel board
 router.post('/', passport.authenticate("jwt"), wrapAsync(async (req, res) => {
