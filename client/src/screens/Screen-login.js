@@ -16,7 +16,7 @@ export default function ScreenLogin() {
     if (response.data.success) {
       navigate('/');
     }
-    return false;
+    return true;
   };
   return (
     <div className={theme}>

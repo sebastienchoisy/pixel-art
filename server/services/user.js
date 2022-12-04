@@ -17,7 +17,7 @@ exports.getById = async (req, res) => {
 
 // Connexion d'un utilisateur
 exports.login = async (req, res, next) => {
-    User.findById(req.user._id).then(
+    User.findOne({username: req.body.username}).then(
         user => {
             // Création du token avec jwt
             const token = jwt.sign({user_id:user._id, role:user.role}, process.env.JWT_SECRET);

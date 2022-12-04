@@ -28,8 +28,18 @@ router.post("/signup", async (req, res) => {
 });
 
 // Connexion d'un utilisateur (stratégie local => on compare les identifiants données avec ceux en db)
-router.post("/login", passport.authenticate("local"), wrapAsync(async (req, res, next) => {
-	await userService.login(req, res, next);
+router.post("/login", wrapAsync(async (req, res, next) => {
+	passport.authenticate('local', async (err, user) => {
+		if (err) {
+			return next(err);
+		}
+		if (user) {
+			await userService.login(req, res, next);
+		} else {
+			return res.status(200).send({success: false, message:'Mauvais identifiants'});
+		}
+	})(req, res, next);
+
 }));
 
 // Déconnexion d'un utilisateur (strategie jwt => connexion requise)
