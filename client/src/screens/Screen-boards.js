@@ -80,16 +80,16 @@ export default function ScreenBoards({ isLogged }) {
         : (
           <div className="pt-5 pb-5">
             <h1>Boards</h1>
-            <div className="d-flex justify-content-around align-items-center mb-3">
+            <div className="d-flex justify-content-around align-items-center flex-wrap my-5">
               {isLogged && (
-              <div className="ms-4">
+              <div className="m-2">
                 <Button onClick={() => navigate('/boardform')}>Créer une nouvelle grille</Button>
               </div>
               )}
-              <div className="mx-2">
-                <Input onChange={changeNameFilter} />
+              <div className="m-2 w-50">
+                <Input onChange={changeNameFilter} placeholder="Chercher par nom de grille" />
               </div>
-              <div className="me-4">
+              <div className="m-2">
                 <Button color={isOpen ? 'success' : 'danger'} onClick={() => changeOpen()}>{isOpen ? 'Boards ouverts' : 'Boards fermés'}</Button>
               </div>
             </div>
