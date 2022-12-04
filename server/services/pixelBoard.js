@@ -3,7 +3,7 @@ const Pixel = require('../models/pixel');
 const HistoriquePixel = require('../models/historiquePixels');
 const HistoriquePixelService = require("../services/historiquePixel");
 const PixelUpdate = require('../services/pixel');
-const User = require("../models/user");
+
 
 // Vérification des droits pour modifier un pixel ou une pixel board
 function isAuthorized(userConnected, pixelBoard) {
@@ -206,6 +206,7 @@ exports.updatePixelBoard = async (req, res) => {
 
 // Modification d'un pixel d'une board
 exports.updatePixelOfPixelBoard = async (req, res) => {
+    const { sendMessageToClients } = require('../index');
     const today = new Date();
     const pixelBoard = await PixelBoard.findById(req.query.idBoard);
     const dateClosure = new Date(pixelBoard.dateOfClosure);
@@ -241,6 +242,7 @@ exports.updatePixelOfPixelBoard = async (req, res) => {
                 success: true,
                 message: "le Pixel a ete mis a jour dans le pixelboard " + pixelToUpdate.id
             });
+            sendMessageToClients(JSON.stringify({pixelBoardId: req.query.idBoard, pixelId: pixelToUpdate.id, color: req.body.color}));
         } else {
             return res.status(200).json({success: false, message: "Il faut attendre encore : " + Math.round((pixelBoard.intervalPixel*1000 - diffTime)/1000) + " s"});
         }
@@ -251,6 +253,7 @@ exports.updatePixelOfPixelBoard = async (req, res) => {
             success: true,
             message: "le Pixel a ete mis a jour dans le pixelboard " + pixelToUpdate.id
         });
+        sendMessageToClients(JSON.stringify({pixelBoardId: req.query.idBoard, pixelId: pixelToUpdate.id, color: req.body.color}));
     }
     pixelBoard.save();
 }

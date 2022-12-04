@@ -11,6 +11,7 @@ import { ThemeContext } from '../../context/theme';
 import { checkRights, delBoard, patchPixelFromBoard } from '../../services/APIService';
 import trash from '../../assets/trash.png';
 
+const ws = new WebSocket('ws://localhost:3001');
 export default function Board({ board }) {
   const refCanvas = useRef(null);
   const pixelSize = 12;
@@ -30,7 +31,7 @@ export default function Board({ board }) {
     loadData().then();
   }, []);
 
-  const drawPixel = useCallback(async (pixel) => {
+  const drawPixel = useCallback((pixel) => {
     refCanvas.current.getContext('2d').fillStyle = pixel.color;
     refCanvas.current.getContext('2d').strokeStyle = pixelBorderColor;
     refCanvas.current.getContext('2d')
@@ -50,6 +51,15 @@ export default function Board({ board }) {
     pixel.occurrence += 1; // eslint-disable-line no-param-reassign
   }, []);
 
+  ws.onmessage = (evt) => {
+    const message = JSON.parse(evt.data);
+    if (message.pixelBoardId === board._id) {
+      const pixelToUpdate = board.pixels.find((pixel) => pixel._id === message.pixelId);
+      pixelToUpdate.color = message.color;
+      drawPixel(pixelToUpdate);
+    }
+  };
+
   const generateBoard = () => {
     board.pixels.forEach((pixel) => {
       drawPixel(pixel);
@@ -60,8 +70,6 @@ export default function Board({ board }) {
     const rect = refCanvas.current.getBoundingClientRect();
     const scaleX = refCanvas.current.width / rect.width;
     const scaleY = refCanvas.current.height / rect.height;
-    console.log(scaleX);
-    console.log(scaleY);
     return {
       x: (evt.clientX - rect.left) * scaleX,
       y: (evt.clientY - rect.top) * scaleY,
@@ -79,7 +87,6 @@ export default function Board({ board }) {
     const x = Math.floor(mousePos.x / pixelSize);
     const y = Math.floor(mousePos.y / pixelSize);
     const clickedPixel = getPixel(x, y);
-    console.log(clickedPixel);
     clickedPixel.color = color;
     if (board.isClosed) {
       return;
@@ -87,10 +94,8 @@ export default function Board({ board }) {
     const patchData = {
       color,
     };
-    // eslint-disable-next-line no-underscore-dangle,max-len
-    await patchPixelFromBoard(board._id, clickedPixel._id, patchData).then((res) => (res.data.success
-      ? patchSucces(clickedPixel)
-      : setError(res.data.message)));
+    await patchPixelFromBoard(board._id, clickedPixel._id, patchData)
+      .then((res) => (res.data.success ? patchSucces(clickedPixel) : setError(res.data.message)));
   }, [drawPixel, board.pixels, color]);
 
   useEffect(() => {

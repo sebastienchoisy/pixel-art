@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const passport = require("passport");
 const session = require("express-session");
+const WebSocket = require('ws');
 const cron = require("node-cron");
 
 require("./strategies/JwtStrategy");
@@ -76,4 +77,20 @@ const server = app.listen(PORT, () => {
 	// eslint-disable-next-line no-console
 	console.log(`Application started. Visit http://localhost:${port}`);
 });
-module.exports = app;
+
+const wss = new WebSocket.Server({server});
+
+wss.on('connection', (ws) => {
+	console.log('Client connected');
+	ws.on('close', () => console.log('Client disconnected'));
+});
+
+
+
+const sendMessageToClients = (message) => {
+	wss.clients.forEach((client) => {
+		client.send(message);
+	});
+}
+
+module.exports.sendMessageToClients = sendMessageToClients;

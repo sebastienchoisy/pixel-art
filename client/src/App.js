@@ -33,7 +33,9 @@ function App() {
       } else {
         setUser(null);
       }
-      setTheme(localStorage.getItem('theme'));
+      if (localStorage.getItem('theme')) {
+        setTheme(localStorage.getItem('theme'));
+      }
     });
   }, [location]);
 

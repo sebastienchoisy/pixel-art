@@ -43,7 +43,6 @@ export default function ScreenBoards({ isLogged }) {
   const renderBoardItem = (board) => (
     <div key={board.pixelBoardname} className="mb-5">
       {isOpen === !board.isClosed && (
-      // eslint-disable-next-line no-underscore-dangle
       <div className="Card card m-2" onKeyDown={() => navBoard(board._id)} role="button" tabIndex={board.pixelBoardname}>
         <BoardDisplay board={board} side={300} className="card-img-top" />
         <div className="card-body">
