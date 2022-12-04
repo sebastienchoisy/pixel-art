@@ -49,7 +49,7 @@ export default function ScreenBoards({ isLogged }) {
     [boards, isOpen, nameFilter],
   );
   const renderBoardItem = (board) => (
-    <div key={board.pixelBoardname} className="mb-5">
+    <div key={board.pixelBoardname} className={`mb-5 ${theme === 'dark' ? 'black' : ''}`}>
       {isOpen === !board.isClosed && (
       <div className="Card card m-2" onKeyDown={() => navBoard(board._id)} role="button" tabIndex={board.pixelBoardname}>
         <BoardDisplay board={board} side={300} className="card-img-top" />
