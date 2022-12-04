@@ -93,6 +93,10 @@ html, body, #root, .App {
   color: white;
 }
 
+.black {
+  color: black;
+}
+
 .error-msg {
   color: #b61212;
 }
