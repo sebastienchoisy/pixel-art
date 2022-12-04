@@ -14,9 +14,9 @@ exports.checkRights = async (req, res, user) => {
     try{
         const pixelBoard = await PixelBoard.findById(req.query.id);
         if (isAuthorized(user, pixelBoard)) {
-            res.status(200).json({success: true, message: true});
+            res.status(200).json({success: true, message: "Utilisateur autorisé"});
         } else {
-            res.status(200).json({success: true, message: false});
+            res.status(200).json({success: false, message: "Utilisateur non autorisé"});
         }
     } catch (error){
         res.status(501).json({success: false, message: error});
@@ -205,7 +205,7 @@ exports.updatePixelBoard = async (req, res) => {
 }
 
 // Modification d'un pixel d'une board
-exports.updatePixelOfPixelBoard = async (req, res) => {
+exports.updatePixelOfPixelBoard = async (req, res, user) => {
     const { sendMessageToClients } = require('../index');
     const today = new Date();
     const pixelBoard = await PixelBoard.findById(req.query.idBoard);
@@ -219,7 +219,7 @@ exports.updatePixelOfPixelBoard = async (req, res) => {
     const historyData = {
         pixelBoardId: req.query.idBoard,
         pixelId: req.query.idPixel,
-        username: req.user.username,
+        username: user.username,
     };
 
     // Check edition multiple
@@ -231,12 +231,12 @@ exports.updatePixelOfPixelBoard = async (req, res) => {
     }
 
     // L'historique permet de garder une trace des dernières actions d'un user avec une board
-    const lastUserHistorique = await HistoriquePixelService.getLastHistorique(req.query.idBoard, req.user.username);
+    const lastUserHistorique = await HistoriquePixelService.getLastHistorique(req.query.idBoard, user.username);
     if (lastUserHistorique) {
         // Check interval dernière modification
         let diffTime = today.getTime() - (new Date (lastUserHistorique.updatedAt)).getTime()
         if((pixelBoard.intervalPixel*1000) < diffTime) {
-            await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color); //update pixel
+            await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, user.username, req.body.color); //update pixel
             await HistoriquePixel.create(historyData); //add historique
             res.status(200).json({
                 success: true,
@@ -247,7 +247,7 @@ exports.updatePixelOfPixelBoard = async (req, res) => {
             return res.status(200).json({success: false, message: "Il faut attendre encore : " + Math.round((pixelBoard.intervalPixel*1000 - diffTime)/1000) + " s"});
         }
     } else {
-        await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, req.user.username, req.body.color) //update pixel
+        await PixelUpdate.updatePixel(pixelToUpdate, req.query.idBoard, user.username, req.body.color) //update pixel
         await HistoriquePixel.create(historyData) //add historique
         res.status(200).json({
             success: true,
@@ -286,7 +286,7 @@ exports.countPixelBoard = async (req, res) => {
     }
 }
 
-// Vérification de la validité d'un username
+// Vérification de la validité du nom de la grille
 exports.isNameAvailable = async (req, res) => {
     try {
         // Regex pour ne pas prendre en compte les majuscules/minuscules

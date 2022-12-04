@@ -140,7 +140,6 @@ export default function Board({ board, side }) {
     link.download = `${board.pixelBoardname}.png`;
     link.href = url;
     link.click();
-    link.del();
   };
 
   return board && (
@@ -195,9 +194,13 @@ export default function Board({ board, side }) {
             </div>
           </div>
         </div>
-        <div className="row mx-0 my-5 justify-content-center text-start">
+        <div className="row mx-0 my-2 justify-content-center text-start">
           <div className="row mx-0 col-12 col-sm-10 col-md-8 col-xl-6">
-            <div className="col-12 text-center">
+            <div className="col-4">
+              <h6>Auteur</h6>
+              <h6>{board.author}</h6>
+            </div>
+            <div className="col-8 text-center">
               <p className="error-msg">{error}</p>
             </div>
           </div>
